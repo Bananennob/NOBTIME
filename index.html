@@ -46,6 +46,7 @@ polyline{fill:none;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke
 .l1{stroke:var(--mut);stroke-width:1.5;opacity:.7}.l2{stroke:var(--ac);stroke-width:2.5}
 .g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .smr{display:grid;grid-template-columns:96px 52px auto 64px;gap:6px;align-items:center;margin-top:8px}.smr.w{grid-template-columns:1fr 52px 36px auto}.smr .bar{grid-column:1/-1;margin:0;height:5px}.smr input{width:64px}.sxc::before{content:'';display:inline-block;width:8px;height:8px;border-radius:3px;background:var(--c);margin-right:6px}.sub{margin-top:12px}#dnt{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.plr{padding:9px 0;border-top:1px solid var(--line)}.plr.ok{opacity:.6}.plh{display:flex;align-items:center;gap:8px}.plh b{flex:1}
 .bar{height:8px;border-radius:9px;background:var(--line);margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .4s}
 input{width:62px;font:inherit;color:var(--fg);background:var(--line);border:0;border-radius:10px;padding:6px 8px;text-align:center}
 .rw2{display:grid;grid-template-columns:44px 1fr 1fr 34px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
@@ -768,20 +769,43 @@ function plBuild(){const c=new Map(),get=k=>{let e=c.get(k);if(!e){e={k,sm:[],ps
  const L=[...c.values()].map(e=>{const a=e.sm.length?e.sm.reduce((x,y)=>x+y,0)/e.sm.length:null,v=[a,e.ps].filter(x=>x!=null);let sc,why;
   if(v.length){sc=v.reduce((x,y)=>x+y,0)/v.length;why=(a!=null?T('Smartcube Ø ','Smartcube avg ')+(a/1000).toFixed(1)+' s':'')+(a!=null&&e.ps!=null?' · ':'')+(e.ps!=null?T('Training Ø ','Practice avg ')+(e.ps/1000).toFixed(1)+' s':'')}
   else{sc=e.k.startsWith('pll')?4200:5200;why=T('noch nie geübt','never practiced')}return{k:e.k,sc,why}}).sort((x,y)=>y.sc-x.sc);
- const n={pll:0,oll:0,f2l:0},o=[];L.forEach(e=>{const t=e.k.split(':')[0];if(o.length<(cfg.plc||6)&&n[t]<4){n[t]++;o.push(e)}});
+ const n={pll:0,oll:0,f2l:0},o=[];L.forEach(e=>{const t=e.k.split(':')[0];if(o.length<(cfg.plc||8)&&n[t]<4){n[t]++;o.push(e)}});
  const reps=cfg.plr||3;return{d:new Date().toDateString(),reps,items:o.map(e=>({k:e.k,why:e.why,base:(PS[e.k]&&PS[e.k].n)||0}))}}
-function plRender(){const el=$('#lpl');if(!el)return;if(!cfg.plan||cfg.plan.d!=new Date().toDateString()){cfg.plan=plBuild();S('nt.c',cfg)}const P=cfg.plan;let done=0;
- const rows=P.items.map(it=>{const[t,i]=it.k.split(':'),c=LD[t][+i];if(!c)return'';const n=Math.min(P.reps,Math.max(0,((PS[it.k]&&PS[it.k].n)||0)-it.base));done+=n;return`<div class="smr w"><span class="sxn">${c.n}${t=='pll'?'-Perm':''}<br><span class="k">${it.why}</span></span><b>${n}/${P.reps}</b><span class="k"></span><span>${n>=P.reps?'✓':''}</span></div>`}).join(''),tot=P.items.length*P.reps,pc=tot?Math.round(done/tot*100):0;
- el.innerHTML=`<div class="k">${T('Trainingsplan · heute','Training plan · today')}</div>${rows}<div class="bar"><i style="width:${pc}%${pc>=100?';background:var(--ok)':''}"></i></div><div class="k">${pc>=100?T('Plan geschafft 🎉','Plan complete 🎉'):pc+'% · '+T('Wiederholungen pro Case:','Reps per case:')}</div>
- <div class="chips">${[3,5,10].map(r=>`<button class="chip${(cfg.plr||3)==r?' on':''}" data-plr="${r}">${r}×</button>`).join('')}<button class="chip" id="plgo">${T('Plan starten','Start plan')}</button><button class="chip" id="plnew">${T('Neu erstellen','Rebuild')}</button></div>`}
+const PLT={solves:['{n} normale Solves','{n} normal solves','Einfach timen. Zählt automatisch.','Just time them. Counts automatically.','auto'],
+slow:['{n} Slow Solves','{n} slow solves','Absichtlich langsam lösen, aber nie stehen bleiben: Blick immer schon beim nächsten Paar (Lookahead).','Solve deliberately slow but never pause: always look at the next pair (lookahead).','man'],
+split:['{n} Solves mit Phasen-Zeiten','{n} solves with phase splits','Im Smartcube-Modus lösen: danach siehst du Cross, F2L, OLL und PLL einzeln und findest deine schwächste Phase. Zählt automatisch.','Solve in smartcube mode to see Cross, F2L, OLL and PLL splits and find your weakest phase. Counts automatically.','spl'],
+look:['{n}× Augen-zu-Lookahead','{n}× eyes-closed lookahead','Nach dem Cross das erste Paar planen, Augen zu, Paar ausführen. Später zwei Paare auf einmal. Inspection unbegrenzt.','After the cross plan the first pair, close your eyes, execute it. Later two pairs at once. Unlimited inspection.','man'],
+cross:['{n}× Cross-Planung','{n}× cross planning','Unbegrenzte Inspection: eine gute Cross-Lösung (höchstens 8 Züge) suchen, dann sauber ausführen. Später nur noch mit den 15 s.','Unlimited inspection: find a good cross (max 8 moves), then execute it cleanly. Later use only the 15 s.','man'],
+f2lo:['{n}× nur F2L','{n}× F2L only','Nur Cross + F2L lösen und dann stoppen. Ziel: F2L unter 8 s.','Solve only cross + F2L, then stop. Goal: F2L under 8 s.','man'],
+fing:['Fingertricks für {n} Alg(s)','Finger tricks for {n} alg(s)','Einen Alg aus dem Plan flüssig und ohne Umgreifen üben (Fingertricks auf YouTube).','Practise one alg from the plan smoothly without regrips.','man'],
+obs:['{n} schwere F2L-Cases','{n} hard F2L cases','Seltene, effiziente F2L-Cases (z. B. mit umgedrehter Kante) im Trainer-Tab ansehen und üben.','Look at and practise rare, efficient F2L cases (e.g. flipped edge) in the trainer tab.','man'],
+pll:['PLL-Schwächste üben','Practise weakest PLLs','','','drill'],oll:['OLL-Schwächste üben','Practise weakest OLLs','','','drill']};
+const PLV=[{id:'45',min:45,n:['Über 45 s','Over 45 s'],t:[['solves',30],['slow',10],['pll'],['oll']]},
+{id:'30',min:30,n:['30–45 s','30–45 s'],t:[['solves',100],['split',15],['look',10],['pll'],['oll'],['fing',1]]},
+{id:'20',min:20,n:['20–30 s','20–30 s'],t:[['solves',75],['split',10],['slow',15],['cross',10],['pll'],['oll']]},
+{id:'15',min:15,n:['15–20 s','15–20 s'],t:[['solves',50],['f2lo',15],['slow',15],['split',10],['pll'],['oll']]},
+{id:'0',min:0,n:['Unter 15 s','Under 15 s'],t:[['solves',50],['cross',10],['slow',20],['obs',10],['pll'],['oll'],['fing',2]]}];
+function plLevel(){if(cfg.plk)return PLV.find(l=>l.id==cfg.plk)||PLV[1];const v=pzS().filter(s=>s.p!=2).slice(-25).map(s=>E(s)/1000);if(v.length<5)return null;const m=v.reduce((a,b)=>a+b,0)/v.length;return PLV.find(l=>m>=l.min)}
+function plRender(){const el=$('#lpl');if(!el)return;const today=new Date().toDateString();if(!cfg.plan||cfg.plan.d!=today){cfg.plan=plBuild();S('nt.c',cfg)}if(!cfg.pld||cfg.pld.d!=today){cfg.pld={d:today,m:{}};S('nt.c',cfg)}
+ const P=cfg.plan,lv=plLevel()||PLV[1],auto=!cfg.plk,t0=new Date().setHours(0,0,0,0),ts=D.ses.filter(q=>q.pz==D.ses[D.cur].pz&&q.n!='Practice').flatMap(q=>q.sv).filter(s=>s.d>=t0),cnt={auto:ts.length,spl:ts.filter(s=>s.rm).length};
+ let dn=0,all=0;const rows=lv.t.map(([id,n],ix)=>{const d=PLT[id],ty=d[4],key=id+ix;let a=0,b=n||1,tip=d[2],btn='';
+  if(ty=='drill'){const its=P.items.filter(x=>x.k.startsWith(id+':'));if(!its.length)return'';b=its.length*P.reps;its.forEach(x=>{a+=Math.min(P.reps,Math.max(0,((PS[x.k]&&PS[x.k].n)||0)-x.base))});
+    tip=its.map(x=>{const c=LD[id][+x.k.split(':')[1]];return(c?c.n+(id=='pll'?'-Perm':''):'')}).join(' · ')+' — '+its.map(x=>x.why).filter((v,i,A)=>A.indexOf(v)==i).slice(0,2).join(' / ');btn=`<button class="chip" data-pls="${id}">${T('Starten','Start')}</button>`}
+  else if(ty=='man'){a=cfg.pld.m[key]?b:0;btn=`<button class="chip${a?' on':''}" data-plm="${key}">${a?'✓':T('Abhaken','Done')}</button>`}
+  else a=Math.min(b,cnt[ty]);const ok=a>=b;if(ok)dn++;all++;
+  return`<div class="plr${ok?' ok':''}"><div class="plh"><b>${ok?'✓ ':''}${(ty=='drill'?T(d[0],d[1]):T(d[0],d[1]).replace('{n}',n))}</b><span class="k">${ty=='man'?'':a+'/'+b}</span>${btn}</div><div class="k">${tip}</div></div>`}).join('');
+ const pc=all?Math.round(dn/all*100):0,avg=(()=>{const v=pzS().filter(s=>s.p!=2).slice(-25).map(s=>E(s)/1000);return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'–'})();
+ el.innerHTML=`<div class="k">${T('Trainingsplan · heute','Training plan · today')} · Ø ${avg} s</div><div class="chips">${PLV.map(l=>`<button class="chip${l.id==lv.id?' on':''}" data-plk="${l.id}">${T(l.n[0],l.n[1])}</button>`).join('')}<button class="chip${auto?' on':''}" data-plk="auto">Auto</button></div>${rows}<div class="bar"><i style="width:${pc}%${pc>=100?';background:var(--ok)':''}"></i></div><div class="k">${pc>=100?T('Tagesplan geschafft 🎉','Daily plan complete 🎉'):dn+'/'+all+' · '+T('Zeitklasse nach deinem Schnitt der letzten 25 Solves (3x3)','Level from your last-25 average (3x3)')}</div><div class="chips">${[3,5,10].map(r=>`<button class="chip${(cfg.plr||3)==r?' on':''}" data-plr="${r}">${r}× ${T('pro Case','per case')}</button>`).join('')}<button class="chip" id="plnew">${T('Cases neu würfeln','Reroll cases')}</button></div><div class="k sub">${T('Grundlage: Tipps von Kewbz (30–40 s), J. Cherian (Road to Sub 15) und Cubelelo (Sub 10), angepasst. Die Zahlen sind Richtwerte, keine Regeln.','Based on tips from Kewbz (30–40 s), J. Cherian (Road to Sub 15) and Cubelelo (sub 10), adapted. Numbers are guidelines, not rules.')}</div>`}
 document.addEventListener('click',e=>{const t=e.target;let b;
  if(b=t.closest('[data-plr]')){cfg.plr=+b.dataset.plr;cfg.plan=plBuild();S('nt.c',cfg);plRender();return}
  if(t.id=='plnew'){cfg.plan=plBuild();S('nt.c',cfg);plRender();return}
- if(t.id=='plgo'){cfg.lsel=cfg.plan.items.map(x=>x.k);cfg.lweak=false;S('nt.c',cfg);prStart();return}
+ if(b=t.closest('[data-plk]')){const v=b.dataset.plk;if(v=='auto')delete cfg.plk;else cfg.plk=v;S('nt.c',cfg);plRender();return}
+ if(b=t.closest('[data-plm]')){const k=b.dataset.plm;cfg.pld.m[k]=cfg.pld.m[k]?0:1;S('nt.c',cfg);plRender();return}
+ if(b=t.closest('[data-pls]')){cfg.lsel=cfg.plan.items.filter(x=>x.k.startsWith(b.dataset.pls+':')).map(x=>x.k);cfg.lweak=false;S('nt.c',cfg);prStart();return}
  if(t.closest('[data-go=learn]'))setTimeout(plRender,30)});
 setTimeout(plRender,50);
 
-const BUILD='v12';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+const BUILD='v13';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
