@@ -230,7 +230,7 @@ body.sx #app{visibility:hidden}#sx,#sxr,#rcv{visibility:visible}
 
 <div id="ew" hidden><div class="card" id="ewc"></div></div>
 <div id="eb"><span>Ziehen: Platz wählen · Tippen: anpassen</span><button id="dn">Fertig</button></div>
-<div id="sh" hidden><div class="card" id="shc"><div class="k">Disziplin</div><div class="chips" id="pzs"></div><div class="k" style="margin-top:14px">Sessions</div><div id="sl"></div><div class="chips"><button class="chip" id="ns">Neue Session</button><button class="chip" id="cps">Wettkampf (Ao5)</button><button class="chip" id="scs2">Smartcube</button><button class="chip" id="shx">Schließen</button></div></div></div>
+<div id="sh" hidden><div class="card" id="shc"><div class="k">Disziplin</div><div class="chips" id="pzs"></div><div class="chips" style="margin-top:6px"><button class="chip" id="sxsh">Smartcube</button></div><div class="k" style="margin-top:14px">Sessions</div><div id="sl"></div><div class="chips"><button class="chip" id="ns">Neue Session</button><button class="chip" id="cps">Wettkampf (Ao5)</button><button class="chip" id="scs2">Smartcube</button><button class="chip" id="shx">Schließen</button></div></div></div>
 <nav class="card" id="nav">
  <button class="on" data-go="timer" aria-label="Timer"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 13V9M9 3h6"/></svg></button>
  <button data-go="list" aria-label="Zeiten"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
@@ -652,14 +652,15 @@ function scSetMode(m){SC.mode=m;if(!m){SC.gyro=false;SC.tq=null;SC.conn=null}sxS
 function sxOpen(){if(PR){return}
  if(!sc3()){let i=D.ses.map(s=>s.pz).lastIndexOf('333');if(i<0){D.ses.push({n:'Session 1',pz:'333',sv:[]});i=D.ses.length-1}goSes(i)}
  SX.open=true;document.body.classList.add('sx');$('#sx').hidden=false;$('#sh').hidden=true;$('[data-go=timer]')&&$('[data-go=timer]').click();
- if(!SC.st)SC.st=scFresh();SX.scr=cur;SC.g=null;SX.rec=[];$('#sxo').hidden=true;sxSet('scr');setSx('0.00');sxGuide();scMount();sxStatus();sxEval();
+ if(!SC.st)SC.st=scFresh();SX.scr=cur;SC.g=null;SX.rec=[];$('#sxo').hidden=true;sxSet('scr');setSx('0.00');sxGuide();scMount();sxStatus();sxEval();if(!navigator.bluetooth&&!SC.mode)$('#scn').textContent=sxBtMsg();
  try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>SX.wl=l).catch(()=>{})}catch(e){}}
 function sxClose(){cancelAnimationFrame(SX.raf);clearInterval(SX.iT);SX.open=false;document.body.classList.remove('sx');$('#sx').hidden=true;$('#sxr').hidden=true;SX.rec=[];try{SX.wl&&SX.wl.release();SX.wl=null}catch(e){}setT(solves.length?F(E(solves.at(-1))):'0.00');render()}
 async function scLib(){const urls=['https://cdn.jsdelivr.net/npm/gan-web-bluetooth/+esm','https://esm.sh/gan-web-bluetooth'];let err;for(const u of urls){try{const m=await import(u);if(m&&m.connectGanCube)return m}catch(e){err=e}}throw err||new Error('library')}
+const sxBtMsg=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform=='MacIntel'&&navigator.maxTouchPoints>1)?T('Auf dem iPhone/iPad geht Web Bluetooth nicht in Safari. Öffne diese Seite im Browser „Bluefy“ (App Store, kostenlos). Der Simulator geht überall.','On iPhone/iPad Web Bluetooth does not work in Safari. Open this page in the free “Bluefy” browser (App Store). The simulator works everywhere.'):T('Web Bluetooth fehlt: Chrome auf Android/PC über https nötig.','Web Bluetooth missing: use Chrome on Android/desktop over https.');
 function scOnEv(ev){if(ev.type=='MOVE')scMove(ev.move);else if(ev.type=='GYRO')scGyro(ev.quaternion);
  else if(ev.type=='FACELETS'){if(SC.sync&&ev.facelets&&ev.facelets.length==54){SC.sync=false;if(ev.facelets!=scFl()){SC.st=scFromFl(ev.facelets);SC.g=null;if(C3.r&&$('#rc3w').parentNode.id=='sxc')c3Set(SC.st);if(SX.ph=='scr'){sxGuide();sxEval()}}}}
  else if(ev.type=='BATTERY'){SC.bat=ev.batteryLevel;sxStatus()}else if(ev.type=='DISCONNECT'){scSetMode(null)}}
-async function scConnect(){try{if(!navigator.bluetooth)throw new Error(T('Web Bluetooth fehlt: Chrome auf Android/PC über https nötig (Safari/iOS unterstützt das nicht).','Web Bluetooth missing: use Chrome on Android/desktop over https (not Safari/iOS).'));$('#scn').textContent=T('Bibliothek wird geladen…','Loading library…');const lib=await scLib();$('#scn').textContent=T('Cube wählen…','Pick your cube…');
+async function scConnect(){try{if(!navigator.bluetooth)throw new Error(sxBtMsg());$('#scn').textContent=T('Bibliothek wird geladen…','Loading library…');const lib=await scLib();$('#scn').textContent=T('Cube wählen…','Pick your cube…');
  const conn=await lib.connectGanCube(async(dev,fb)=>{if(SC.mac&&!fb)return SC.mac;const m=prompt(T('MAC-Adresse deines Cubes (z. B. AB:12:34:56:78:9A):','Your cube\'s MAC address (e.g. AB:12:34:56:78:9A):'),SC.mac||'');if(m){SC.mac=m.trim();S('nt.mac',SC.mac)}return m?m.trim():null});
  SC.conn=conn;SC.q0inv=null;SC.st=scFresh();scSetMode('ble');if(C3.r)c3Set(SC.st);sxGuide();SC.sync=true;conn.events$.subscribe(scOnEv);
  await conn.sendCubeCommand({type:'REQUEST_FACELETS'});$('#scn').textContent='';sxStatus()}catch(e){$('#scn').textContent=(e&&e.message)||String(e)}}
@@ -696,7 +697,7 @@ function sxStats(i){const s=solves[i],c=$('#sxrc');SX.ri=i;let R=null;try{R=s&&s
 function sxAct(a){if(a=='abort')sxAbort();else if(a=='stats')sxStats(SX.ri);else if(a=='next')sxNext();else if(a=='ns')sxNewScr();else if(a=='rs')sxReset()}
 document.addEventListener('click',e=>{const t=e.target,b=t.closest('[data-scm]');if(b){if(!SC.mode)scSetMode('sim');scMove(b.dataset.scm);return}
  const x=t.closest('[data-sx]');if(x){sxAct(x.dataset.sx);return}const id=(t.closest('button')||{}).id;if(!id)return;
- if(id=='sxe'||id=='sco')sxOpen();else if(id=='sxq')sxClose();
+ if(id=='sxe'||id=='sco'||id=='sxsh')sxOpen();else if(id=='sxq')sxClose();
  else if(id=='sxi'){cfg.sxi=!cfg.sxi;S('nt.c',cfg);if(SX.ph=='insp'&&!cfg.sxi){clearInterval(SX.iT);sxSet('ready');setSx('0.00')}else if(SX.ph=='ready'&&cfg.sxi)sxReady();sxStatus()}
  else if(id=='sxg')$('#sxo').hidden=!$('#sxo').hidden;
  else if(id=='sxns')sxNewScr();
@@ -711,7 +712,7 @@ document.addEventListener('click',e=>{const t=e.target,b=t.closest('[data-scm]')
  else if(id=='rcst'){$('#rcv').hidden=true;sxStats(rci)}
  else if(id=='rcx')setTimeout(scMount,30)});
 addEventListener('keydown',e=>{if(!SX.open||SC.mode!='sim'||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key.toUpperCase();if('RLUDFB'.includes(k)&&k.length==1){e.preventDefault();scMove(k+(e.shiftKey?"'":''))}});
-const BUILD='v9';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+const BUILD='v10';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
