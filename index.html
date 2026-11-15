@@ -629,7 +629,7 @@ function sxAbort(){cancelAnimationFrame(SX.raf);clearInterval(SX.iT);SX.rec=[];S
 function sxNext(){cur=scr();SX.scr=cur;SC.g=null;SX.rec=[];$('#sxr').hidden=true;sxSet('scr');setSx('0.00');render();sxGuide();sxEval()}
 function sxNewScr(){if(SX.ph!='scr'&&SX.ph!='ready'&&SX.ph!='insp')return;clearInterval(SX.iT);cur=scr();SX.scr=cur;SC.g=null;sxSet('scr');setSx('0.00');render();sxGuide();sxEval()}
 function sxEval(){if(SX.open&&SX.ph=='scr'&&sxArmed()){SX.scr=cur;sxReady()}}
-function sxReset(){SC.st=scFresh();SC.q=[];SC.busy=false;if(SC.conn&&SC.conn.sendCubeCommand)try{SC.conn.sendCubeCommand({type:'REQUEST_RESET'})}catch(e){}if(C3.r&&$('#rc3w').parentNode.id=='sxc')c3Set(SC.st);if(SX.ph!='done'){cancelAnimationFrame(SX.raf);clearInterval(SX.iT);SC.g=null;sxSet('scr');setSx('0.00');sxGuide();sxEval()}}
+function sxReset(){SC.sync=false;SC.st=scFresh();SC.q=[];SC.busy=false;if(SC.conn&&SC.conn.sendCubeCommand)try{SC.conn.sendCubeCommand({type:'REQUEST_RESET'})}catch(e){}if(C3.r&&$('#rc3w').parentNode.id=='sxc')c3Set(SC.st);if(SX.ph!='done'){cancelAnimationFrame(SX.raf);clearInterval(SX.iT);SC.g=null;sxSet('scr');setSx('0.00');sxGuide();sxEval()}}
 /* ---------- moves ---------- */
 function scMove(m){if(!SC.st)SC.st=scFresh();if(!LMV[m[0]]||'xyzMESudlrfb'.includes(m[0]))return;if(m[1]=='2'){scMove(m[0]);scMove(m[0]);return}
  const vis=SX.open&&C3.r&&$('#rc3w').parentNode.id=='sxc',prev=vis?scCopy(SC.st):null,on=SX.open&&sc3();
@@ -655,9 +655,12 @@ function sxOpen(){if(PR){return}
  try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>SX.wl=l).catch(()=>{})}catch(e){}}
 function sxClose(){cancelAnimationFrame(SX.raf);clearInterval(SX.iT);SX.open=false;document.body.classList.remove('sx');$('#sx').hidden=true;$('#sxr').hidden=true;SX.rec=[];try{SX.wl&&SX.wl.release();SX.wl=null}catch(e){}setT(solves.length?F(E(solves.at(-1))):'0.00');render()}
 async function scLib(){const urls=['https://cdn.jsdelivr.net/npm/gan-web-bluetooth/+esm','https://esm.sh/gan-web-bluetooth'];let err;for(const u of urls){try{const m=await import(u);if(m&&m.connectGanCube)return m}catch(e){err=e}}throw err||new Error('library')}
+function scOnEv(ev){if(ev.type=='MOVE')scMove(ev.move);else if(ev.type=='GYRO')scGyro(ev.quaternion);
+ else if(ev.type=='FACELETS'){if(SC.sync&&ev.facelets&&ev.facelets.length==54){SC.sync=false;if(ev.facelets!=scFl()){SC.st=scFromFl(ev.facelets);SC.g=null;if(C3.r&&$('#rc3w').parentNode.id=='sxc')c3Set(SC.st);if(SX.ph=='scr'){sxGuide();sxEval()}}}}
+ else if(ev.type=='BATTERY'){SC.bat=ev.batteryLevel;sxStatus()}else if(ev.type=='DISCONNECT'){scSetMode(null)}}
 async function scConnect(){try{if(!navigator.bluetooth)throw new Error(T('Web Bluetooth fehlt: Chrome auf Android/PC über https nötig (Safari/iOS unterstützt das nicht).','Web Bluetooth missing: use Chrome on Android/desktop over https (not Safari/iOS).'));$('#scn').textContent=T('Bibliothek wird geladen…','Loading library…');const lib=await scLib();$('#scn').textContent=T('Cube wählen…','Pick your cube…');
  const conn=await lib.connectGanCube(async(dev,fb)=>{if(SC.mac&&!fb)return SC.mac;const m=prompt(T('MAC-Adresse deines Cubes (z. B. AB:12:34:56:78:9A):','Your cube\'s MAC address (e.g. AB:12:34:56:78:9A):'),SC.mac||'');if(m){SC.mac=m.trim();S('nt.mac',SC.mac)}return m?m.trim():null});
- SC.conn=conn;SC.q0inv=null;SC.st=scFresh();scSetMode('ble');if(C3.r)c3Set(SC.st);sxGuide();conn.events$.subscribe(ev=>{if(ev.type=='MOVE')scMove(ev.move);else if(ev.type=='GYRO')scGyro(ev.quaternion);else if(ev.type=='FACELETS'){if(ev.facelets&&ev.facelets.length==54&&SX.ph!='solve'&&!SC.q.length&&!SC.busy&&ev.facelets!=scFl()){SC.st=scFromFl(ev.facelets);SC.g=null;if(C3.r&&$('#rc3w').parentNode.id=='sxc')c3Set(SC.st);if(SX.ph=='scr'){sxGuide();sxEval()}}}else if(ev.type=='BATTERY'){SC.bat=ev.batteryLevel;sxStatus()}else if(ev.type=='DISCONNECT'){scSetMode(null)}});
+ SC.conn=conn;SC.q0inv=null;SC.st=scFresh();scSetMode('ble');if(C3.r)c3Set(SC.st);sxGuide();SC.sync=true;conn.events$.subscribe(scOnEv);
  await conn.sendCubeCommand({type:'REQUEST_FACELETS'});$('#scn').textContent='';sxStatus()}catch(e){$('#scn').textContent=(e&&e.message)||String(e)}}
 /* ---------- analysis: Cross / F2L / OLL / PLL ---------- */
 const FMAP={D:{},U:{U:'D',D:'U',F:'B',B:'F'},F:{F:'D',D:'B',B:'U',U:'F'},B:{B:'D',D:'F',F:'U',U:'B'},R:{R:'D',D:'L',L:'U',U:'R'},L:{L:'D',D:'R',R:'U',U:'L'}};
@@ -709,4 +712,4 @@ document.addEventListener('click',e=>{const t=e.target,b=t.closest('[data-scm]')
 addEventListener('keydown',e=>{if(!SX.open||SC.mode!='sim'||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key.toUpperCase();if('RLUDFB'.includes(k)&&k.length==1){e.preventDefault();scMove(k+(e.shiftKey?"'":''))}});
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
-</script><script>if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'))</script></body></html>
+</script><script>if('serviceWorker'in navigator){const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window._r){window._r=1;location.reload()}});addEventListener('load',()=>navigator.serviceWorker.register('sw.js'))}</script></body></html>
