@@ -187,7 +187,7 @@ body.sx #app{visibility:hidden}#sx,#sxr,#rcv{visibility:visible}
  <div class="card"><div class="k">Bestzeiten-Verlauf</div><div class="chart" id="sh2"></div><div class="k" id="sh2t"></div></div>
  <div class="card"><div class="k">Training</div><div id="sh3"></div></div><div class="card" id="fdy"></div><div class="card" id="fcm"></div><div class="card" id="fss"></div>
 </section>
-<section class="view scroll" id="v-learn"><h2>Trainer</h2><div class="chips" id="ltabs"><button class="chip on" data-lt="pll">PLL</button><button class="chip" data-lt="oll">OLL</button><button class="chip" data-lt="f2l">F2L</button><button class="chip" id="lq">Quiz starten</button></div><div class="chips"><button class="chip" id="lsm">Auswählen</button><button class="chip" id="lsa">Alle</button><button class="chip" id="lpr">Üben</button><button class="chip" data-k="lweak">Schwächste zuerst</button></div><div class="k" id="lhint"></div><div id="lg"></div></section>
+<section class="view scroll" id="v-learn"><h2>Trainer</h2><div class="chips" id="ltabs"><button class="chip on" data-lt="pll">PLL</button><button class="chip" data-lt="oll">OLL</button><button class="chip" data-lt="f2l">F2L</button><button class="chip" id="lq">Quiz starten</button></div><div class="chips"><button class="chip" id="lsm">Auswählen</button><button class="chip" id="lsa">Alle</button><button class="chip" id="lpr">Üben</button><button class="chip" data-k="lweak">Schwächste zuerst</button></div><div class="card" id="lpl"></div><div class="k" id="lhint"></div><div id="lg"></div></section>
 <section class="view scroll" id="v-set"><h2>Einstellungen</h2><div class="chips" id="stabs"><button class="chip" data-t="a">Aussehen</button><button class="chip" data-t="t">Timer</button><button class="chip" data-t="w">Widgets</button><button class="chip" data-t="d">Allgemein</button></div>
  <div class="card"><div class="k">Themes</div><div class="chips"><button class="chip" data-pre="ocean">Ocean</button><button class="chip" data-pre="saturn">Saturn</button><button class="chip" data-pre="cyber">Cyber</button><button class="chip" data-pre="banana">Banana</button><button class="chip" data-pre="matrix">Matrix</button><button class="chip" data-pre="sunset">Sunset</button><button class="chip" data-pre="mono">Mono</button><button class="chip" data-pre="sketch">Sketch</button></div></div>
  <div class="card"><div class="k">Widget-Stil</div><div class="chips"><button class="chip" data-k="wbg" data-v="card">Mit Karte</button><button class="chip" data-k="wbg" data-v="line">Nur Rand</button><button class="chip" data-k="wbg" data-v="none">Ohne</button></div></div>
@@ -760,8 +760,28 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-tg]');if(!
 BG.lava=function(){cx.globalCompositeOperation='lighter';for(let i=0;i<6;i++){const x=W*(.5+.42*Math.sin(tt*(.5+i*.17)+i*1.9)),y=H*(.5+.42*Math.cos(tt*(.43+i*.13)+i*2.3)),r=Math.max(W,H)*(.22+.05*Math.sin(tt*1.5+i)),g=cx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,(i%2?c2:c1)+'cc');g.addColorStop(1,'#0000');cx.fillStyle=g;cx.fillRect(0,0,W,H)}cx.globalCompositeOperation='source-over'};
 BG.code=function(){const cs=Math.ceil(W/24);if(!BG.cd||BG.cd.length!=cs)BG.cd=Array.from({length:cs},()=>Math.random()*H);cx.font='15px monospace';const L='RUFLDB';BG.cd.forEach((y,i)=>{y+=1.1+(i%4)*.5;if(y>H+170)y=-20;BG.cd[i]=y;for(let k=0;k<9;k++){const q=Math.floor(y/17)-k,c=L[Math.abs(q*7+i*13)%6]+(Math.abs(q*3+i)%5==0?"'":'');cx.globalAlpha=Math.max(0,.55-k*.06);cx.fillStyle=k?c1:c2;cx.fillText(c,i*24,y-k*17)}});cx.globalAlpha=1};
 BG.fly=function(){if(!BG.ff)BG.ff=Array.from({length:46},()=>({x:Math.random(),y:Math.random(),p:Math.random()*6.28,s:.4+Math.random()}));BG.ff.forEach((f,i)=>{const x=(f.x+Math.sin(tt*f.s+f.p)*.04)*W,y=(f.y+Math.cos(tt*f.s*.8+f.p)*.05)*H,a=.25+.75*Math.abs(Math.sin(tt*3*f.s+f.p)),g=cx.createRadialGradient(x,y,0,x,y,16);g.addColorStop(0,(i%2?c1:c2)+'ff');g.addColorStop(1,'#0000');cx.globalAlpha=a;cx.fillStyle=g;cx.beginPath();cx.arc(x,y,16,0,7);cx.fill()});cx.globalAlpha=1};
+/* ===== Trainingsplan ===== */
+function plBuild(){const c=new Map(),get=k=>{let e=c.get(k);if(!e){e={k,sm:[],ps:null};c.set(k,e)}return e};
+ smData().forEach(({R})=>R.rows.forEach(r=>{if(r.ck&&!r.skip)get(r.ck).sm.push(r.dt)}));
+ Object.keys(PS).forEach(k=>{if(PS[k]&&PS[k].n)get(k).ps=PS[k].sum/PS[k].n});
+ ['pll','oll'].forEach(t=>LD[t].forEach((_,i)=>get(t+':'+i)));
+ const L=[...c.values()].map(e=>{const a=e.sm.length?e.sm.reduce((x,y)=>x+y,0)/e.sm.length:null,v=[a,e.ps].filter(x=>x!=null);let sc,why;
+  if(v.length){sc=v.reduce((x,y)=>x+y,0)/v.length;why=(a!=null?T('Smartcube Ø ','Smartcube avg ')+(a/1000).toFixed(1)+' s':'')+(a!=null&&e.ps!=null?' · ':'')+(e.ps!=null?T('Training Ø ','Practice avg ')+(e.ps/1000).toFixed(1)+' s':'')}
+  else{sc=e.k.startsWith('pll')?4200:5200;why=T('noch nie geübt','never practiced')}return{k:e.k,sc,why}}).sort((x,y)=>y.sc-x.sc);
+ const n={pll:0,oll:0,f2l:0},o=[];L.forEach(e=>{const t=e.k.split(':')[0];if(o.length<(cfg.plc||6)&&n[t]<4){n[t]++;o.push(e)}});
+ const reps=cfg.plr||3;return{d:new Date().toDateString(),reps,items:o.map(e=>({k:e.k,why:e.why,base:(PS[e.k]&&PS[e.k].n)||0}))}}
+function plRender(){const el=$('#lpl');if(!el)return;if(!cfg.plan||cfg.plan.d!=new Date().toDateString()){cfg.plan=plBuild();S('nt.c',cfg)}const P=cfg.plan;let done=0;
+ const rows=P.items.map(it=>{const[t,i]=it.k.split(':'),c=LD[t][+i];if(!c)return'';const n=Math.min(P.reps,Math.max(0,((PS[it.k]&&PS[it.k].n)||0)-it.base));done+=n;return`<div class="smr w"><span class="sxn">${c.n}${t=='pll'?'-Perm':''}<br><span class="k">${it.why}</span></span><b>${n}/${P.reps}</b><span class="k"></span><span>${n>=P.reps?'✓':''}</span></div>`}).join(''),tot=P.items.length*P.reps,pc=tot?Math.round(done/tot*100):0;
+ el.innerHTML=`<div class="k">${T('Trainingsplan · heute','Training plan · today')}</div>${rows}<div class="bar"><i style="width:${pc}%${pc>=100?';background:var(--ok)':''}"></i></div><div class="k">${pc>=100?T('Plan geschafft 🎉','Plan complete 🎉'):pc+'% · '+T('Wiederholungen pro Case:','Reps per case:')}</div>
+ <div class="chips">${[3,5,10].map(r=>`<button class="chip${(cfg.plr||3)==r?' on':''}" data-plr="${r}">${r}×</button>`).join('')}<button class="chip" id="plgo">${T('Plan starten','Start plan')}</button><button class="chip" id="plnew">${T('Neu erstellen','Rebuild')}</button></div>`}
+document.addEventListener('click',e=>{const t=e.target;let b;
+ if(b=t.closest('[data-plr]')){cfg.plr=+b.dataset.plr;cfg.plan=plBuild();S('nt.c',cfg);plRender();return}
+ if(t.id=='plnew'){cfg.plan=plBuild();S('nt.c',cfg);plRender();return}
+ if(t.id=='plgo'){cfg.lsel=cfg.plan.items.map(x=>x.k);cfg.lweak=false;S('nt.c',cfg);prStart();return}
+ if(t.closest('[data-go=learn]'))setTimeout(plRender,30)});
+setTimeout(plRender,50);
 
-const BUILD='v11';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+const BUILD='v12';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
