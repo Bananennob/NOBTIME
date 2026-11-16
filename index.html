@@ -780,12 +780,17 @@ cross:['{n}× Cross-Planung','{n}× cross planning','Unbegrenzte Inspection: ein
 f2lo:['{n}× nur F2L','{n}× F2L only','Nur Cross + F2L lösen und dann stoppen. Ziel: F2L unter 8 s.','Solve only cross + F2L, then stop. Goal: F2L under 8 s.','man'],
 fing:['Fingertricks für {n} Alg(s)','Finger tricks for {n} alg(s)','Einen Alg aus dem Plan flüssig und ohne Umgreifen üben (Fingertricks auf YouTube).','Practise one alg from the plan smoothly without regrips.','man'],
 obs:['{n} schwere F2L-Cases','{n} hard F2L cases','Seltene, effiziente F2L-Cases (z. B. mit umgedrehter Kante) im Trainer-Tab ansehen und üben.','Look at and practise rare, efficient F2L cases (e.g. flipped edge) in the trainer tab.','man'],
+bench:['{n} Solves: OLL und PLL einzeln messen','{n} solves: measure OLL and PLL separately','Im Smartcube-Modus lösen und danach in der Statistik OLL- und PLL-Zeit einzeln ansehen. Ziel: PLL unter 3 s. Zählt automatisch.','Solve in smartcube mode and check OLL and PLL times separately afterwards. Goal: PLL under 3 s. Counts automatically.','spl'],
+insp:['{n}× Inspection voll nutzen','{n}× use full inspection','In den 15 s Cross plus erstes Paar planen, dann ohne Pause durchziehen. Kein Stocken nach dem Cross.','Plan the cross plus the first pair within the 15 s, then execute without pausing. No hesitation after the cross.','man'],
+alt:['{n} Alternativ-Algs lernen','{n} alternative algs to learn','Für deine langsamsten Cases einen schnelleren oder bequemeren Alg suchen und im Trainer festigen.','For your slowest cases find a faster or more comfortable alg and drill it in the trainer.','man'],
 pll:['PLL-Schwächste üben','Practise weakest PLLs','','','drill'],oll:['OLL-Schwächste üben','Practise weakest OLLs','','','drill']};
 const PLV=[{id:'45',min:45,n:['Über 45 s','Over 45 s'],t:[['solves',30],['slow',10],['pll'],['oll']]},
 {id:'30',min:30,n:['30–45 s','30–45 s'],t:[['solves',100],['split',15],['look',10],['pll'],['oll'],['fing',1]]},
 {id:'20',min:20,n:['20–30 s','20–30 s'],t:[['solves',75],['split',10],['slow',15],['cross',10],['pll'],['oll']]},
 {id:'15',min:15,n:['15–20 s','15–20 s'],t:[['solves',50],['f2lo',15],['slow',15],['split',10],['pll'],['oll']]},
-{id:'0',min:0,n:['Unter 15 s','Under 15 s'],t:[['solves',50],['cross',10],['slow',20],['obs',10],['pll'],['oll'],['fing',2]]}];
+{id:'10',min:10,n:['10–15 s','10–15 s'],t:[['solves',50],['cross',10],['slow',20],['obs',10],['pll'],['oll'],['fing',2]]},
+{id:'8',min:8,n:['8–10 s','8–10 s'],t:[['solves',50],['split',15],['insp',15],['slow',20],['look',10],['pll'],['oll'],['bench',10],['fing',3]]},
+{id:'0',min:0,n:['Unter 8 s','Under 8 s'],t:[['solves',50],['split',20],['insp',15],['slow',15],['obs',10],['alt',2],['pll'],['oll'],['bench',10],['fing',3]]}];
 function plLevel(){if(cfg.plk)return PLV.find(l=>l.id==cfg.plk)||PLV[1];const v=pzS().filter(s=>s.p!=2).slice(-25).map(s=>E(s)/1000);if(v.length<5)return null;const m=v.reduce((a,b)=>a+b,0)/v.length;return PLV.find(l=>m>=l.min)}
 function plRender(){const el=$('#lpl');if(!el)return;const today=new Date().toDateString();if(!cfg.plan||cfg.plan.d!=today){cfg.plan=plBuild();S('nt.c',cfg)}if(!cfg.pld||cfg.pld.d!=today){cfg.pld={d:today,m:{}};S('nt.c',cfg)}
  const P=cfg.plan,lv=plLevel()||PLV[1],auto=!cfg.plk,t0=new Date().setHours(0,0,0,0),ts=D.ses.filter(q=>q.pz==D.ses[D.cur].pz&&q.n!='Practice').flatMap(q=>q.sv).filter(s=>s.d>=t0),cnt={auto:ts.length,spl:ts.filter(s=>s.rm).length};
@@ -806,7 +811,7 @@ document.addEventListener('click',e=>{const t=e.target;let b;
  if(t.closest('[data-go=learn]'))setTimeout(plRender,30)});
 setTimeout(plRender,50);
 
-const BUILD='v14';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+const BUILD='v15';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
