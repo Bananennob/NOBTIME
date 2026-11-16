@@ -47,6 +47,7 @@ polyline{fill:none;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke
 .g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .smr{display:grid;grid-template-columns:96px 52px auto 64px;gap:6px;align-items:center;margin-top:8px}.smr.w{grid-template-columns:1fr 52px 36px auto}.smr .bar{grid-column:1/-1;margin:0;height:5px}.smr input{width:64px}.sxc::before{content:'';display:inline-block;width:8px;height:8px;border-radius:3px;background:var(--c);margin-right:6px}.sub{margin-top:12px}#dnt{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
 .plr{padding:9px 0;border-top:1px solid var(--line)}.plr.ok{opacity:.6}.plh{display:flex;align-items:center;gap:8px}.plh b{flex:1}
+#v-learn #lpl{display:none}#v-learn.pl #lpl{display:block}#v-learn.pl #lg,#v-learn.pl .lctl,#v-learn.pl #lhint{display:none}
 .bar{height:8px;border-radius:9px;background:var(--line);margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .4s}
 input{width:62px;font:inherit;color:var(--fg);background:var(--line);border:0;border-radius:10px;padding:6px 8px;text-align:center}
 .rw2{display:grid;grid-template-columns:44px 1fr 1fr 34px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
@@ -188,7 +189,7 @@ body.sx #app{visibility:hidden}#sx,#sxr,#rcv{visibility:visible}
  <div class="card"><div class="k">Bestzeiten-Verlauf</div><div class="chart" id="sh2"></div><div class="k" id="sh2t"></div></div>
  <div class="card"><div class="k">Training</div><div id="sh3"></div></div><div class="card" id="fdy"></div><div class="card" id="fcm"></div><div class="card" id="fss"></div>
 </section>
-<section class="view scroll" id="v-learn"><h2>Trainer</h2><div class="chips" id="ltabs"><button class="chip on" data-lt="pll">PLL</button><button class="chip" data-lt="oll">OLL</button><button class="chip" data-lt="f2l">F2L</button><button class="chip" id="lq">Quiz starten</button></div><div class="chips"><button class="chip" id="lsm">Auswählen</button><button class="chip" id="lsa">Alle</button><button class="chip" id="lpr">Üben</button><button class="chip" data-k="lweak">Schwächste zuerst</button></div><div class="card" id="lpl"></div><div class="k" id="lhint"></div><div id="lg"></div></section>
+<section class="view scroll" id="v-learn"><h2>Trainer</h2><div class="chips" id="ltabs"><button class="chip on" data-lt="pll">PLL</button><button class="chip" data-lt="oll">OLL</button><button class="chip" data-lt="f2l">F2L</button><button class="chip" data-lt="plan">Plan</button></div><div class="chips lctl"><button class="chip" id="lsm">Auswählen</button><button class="chip" id="lsa">Alle</button><button class="chip" id="lpr">Üben</button><button class="chip" data-k="lweak">Schwächste zuerst</button></div><div class="card" id="lpl"></div><div class="k" id="lhint"></div><div id="lg"></div></section>
 <section class="view scroll" id="v-set"><h2>Einstellungen</h2><div class="chips" id="stabs"><button class="chip" data-t="a">Aussehen</button><button class="chip" data-t="t">Timer</button><button class="chip" data-t="w">Widgets</button><button class="chip" data-t="d">Allgemein</button></div>
  <div class="card"><div class="k">Themes</div><div class="chips"><button class="chip" data-pre="ocean">Ocean</button><button class="chip" data-pre="saturn">Saturn</button><button class="chip" data-pre="cyber">Cyber</button><button class="chip" data-pre="banana">Banana</button><button class="chip" data-pre="matrix">Matrix</button><button class="chip" data-pre="sunset">Sunset</button><button class="chip" data-pre="mono">Mono</button><button class="chip" data-pre="sketch">Sketch</button></div></div>
  <div class="card"><div class="k">Widget-Stil</div><div class="chips"><button class="chip" data-k="wbg" data-v="card">Mit Karte</button><button class="chip" data-k="wbg" data-v="line">Nur Rand</button><button class="chip" data-k="wbg" data-v="none">Ohne</button></div></div>
@@ -388,7 +389,7 @@ function prShow(){const c=PR.prev;if(c){const e=E(solves.at(-1));if(isFinite(e))
 function prStart(){const pool=cfg.lsel.map(k=>{const[t,i]=k.split(':');return LD[t][+i]}).filter(Boolean);if(!pool.length){$('#lhint').textContent='Wähle erst Fälle aus (Auswählen)';return}if(st!='idle')return;PR={pool,cur:null,prev:null};let i=D.ses.findIndex(s=>s.n=='Practice');if(i<0){D.ses.push({n:'Practice',pz:'333',sv:[]});i=D.ses.length-1}goSes(i);$('#prb').hidden=false;$('#prt').textContent='Üben';$('[data-go=timer]').click()}
 function prStop(){PR=null;$('#prb').hidden=true;cur=scr();render()}
 let lt='pll',lqm=false,lci=0,lsm=false;
-function lrender(){let g='',h='';LD[lt].forEach((c,i)=>{if(c.g&&c.g!=g){g=c.g;h+=`<div class="lgh">${FG[g]}</div>`}h+=`<div class="card lc${cfg.lsel.includes(lt+':'+i)?' sel':''}" data-ci="${i}">${lpic(c)}<b>${c.n}</b>${PS[lt+':'+i]?`<small>Ø ${F(PS[lt+':'+i].sum/PS[lt+':'+i].n)}</small>`:''}</div>`});$('#lg').innerHTML=h;$('#lhint').textContent=cfg.lsel.length?cfg.lsel.length+' ✓':''}
+function lrender(){$('#v-learn').classList.toggle('pl',lt=='plan');if(lt=='plan'){plRender();return}let g='',h='';LD[lt].forEach((c,i)=>{if(c.g&&c.g!=g){g=c.g;h+=`<div class="lgh">${FG[g]}</div>`}h+=`<div class="card lc${cfg.lsel.includes(lt+':'+i)?' sel':''}" data-ci="${i}">${lpic(c)}<b>${c.n}</b>${PS[lt+':'+i]?`<small>Ø ${F(PS[lt+':'+i].sum/PS[lt+':'+i].n)}</small>`:''}</div>`});$('#lg').innerHTML=h;$('#lhint').textContent=cfg.lsel.length?cfg.lsel.length+' ✓':''}
 function lopen(i,hide){lci=i;const c=LD[lt][i];$('#lvh').textContent=hide?'?':c.n;$('#lvp').innerHTML=lpic(c);$('#lva').textContent=hide?'':c.a;{const r=PS[c.t+':'+c.i];$('#lvt').textContent=r?r.n+'× · Ø '+F(r.sum/r.n)+' · Best '+F(r.best):''}$('#lvs').hidden=!hide;$('#lv').hidden=false}
 const lrnd=()=>Math.random()*LD[lt].length|0;
 document.addEventListener('click',e=>{const t=e.target,c=t.closest('[data-ci]');
@@ -805,7 +806,7 @@ document.addEventListener('click',e=>{const t=e.target;let b;
  if(t.closest('[data-go=learn]'))setTimeout(plRender,30)});
 setTimeout(plRender,50);
 
-const BUILD='v13';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+const BUILD='v14';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
