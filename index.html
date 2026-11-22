@@ -1190,7 +1190,7 @@ function btSheet(){const v=BT.view;let h='';
  BT.src.innerHTML=h}
 function btOpen(v,m){BT.view=v;if(m!=null)BT.msg=m;btSheet();if($('#pop').hidden||popCur!=BT.pi){if(popCur>=0)popClose();popOpen(BT.pi)}}
 function btUi(){const b=$('#btb');b.hidden=!BT.on;if(!BT.on)return;$('#btl').textContent=`${BT.name||T('Du','You')}  ${BT.me} : ${BT.op}  ${BT.opn||T('Gegner','Opponent')}`;let s='';const rb=$('#btr');rb.hidden=!(BT.ph=='ready'&&!BT.rdyMe);
- if(BT.ph=='solve'){if(BT.my)s=T('Warte, bis der Gegner fertig ist...','Waiting for the opponent to finish...');else if(BT.opr)s=T(`${BT.opn||'Gegner'} ist fertig - Zeit verdeckt, bis du fertig bist.`,`${BT.opn||'Opponent'} is done - time hidden until you finish.`);else s=T('Zum Start der Inspektion klicken','Click to start inspection')}else if(BT.ph=='wait')s=T('Warte, bis der Gegner fertig ist...','Waiting for the opponent to finish...');else if(BT.ph=='show'||BT.ph=='over')s=BT.line||'';
+ if(BT.ph=='solve'){if(BT.my)s=T('Warte, bis der Gegner fertig ist...','Waiting for the opponent to finish...');else{s=inspecting?T('Halte 0,5 s gedrückt, dann loslassen zum Start','Hold 0.5 s, then release to start'):T('Einmal tippen: Inspektion starten (15 s)','Tap once to start inspection (15 s)');if(BT.opr)s+=' | '+T(`${BT.opn||'Gegner'} ist fertig - Zeit verdeckt.`,`${BT.opn||'Opponent'} is done - time hidden.`)}}else if(BT.ph=='wait')s=T('Warte, bis der Gegner fertig ist...','Waiting for the opponent to finish...');else if(BT.ph=='show'||BT.ph=='over')s=BT.line||'';
 $('#bts').textContent=s;$('#bth').textContent=BT.hist.length?T('Du / Gegner  ','You / Opp  ')+BT.hist.join('   '):''}
 function btReset(){BT.my=null;BT.opr=null;BT.rdyMe=false;BT.rdyOp=false}
 function btSetRound(n,s){BT.rd=n;btReset();BT.ph='solve';BT.scr=s;cur=s;st='idle';clearInterval(iT);inspecting=false;pen=0;document.body.classList.remove('run');setT('0.00');render();btUi()}
@@ -1223,7 +1223,7 @@ document.addEventListener('click',e=>{const t=e.target;if(t.closest('#bte')){if(
  else if(t.closest('#btr')){BT.rdyMe=true;btSend({t:'rdy'});btUi();btCheck()}
  else if(t.closest('#btx')){btSend({t:'bye'});btEnd('')}});
 {const o=up;up=()=>{if(BT.on){const s=cfg.insp;cfg.insp=true;try{o()}finally{cfg.insp=s}}else o()}}
-{const o=down;down=()=>{if(BT.on&&st=='idle'&&!(BT.ph=='solve'&&!BT.my))return;o()}}
+{const o=down;down=()=>{if(BT.on&&st=='idle'&&!(BT.ph=='solve'&&!BT.my))return;if(BT.on&&BT.ph=='solve'&&!BT.my&&st=='idle'&&!inspecting){inspecting=true;i0=performance.now();iS=0;iT=setInterval(()=>{const s=15-(performance.now()-i0)/1000;inspSay(15-s);setT(s>0?Math.ceil(s):s>-2?'+2':'DNF')},100);setT(15);btUi();return}if(BT.on){const hs=cfg.hold;cfg.hold=500;try{o()}finally{cfg.hold=hs}}else o()}}
 {const o=stop;stop=()=>{if(!(BT.on&&BT.ph=='solve'&&!BT.my)){o();return}const keep=BT.scr;o();const s=solves.pop();save();cur=keep;render();const ms=E(s),v=isFinite(ms)?ms:-1;setT(isFinite(ms)?F(ms):'DNF');BT.my={ms:v};BT.ph='wait';btSend({t:'res',n:BT.rd,ms:v});btUi();btRes()}}
 {const o=celebrate;celebrate=(...a)=>{if(BT.on)return;o(...a)}}
 /* ===== Animations-Regler ===== */
@@ -1268,7 +1268,7 @@ document.addEventListener('click',e=>{const c=e.target.closest('[data-rcx]');if(
  else if(v=='clr')s='';
  t.value=s;rcUp()});
 rcxRender();
-const BUILD='v34';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+const BUILD='v35';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
