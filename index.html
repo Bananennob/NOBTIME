@@ -175,7 +175,7 @@ body:not(.paper):not(.pixel):not(.term):not(.blue):not(.neo):not(.lg) .card{box-
 @media(prefers-reduced-motion:reduce){#v-timer.on>*,#v-timer.on #wid>.card,#v-set.on>*{animation:none}body.run .stage::before{animation:none}}
 /* ===== Battle ===== */
 #bte{font-weight:700;letter-spacing:.06em}
-#btb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;flex:none}#btb[hidden]{display:none}#btl{flex:1;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#bts{width:100%;order:3;color:var(--mut);font-size:13px}
+#btb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;flex:none}#btb[hidden]{display:none}#btl{flex:1;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#bts{width:100%;order:3;color:var(--fg);font-size:14px;font-weight:600}#bth{width:100%;order:4;color:var(--mut);font-size:12px;font-variant-numeric:tabular-nums}#bth:empty{display:none}
 .btl2{font-size:12px;color:var(--mut);margin:8px 0 6px;text-transform:uppercase;letter-spacing:.08em}.btin{width:100%;background:var(--line);color:var(--fg);border:0;border-radius:12px;padding:12px;font:inherit;-webkit-user-select:text;user-select:text;outline:0}.btrow{display:flex;gap:8px;align-items:stretch}
 .btbig{width:100%;background:var(--ac);color:#111;border:0;border-radius:999px;padding:13px 26px;font:inherit;font-weight:700;margin-top:10px}body.pixel .btbig,body.term .btbig{border-radius:0}
 .btcode{font-size:44px;letter-spacing:.18em;font-weight:700;text-align:center;font-family:ui-monospace,monospace;margin:10px 0;-webkit-user-select:text;user-select:text}.bthint{color:var(--mut);font-size:12px;margin-top:10px}
@@ -307,7 +307,7 @@ body.sx #app{visibility:hidden}#sx,#sxr,#rcv{visibility:visible}
 <section class="view on" id="v-timer">
  <div class="top"><div class="brand"><span class="logo"></span>NOBTIME</div><div class="hd"><button class="pill" id="bte" aria-label="Battle">VS</button><button class="pill" id="sxe" aria-label="Smartcube"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM4 7.5l8 4.5 8-4.5M12 12v9"/></svg></button><button class="pill" id="bgb"></button><button class="pill" id="ses"></button></div></div>
  <div id="cpb" hidden><span id="cpt"></span><button class="pill" id="cpx">Stop</button></div>
- <div id="btb" class="card" hidden><div id="btl"></div><button class="pill" id="btr" hidden>Ready</button><button class="pill" id="btx">Leave</button><div id="bts"></div></div>
+ <div id="btb" class="card" hidden><div id="btl"></div><button class="pill" id="btr" hidden>Ready</button><button class="pill" id="btx">Leave</button><div id="bts"></div><div id="bth"></div></div>
  <div id="prb" hidden><span id="prt">Üben</span><button class="pill" id="prx">Stop</button></div>
  <div id="scr" class="card"><div id="st"></div><div id="pvm"></div></div>
  <div class="stage"><div id="time">0.00</div>
@@ -1080,7 +1080,7 @@ popupify();
 /* ===== Feinschliff v27 JS ===== */
 {let y0=null,dy=0;const sh=$('#popsh');$('#poph').addEventListener('touchstart',e=>{y0=e.touches[0].clientY;dy=0;sh.classList.add('drag')},{passive:true});$('#poph').addEventListener('touchmove',e=>{if(y0==null)return;dy=Math.max(0,e.touches[0].clientY-y0);sh.style.transform=`translateY(${dy}px)`},{passive:true});$('#poph').addEventListener('touchend',()=>{if(y0==null)return;sh.classList.remove('drag');y0=null;if(dy>70)popClose();sh.style.transform='';dy=0})}
 /* ===== Online Battle (WebRTC ueber PeerJS) ===== */
-const BT={on:false,role:'',peer:null,conn:null,code:'',to:3,me:0,op:0,rd:0,ph:'off',rdyMe:false,rdyOp:false,my:null,opr:null,name:'',opn:'',view:'menu',msg:'',scr:'',src:document.createElement('div'),tm:0,iv:0};
+const BT={on:false,role:'',peer:null,conn:null,code:'',to:3,me:0,op:0,rd:0,ph:'off',rdyMe:false,rdyOp:false,my:null,opr:null,name:'',opn:'',view:'menu',msg:'',scr:'',hist:[],src:document.createElement('div'),tm:0,iv:0};
 BT.src.className='popsrc';BT.src.hidden=true;POPS.push({id:'Battle',card:document.createElement('div'),src:BT.src,title:'Battle'});BT.pi=POPS.length-1;
 const btE=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 const btMs=ms=>ms<0||!isFinite(ms)?'DNF':F(ms);
@@ -1095,25 +1095,24 @@ function btSheet(){const v=BT.view;let h='';
  BT.src.innerHTML=h}
 function btOpen(v,m){BT.view=v;if(m!=null)BT.msg=m;btSheet();if($('#pop').hidden||popCur!=BT.pi){if(popCur>=0)popClose();popOpen(BT.pi)}}
 function btUi(){const b=$('#btb');b.hidden=!BT.on;if(!BT.on)return;$('#btl').textContent=`${BT.name||T('Du','You')}  ${BT.me} : ${BT.op}  ${BT.opn||T('Gegner','Opponent')}`;let s='';const rb=$('#btr');rb.hidden=!(BT.ph=='ready'&&!BT.rdyMe);
- if(BT.ph=='ready')s=BT.rdyMe?T('Warte auf Gegner...','Waiting for opponent...'):T(`Runde ${BT.rd} - zuerst auf ${BT.to}. Tippe Bereit.`,`Round ${BT.rd} - first to ${BT.to}. Tap Ready.`);
- else if(BT.ph=='cd')s=T('Gleich gehts los...','Get ready...');else if(BT.ph=='solve')s=BT.my?T('Warte auf Gegner...','Waiting for opponent...'):T('Los! Löse den Cube.','Go! Solve the cube.');
- else if(BT.ph=='wait')s=T('Warte, bis der Gegner fertig ist...','Waiting for the opponent to finish...');else if(BT.ph=='show')s=BT.line||'';$('#bts').textContent=s}
+ if(BT.ph=='solve'){if(BT.my)s=T('Warte, bis der Gegner fertig ist...','Waiting for the opponent to finish...');else if(BT.opr)s=T(`${BT.opn||'Gegner'} ist fertig - Zeit verdeckt, bis du fertig bist.`,`${BT.opn||'Opponent'} is done - time hidden until you finish.`);else s=T('Zum Start der Inspektion klicken','Click to start inspection')}else if(BT.ph=='wait')s=T('Warte, bis der Gegner fertig ist...','Waiting for the opponent to finish...');else if(BT.ph=='show'||BT.ph=='over')s=BT.line||'';
+$('#bts').textContent=s;$('#bth').textContent=BT.hist.length?T('Du / Gegner  ','You / Opp  ')+BT.hist.join('   '):''}
 function btReset(){BT.my=null;BT.opr=null;BT.rdyMe=false;BT.rdyOp=false}
-function btSetRound(n,s){BT.rd=n;btReset();BT.ph='ready';BT.scr=s;cur=s;st='idle';clearInterval(iT);inspecting=false;pen=0;document.body.classList.remove('run');setT('0.00');render();btUi()}
+function btSetRound(n,s){BT.rd=n;btReset();BT.ph='solve';BT.scr=s;cur=s;st='idle';clearInterval(iT);inspecting=false;pen=0;document.body.classList.remove('run');setT('0.00');render();btUi()}
 function btRound(){if(BT.role!='host'||!BT.on)return;const s=PZ['333'][1]();btSend({t:'rd',n:BT.rd+1,scr:s});btSetRound(BT.rd+1,s)}
 function btCheck(){if(BT.role=='host'&&BT.ph=='ready'&&BT.rdyMe&&BT.rdyOp){btSend({t:'go'});btCount()}}
 function btCount(){BT.ph='cd';let n=3;clearInterval(BT.iv);setT(String(n));btUi();BT.iv=setInterval(()=>{n--;if(n>0){setT(String(n))}else{clearInterval(BT.iv);BT.ph='solve';setT('GO');btUi()}},1000)}
-function btRes(){if(!BT.my||!BT.opr||BT.ph=='show'||BT.ph=='over')return;const a=BT.my.ms<0?Infinity:BT.my.ms,b=BT.opr.ms<0?Infinity:BT.opr.ms;let r='';if(a<b){BT.me++;r=T('Punkt für dich','Point for you')}else if(b<a){BT.op++;r=T('Punkt für den Gegner','Point for opponent')}else r=T('Unentschieden','Tie');BT.line=`${btMs(BT.my.ms)}  vs  ${btMs(BT.opr.ms)} - ${r}`;BT.ph='show';btUi();if(BT.me>=BT.to||BT.op>=BT.to){BT.ph='over';clearTimeout(BT.tm);BT.tm=setTimeout(()=>btOpen('over'),1500)}else if(BT.role=='host'){clearTimeout(BT.tm);BT.tm=setTimeout(btRound,4500)}}
+function btRes(){if(!BT.my||!BT.opr||BT.ph=='show'||BT.ph=='over')return;const a=BT.my.ms<0?Infinity:BT.my.ms,b=BT.opr.ms<0?Infinity:BT.opr.ms;let r='';if(a<b){BT.me++;r=T('Punkt für dich','Point for you')}else if(b<a){BT.op++;r=T('Punkt für den Gegner','Point for opponent')}else r=T('Unentschieden','Tie');BT.line=`${btMs(BT.my.ms)}  vs  ${btMs(BT.opr.ms)} - ${r}`;BT.hist.push(`${BT.rd}: ${btMs(BT.my.ms)} / ${btMs(BT.opr.ms)}`);BT.ph='show';btUi();if(BT.me>=BT.to||BT.op>=BT.to){BT.ph='over';clearTimeout(BT.tm);BT.tm=setTimeout(()=>btOpen('over'),1500)}else if(BT.role=='host'){clearTimeout(BT.tm);BT.tm=setTimeout(btRound,4500)}}
 function btRecv(d){if(!d||!d.t)return;switch(d.t){
  case'hi':BT.opn=d.n||'Player';if(BT.role=='host'){btSend({t:'cfg',to:BT.to,n:BT.name});btStart()}break;
  case'cfg':BT.to=d.to;BT.opn=d.n||'Player';btStart();break;
  case'rd':btSetRound(d.n,d.scr);break;
  case'rdy':BT.rdyOp=true;btCheck();break;
  case'go':btCount();break;
- case'res':BT.opr={ms:d.ms};btRes();break;
- case'rm':BT.me=BT.op=0;BT.rd=0;if(popCur==BT.pi)popClose();break;
+ case'res':BT.opr={ms:d.ms};btUi();btRes();break;
+ case'rm':BT.me=BT.op=0;BT.rd=0;BT.hist=[];if(popCur==BT.pi)popClose();break;
  case'bye':btEnd(T('Der Gegner hat den Kampf verlassen.','The opponent left the battle.'));break}}
-function btStart(){BT.on=true;BT.me=BT.op=0;BT.rd=0;if(popCur==BT.pi)popClose();$('[data-go=timer]').click();btUi();if(BT.role=='host')btRound()}
+function btStart(){BT.on=true;BT.me=BT.op=0;BT.rd=0;BT.hist=[];if(popCur==BT.pi)popClose();$('[data-go=timer]').click();btUi();if(BT.role=='host')btRound()}
 function btWire(c,role){BT.conn=c;BT.role=role;c.on('open',()=>{clearTimeout(BT.tm);btSend({t:'hi',n:BT.name})});c.on('data',btRecv);c.on('close',()=>{if(BT.on||BT.view=='wait'||BT.view=='join')btEnd(T('Verbindung getrennt.','Connection lost.'))});c.on('error',()=>{})}
 function btEnd(msg){clearTimeout(BT.tm);clearInterval(BT.iv);const was=BT.on;try{BT.conn&&BT.conn.close()}catch(e){}try{BT.peer&&BT.peer.destroy()}catch(e){}BT.conn=BT.peer=null;BT.on=false;BT.ph='off';btReset();BT.me=BT.op=0;btUi();if(was||msg){cur=scr();setT('0.00');render()}if(msg)btOpen('msg',msg);else if(popCur==BT.pi)popClose()}
 function btCode(){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return Array.from({length:5},()=>a[Math.random()*a.length|0]).join('')}
@@ -1124,10 +1123,11 @@ async function btJoin(){if(D.ses[D.cur].pz!='333')return btOpen('msg',T('Battle 
 document.addEventListener('click',e=>{const t=e.target;if(t.closest('#bte')){if(BT.on)return;if(popCur>=0)popClose();btOpen(BT.peer?BT.view:'menu');return}
  const b=t.closest('[data-bto]');if(b){const nn=$('#btnm');if(nn)cfg.bn=nn.value.trim();BT.to=+b.dataset.bto;btSheet();return}
  if(t.closest('#btc'))btHost();else if(t.closest('#btg'))btJoin();else if(t.closest('#btcx')||t.closest('#btk')){const k=t.closest('#btk');btEnd('');if(k)popClose()}else if(t.closest('#btx2')){btSend({t:'bye'});btEnd('')}
- else if(t.closest('#btrm')){BT.me=BT.op=0;BT.rd=0;btSend({t:'rm'});popClose();btRound()}
+ else if(t.closest('#btrm')){BT.me=BT.op=0;BT.rd=0;BT.hist=[];btSend({t:'rm'});popClose();btRound()}
  else if(t.closest('#bts2')){const m=T(`Battle gegen mich in NOBTIME! Raum-Code: ${BT.code}`,`Battle me in NOBTIME! Room code: ${BT.code}`);if(navigator.share)navigator.share({text:m}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(BT.code)}
  else if(t.closest('#btr')){BT.rdyMe=true;btSend({t:'rdy'});btUi();btCheck()}
  else if(t.closest('#btx')){btSend({t:'bye'});btEnd('')}});
+{const o=up;up=()=>{if(BT.on){const s=cfg.insp;cfg.insp=true;try{o()}finally{cfg.insp=s}}else o()}}
 {const o=down;down=()=>{if(BT.on&&st=='idle'&&!(BT.ph=='solve'&&!BT.my))return;o()}}
 {const o=stop;stop=()=>{if(!(BT.on&&BT.ph=='solve'&&!BT.my)){o();return}const keep=BT.scr;o();const s=solves.pop();save();cur=keep;render();const ms=E(s),v=isFinite(ms)?ms:-1;setT(isFinite(ms)?F(ms):'DNF');BT.my={ms:v};BT.ph='wait';btSend({t:'res',n:BT.rd,ms:v});btUi();btRes()}}
 {const o=celebrate;celebrate=(...a)=>{if(BT.on)return;o(...a)}}
@@ -1135,7 +1135,7 @@ document.addEventListener('click',e=>{const t=e.target;if(t.closest('#bte')){if(
 {const f=()=>{$('#bgsr').value=cfg.bgs||1;$('#bgsv').textContent=(+cfg.bgs||1).toFixed(1)+'x';$('#uisr').value=cfg.uis||1;$('#uisv').textContent=(+cfg.uis||1).toFixed(1)+'x';document.documentElement.style.setProperty('--as',cfg.uis||1)};
 $('#bgsr').addEventListener('input',e=>{cfg.bgs=+e.target.value;$('#bgsv').textContent=cfg.bgs.toFixed(1)+'x';S('nt.c',cfg);popLabels()});$('#uisr').addEventListener('input',e=>{cfg.uis=+e.target.value;$('#uisv').textContent=cfg.uis.toFixed(1)+'x';document.documentElement.style.setProperty('--as',cfg.uis);S('nt.c',cfg);popLabels()});
 {const o=apply;apply=()=>{o();f()}}f()}
-const BUILD='v29';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+const BUILD='v30';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
