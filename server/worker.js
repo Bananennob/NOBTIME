@@ -26,7 +26,7 @@ const NAME=/^[A-Za-z0-9_.-]{3,20}$/;
 const now=()=>Date.now();
 const pubU=r=>({id:r.id,u:r.u,prof:pj(r.prof,{}),pub:pj(r.pub,{}),seen:r.seen||0});
 async function handle(req,env){
- const ADM=new Set(String(env.ADMINS||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean)),isAdm=u=>!!(u&&ADM.has(u.ulc));
+ const ADM=new Set(String(env.ADMINS||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean)),isAdm=u=>!!(u&&(ADM.has(u.ulc)||u.adm==1));
  if(req.method=='OPTIONS')return new Response(null,{headers:CORS});
  const url=new URL(req.url),P=url.pathname.replace(/\/+$/,''),DB=env.DB;
  if(!DB)return ER('DB binding missing',500);
@@ -59,8 +59,9 @@ async function handle(req,env){
  if(!ME)return ER('auth',401);
  if(ME.ban&&P!='/api/logout')return ER('banned',403);
  await q('UPDATE users SET seen=? WHERE id=?',now(),ME.id).run();
+ if(P=='/api/adminkey'&&req.method=='POST'){if(!env.ADMIN_KEY)return ER('nokey',403);if(ME.fn>=5&&now()<ME.ft)return ER('wait',429);if(String(body.k||'')!==String(env.ADMIN_KEY)){const n=(ME.fn||0)+1;await q('UPDATE users SET fn=?,ft=? WHERE id=?',n,n>=5?now()+30000:0,ME.id).run();return ER('bad_key',401)}await q('UPDATE users SET adm=1,fn=0,ft=0 WHERE id=?',ME.id).run();return J({ok:true,adm:true})}
  if(P.startsWith('/api/admin/')){if(!isAdm(ME))return ER('forbidden',403);
-  if(P=='/api/admin/users'&&req.method=='GET'){const s=(url.searchParams.get('q')||'').toLowerCase().replace(/[^a-z0-9_.-]/g,'').slice(0,20),off=Math.max(0,+url.searchParams.get('off')||0);const rows=(await q('SELECT id,u,ulc,prof,pub,seen,created,ban,banr,(SELECT COUNT(*) FROM msgs WHERE uid=users.id AND del=0) mc FROM users WHERE ulc LIKE ? ORDER BY seen DESC LIMIT 40 OFFSET ?','%'+s+'%',off).all()).results||[];const tot=await q('SELECT COUNT(*) n FROM users').first(),mt=await q('SELECT COUNT(*) n FROM msgs WHERE del=0').first();return J({list:rows.map(r=>({...pubU(r),created:r.created,ban:r.ban||0,banr:r.banr||'',mc:r.mc,adm:isAdm(r)})),total:tot.n,msgs:mt.n})}
+  if(P=='/api/admin/users'&&req.method=='GET'){const s=(url.searchParams.get('q')||'').toLowerCase().replace(/[^a-z0-9_.-]/g,'').slice(0,20),off=Math.max(0,+url.searchParams.get('off')||0);const rows=(await q('SELECT id,u,ulc,adm,prof,pub,seen,created,ban,banr,(SELECT COUNT(*) FROM msgs WHERE uid=users.id AND del=0) mc FROM users WHERE ulc LIKE ? ORDER BY seen DESC LIMIT 40 OFFSET ?','%'+s+'%',off).all()).results||[];const tot=await q('SELECT COUNT(*) n FROM users').first(),mt=await q('SELECT COUNT(*) n FROM msgs WHERE del=0').first();return J({list:rows.map(r=>({...pubU(r),created:r.created,ban:r.ban||0,banr:r.banr||'',mc:r.mc,adm:isAdm(r)})),total:tot.n,msgs:mt.n})}
   if(P=='/api/admin/rooms'&&req.method=='GET'){const rows=(await q("SELECT r.id,r.name,r.code,(SELECT COUNT(*) FROM members WHERE room=r.id) n,(SELECT COUNT(*) FROM msgs WHERE room=r.id AND del=0) mc FROM rooms r WHERE r.kind='group' ORDER BY mc DESC LIMIT 60").all()).results||[];return J({list:rows})}
   if(P=='/api/admin/ban'&&req.method=='POST'){const id=String(body.id||''),on=body.on?1:0;const t=await q('SELECT * FROM users WHERE id=?',id).first();if(!t)return ER('notfound',404);if(isAdm(t))return ER('forbidden',403);await q('UPDATE users SET ban=?,banr=? WHERE id=?',on,String(body.reason||'').slice(0,100),id).run();if(on)await q('DELETE FROM tokens WHERE uid=?',id).run();return J({ok:true})}
   if(P=='/api/admin/delmsg'&&req.method=='POST'){await q("UPDATE msgs SET del=1,txt='',att=NULL WHERE id=?",+body.id||0).run();return J({ok:true})}
@@ -97,6 +98,6 @@ async function handle(req,env){
  return ER('notfound',404)}
 const mkDB=sql=>({prepare(s){const mk=a=>({first:async()=>sql.exec(s,...a).toArray()[0]||null,all:async()=>({results:sql.exec(s,...a).toArray()}),run:async()=>{sql.exec(s,...a);const i=/^\s*INSERT/i.test(s)?sql.exec('SELECT last_insert_rowid() AS i').toArray()[0].i:0;return{meta:{last_row_id:i}}}});return{bind:(...a)=>mk(a),...mk([])}}});
 // All API traffic runs through one SQLite-backed Durable Object ("Hub"); static files are served by the assets binding.
-export class Hub{constructor(ctx,env){this.ctx=ctx;this.env=env;this.DB=mkDB(ctx.storage.sql);ctx.blockConcurrencyWhile(async()=>{for(const q of SCHEMA)ctx.storage.sql.exec(q);for(const q of['ALTER TABLE users ADD COLUMN ban INTEGER DEFAULT 0','ALTER TABLE users ADD COLUMN banr TEXT','ALTER TABLE msgs ADD COLUMN del INTEGER DEFAULT 0']){try{ctx.storage.sql.exec(q)}catch(e){}}})}
+export class Hub{constructor(ctx,env){this.ctx=ctx;this.env=env;this.DB=mkDB(ctx.storage.sql);ctx.blockConcurrencyWhile(async()=>{for(const q of SCHEMA)ctx.storage.sql.exec(q);for(const q of['ALTER TABLE users ADD COLUMN ban INTEGER DEFAULT 0','ALTER TABLE users ADD COLUMN banr TEXT','ALTER TABLE msgs ADD COLUMN del INTEGER DEFAULT 0','ALTER TABLE users ADD COLUMN adm INTEGER DEFAULT 0']){try{ctx.storage.sql.exec(q)}catch(e){}}})}
  async fetch(req){try{return await handle(req,{DB:this.DB,ADMINS:this.env.ADMINS,ADMIN_KEY:this.env.ADMIN_KEY})}catch(e){return ER('server_error',500)}}}
 export default{async fetch(req,env){const u=new URL(req.url);if(u.pathname.startsWith('/api/')){if(req.method=='OPTIONS')return new Response(null,{headers:CORS});return env.HUB.get(env.HUB.idFromName('main')).fetch(req)}return env.ASSETS?env.ASSETS.fetch(req):new Response('Not found',{status:404})}};
