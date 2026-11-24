@@ -26,6 +26,7 @@ const NAME=/^[A-Za-z0-9_.-]{3,20}$/;
 const now=()=>Date.now();
 const pubU=r=>({id:r.id,u:r.u,prof:pj(r.prof,{}),pub:pj(r.pub,{}),seen:r.seen||0});
 async function handle(req,env){
+ const ADM=new Set(String(env.ADMINS||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean)),isAdm=u=>!!(u&&ADM.has(u.ulc));
  if(req.method=='OPTIONS')return new Response(null,{headers:CORS});
  const url=new URL(req.url),P=url.pathname.replace(/\/+$/,''),DB=env.DB;
  if(!DB)return ER('DB binding missing',500);
@@ -38,7 +39,7 @@ async function handle(req,env){
   await q('INSERT OR IGNORE INTO members(room,uid,joined) VALUES(\'global\',?,?)',id,t).run();const tk=hex(rnd(24));await q('INSERT INTO tokens(th,uid,created) VALUES(?,?,?)',await sha(tk),id,t).run();return J({token:tk,rc,id,u})}
  if(P=='/api/login'&&req.method=='POST'){const u=String(body.u||'').trim().toLowerCase(),r=await q('SELECT * FROM users WHERE ulc=?',u).first();if(r&&r.fn>=5&&now()<r.ft)return ER('wait',429);
   if(!r||(await pw(String(body.p||''),r.salt))!==r.hash){if(r){const n=(r.fn||0)+1;await q('UPDATE users SET fn=?,ft=? WHERE id=?',n,n>=5?now()+30000:0,r.id).run()}return ER('bad_login',401)}
-  await q('UPDATE users SET fn=0,ft=0,seen=? WHERE id=?',now(),r.id).run();const tk=hex(rnd(24));await q('INSERT INTO tokens(th,uid,created) VALUES(?,?,?)',await sha(tk),r.id,now()).run();return J({token:tk,id:r.id,u:r.u})}
+  if(r.ban)return ER('banned',403);await q('UPDATE users SET fn=0,ft=0,seen=? WHERE id=?',now(),r.id).run();const tk=hex(rnd(24));await q('INSERT INTO tokens(th,uid,created) VALUES(?,?,?)',await sha(tk),r.id,now()).run();return J({token:tk,id:r.id,u:r.u})}
  if(P=='/api/reset'&&req.method=='POST'){const u=String(body.u||'').trim().toLowerCase(),r=await q('SELECT * FROM users WHERE ulc=?',u).first();if(r&&r.fn>=5&&now()<r.ft)return ER('wait',429);
   if(!r||(await pw(rcN(body.rc),r.rs))!==r.rh){if(r){const n=(r.fn||0)+1;await q('UPDATE users SET fn=?,ft=? WHERE id=?',n,n>=5?now()+30000:0,r.id).run()}return ER('bad_reset',401)}
   const np=String(body.np||'');if(np.length<6)return ER('bad_password');const salt=b64(rnd(16)),rs=b64(rnd(16)),rc=rcGen();await q('UPDATE users SET salt=?,hash=?,rs=?,rh=?,fn=0,ft=0 WHERE id=?',salt,await pw(np,salt),rs,await pw(rcN(rc),rs),r.id).run();await q('DELETE FROM tokens WHERE uid=?',r.id).run();
@@ -51,13 +52,23 @@ async function handle(req,env){
  // auth
  const ah=req.headers.get('Authorization')||'',tk=ah.startsWith('Bearer ')?ah.slice(7):'';const tr=tk?await q('SELECT uid FROM tokens WHERE th=?',await sha(tk)).first():null;
  const ME=tr?await q('SELECT * FROM users WHERE id=?',tr.uid).first():null;
- const gm=async(room)=>room=='global'||!!(ME&&await q('SELECT 1 FROM members WHERE room=? AND uid=?',room,ME.id).first());
- if(P=='/api/msgs'&&req.method=='GET'){const room=url.searchParams.get('room')||'global',after=+url.searchParams.get('after')||0,lim=Math.min(100,+url.searchParams.get('limit')||50);if(!(room=='global'||(ME&&await q('SELECT 1 FROM members WHERE room=? AND uid=?',room,ME.id).first())))return ER('forbidden',403);
-  let rows;if(after)rows=(await q('SELECT id,uid,txt,att,ts FROM msgs WHERE room=? AND id>? ORDER BY id ASC LIMIT ?',room,after,lim).all()).results;else rows=((await q('SELECT id,uid,txt,att,ts FROM msgs WHERE room=? ORDER BY id DESC LIMIT ?',room,lim).all()).results||[]).reverse();
+ const gm=async(room)=>room=='global'||!!(ME&&(await q('SELECT 1 FROM members WHERE room=? AND uid=?',room,ME.id).first()||(isAdm(ME)&&await q("SELECT 1 FROM rooms WHERE id=? AND kind='group'",room).first())));
+ if(P=='/api/msgs'&&req.method=='GET'){const room=url.searchParams.get('room')||'global',after=+url.searchParams.get('after')||0,lim=Math.min(100,+url.searchParams.get('limit')||50);if(!(await gm(room)))return ER('forbidden',403);
+  let rows;if(after)rows=(await q('SELECT id,uid,txt,att,ts FROM msgs WHERE room=? AND del=0 AND id>? ORDER BY id ASC LIMIT ?',room,after,lim).all()).results;else rows=((await q('SELECT id,uid,txt,att,ts FROM msgs WHERE room=? AND del=0 ORDER BY id DESC LIMIT ?',room,lim).all()).results||[]).reverse();
   return J({list:(rows||[]).map(r=>({id:r.id,uid:r.uid,txt:r.txt,att:pj(r.att,null),ts:r.ts}))})}
  if(!ME)return ER('auth',401);
+ if(ME.ban&&P!='/api/logout')return ER('banned',403);
  await q('UPDATE users SET seen=? WHERE id=?',now(),ME.id).run();
- if(P=='/api/me'&&req.method=='GET')return J({id:ME.id,u:ME.u,prof:pj(ME.prof,{}),pub:pj(ME.pub,{}),img:ME.img||'',created:ME.created});
+ if(P.startsWith('/api/admin/')){if(!isAdm(ME))return ER('forbidden',403);
+  if(P=='/api/admin/users'&&req.method=='GET'){const s=(url.searchParams.get('q')||'').toLowerCase().replace(/[^a-z0-9_.-]/g,'').slice(0,20),off=Math.max(0,+url.searchParams.get('off')||0);const rows=(await q('SELECT id,u,ulc,prof,pub,seen,created,ban,banr,(SELECT COUNT(*) FROM msgs WHERE uid=users.id AND del=0) mc FROM users WHERE ulc LIKE ? ORDER BY seen DESC LIMIT 40 OFFSET ?','%'+s+'%',off).all()).results||[];const tot=await q('SELECT COUNT(*) n FROM users').first(),mt=await q('SELECT COUNT(*) n FROM msgs WHERE del=0').first();return J({list:rows.map(r=>({...pubU(r),created:r.created,ban:r.ban||0,banr:r.banr||'',mc:r.mc,adm:isAdm(r)})),total:tot.n,msgs:mt.n})}
+  if(P=='/api/admin/rooms'&&req.method=='GET'){const rows=(await q("SELECT r.id,r.name,r.code,(SELECT COUNT(*) FROM members WHERE room=r.id) n,(SELECT COUNT(*) FROM msgs WHERE room=r.id AND del=0) mc FROM rooms r WHERE r.kind='group' ORDER BY mc DESC LIMIT 60").all()).results||[];return J({list:rows})}
+  if(P=='/api/admin/ban'&&req.method=='POST'){const id=String(body.id||''),on=body.on?1:0;const t=await q('SELECT * FROM users WHERE id=?',id).first();if(!t)return ER('notfound',404);if(isAdm(t))return ER('forbidden',403);await q('UPDATE users SET ban=?,banr=? WHERE id=?',on,String(body.reason||'').slice(0,100),id).run();if(on)await q('DELETE FROM tokens WHERE uid=?',id).run();return J({ok:true})}
+  if(P=='/api/admin/delmsg'&&req.method=='POST'){await q("UPDATE msgs SET del=1,txt='',att=NULL WHERE id=?",+body.id||0).run();return J({ok:true})}
+  if(P=='/api/admin/purge'&&req.method=='POST'){await q("UPDATE msgs SET del=1,txt='',att=NULL WHERE uid=?",String(body.id||'')).run();return J({ok:true})}
+  if(P=='/api/admin/deluser'&&req.method=='POST'){const id=String(body.id||''),t=await q('SELECT * FROM users WHERE id=?',id).first();if(!t)return ER('notfound',404);if(isAdm(t))return ER('forbidden',403);for(const x of['tokens','sync','members','msgs','rx'])await q(`DELETE FROM ${x} WHERE uid=?`,id).run();await q('DELETE FROM friends WHERE a=? OR b=?',id,id).run();await q('DELETE FROM users WHERE id=?',id).run();return J({ok:true})}
+  if(P=='/api/admin/delroom'&&req.method=='POST'){const id=String(body.id||'');if(id=='global')return ER('forbidden',403);await q("DELETE FROM msgs WHERE room=?",id).run();await q('DELETE FROM members WHERE room=?',id).run();await q("DELETE FROM rooms WHERE id=? AND kind='group'",id).run();return J({ok:true})}
+  return ER('notfound',404)}
+ if(P=='/api/me'&&req.method=='GET')return J({id:ME.id,u:ME.u,prof:pj(ME.prof,{}),pub:pj(ME.pub,{}),img:ME.img||'',created:ME.created,adm:isAdm(ME)});
  if(P=='/api/profile'&&req.method=='PUT'){const prof=JSON.stringify(body.prof||{}),pub=JSON.stringify(body.pub||{});if(prof.length>4000||pub.length>6000)return ER('too_big');let img=ME.img;if(body.img!==undefined){img=String(body.img||'');if(img.length>70000||(img&&!img.startsWith('data:image/')))return ER('bad_img')}await q('UPDATE users SET prof=?,pub=?,img=? WHERE id=?',prof,pub,img,ME.id).run();return J({ok:true})}
  if(P=='/api/sync'&&req.method=='GET'){const rows=(await q('SELECT idx,part,ts FROM sync WHERE uid=? ORDER BY idx',ME.id).all()).results||[];return J({ts:rows.length?rows[0].ts:0,parts:rows.map(r=>r.part)})}
  if(P=='/api/sync'&&req.method=='PUT'){const parts=Array.isArray(body.parts)?body.parts:[];if(parts.length>12||parts.some(x=>typeof x!='string'||x.length>450000))return ER('too_big');const ts=now();await q('DELETE FROM sync WHERE uid=?',ME.id).run();for(let i=0;i<parts.length;i++)await q('INSERT INTO sync(uid,idx,part,ts) VALUES(?,?,?,?)',ME.id,i,parts[i],ts).run();return J({ok:true,ts})}
@@ -86,6 +97,6 @@ async function handle(req,env){
  return ER('notfound',404)}
 const mkDB=sql=>({prepare(s){const mk=a=>({first:async()=>sql.exec(s,...a).toArray()[0]||null,all:async()=>({results:sql.exec(s,...a).toArray()}),run:async()=>{sql.exec(s,...a);const i=/^\s*INSERT/i.test(s)?sql.exec('SELECT last_insert_rowid() AS i').toArray()[0].i:0;return{meta:{last_row_id:i}}}});return{bind:(...a)=>mk(a),...mk([])}}});
 // All API traffic runs through one SQLite-backed Durable Object ("Hub"); static files are served by the assets binding.
-export class Hub{constructor(ctx,env){this.ctx=ctx;this.env=env;this.DB=mkDB(ctx.storage.sql);ctx.blockConcurrencyWhile(async()=>{for(const q of SCHEMA)ctx.storage.sql.exec(q)})}
- async fetch(req){try{return await handle(req,{DB:this.DB})}catch(e){return ER('server_error',500)}}}
+export class Hub{constructor(ctx,env){this.ctx=ctx;this.env=env;this.DB=mkDB(ctx.storage.sql);ctx.blockConcurrencyWhile(async()=>{for(const q of SCHEMA)ctx.storage.sql.exec(q);for(const q of['ALTER TABLE users ADD COLUMN ban INTEGER DEFAULT 0','ALTER TABLE users ADD COLUMN banr TEXT','ALTER TABLE msgs ADD COLUMN del INTEGER DEFAULT 0']){try{ctx.storage.sql.exec(q)}catch(e){}}})}
+ async fetch(req){try{return await handle(req,{DB:this.DB,ADMINS:this.env.ADMINS})}catch(e){return ER('server_error',500)}}}
 export default{async fetch(req,env){const u=new URL(req.url);if(u.pathname.startsWith('/api/')){if(req.method=='OPTIONS')return new Response(null,{headers:CORS});return env.HUB.get(env.HUB.idFromName('main')).fetch(req)}return env.ASSETS?env.ASSETS.fetch(req):new Response('Not found',{status:404})}};
