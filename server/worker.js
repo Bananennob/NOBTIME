@@ -1,4 +1,4 @@
-// NOBTIME community server (Cloudflare Worker + D1). Bind your D1 database as "DB".
+// NOBTIME community server: Cloudflare Worker + SQLite Durable Object (no external database needed).
 const SCHEMA=[
 "CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,u TEXT NOT NULL,ulc TEXT NOT NULL UNIQUE,salt TEXT,hash TEXT,rs TEXT,rh TEXT,created INTEGER,prof TEXT,pub TEXT,img TEXT,seen INTEGER,fn INTEGER DEFAULT 0,ft INTEGER DEFAULT 0)",
 "CREATE TABLE IF NOT EXISTS tokens(th TEXT PRIMARY KEY,uid TEXT,created INTEGER)",
@@ -10,7 +10,6 @@ const SCHEMA=[
 "CREATE INDEX IF NOT EXISTS msgs_room ON msgs(room,id)",
 "CREATE TABLE IF NOT EXISTS rx(msg INTEGER,uid TEXT,k TEXT,PRIMARY KEY(msg,uid,k))",
 "INSERT OR IGNORE INTO rooms(id,kind,name,owner,code,created) VALUES('global','global','Global','',NULL,0)"];
-let ready=false;
 const CORS={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'Authorization,Content-Type','Access-Control-Allow-Methods':'GET,POST,PUT,OPTIONS','Access-Control-Max-Age':'86400'};
 const J=(o,s=200)=>new Response(JSON.stringify(o),{status:s,headers:{...CORS,'Content-Type':'application/json'}});
 const ER=(m,s=400)=>J({error:m},s);
@@ -26,11 +25,10 @@ const pj=(s,d)=>{try{return s?JSON.parse(s):d}catch(e){return d}};
 const NAME=/^[A-Za-z0-9_.-]{3,20}$/;
 const now=()=>Date.now();
 const pubU=r=>({id:r.id,u:r.u,prof:pj(r.prof,{}),pub:pj(r.pub,{}),seen:r.seen||0});
-export default{async fetch(req,env){
+async function handle(req,env){
  if(req.method=='OPTIONS')return new Response(null,{headers:CORS});
  const url=new URL(req.url),P=url.pathname.replace(/\/+$/,''),DB=env.DB;
  if(!DB)return ER('DB binding missing',500);
- if(!ready){for(const q of SCHEMA)await DB.prepare(q).run();ready=true}
  if(P=='/api/ping')return J({ok:true,v:1});
  let body={};if(req.method!='GET'){try{body=await req.json()}catch(e){body={}}}
  const q=(s,...a)=>DB.prepare(s).bind(...a);
@@ -85,4 +83,9 @@ export default{async fetch(req,env){
  if(P=='/api/react'&&req.method=='POST'){const id=+body.msg,k=String(body.k||'');if(!id||!/^[a-z]{2,10}$/.test(k))return ER('bad');const m=await q('SELECT room FROM msgs WHERE id=?',id).first();if(!m||!await gm(m.room))return ER('forbidden',403);const ex=await q('SELECT 1 x FROM rx WHERE msg=? AND uid=? AND k=?',id,ME.id,k).first();if(ex)await q('DELETE FROM rx WHERE msg=? AND uid=? AND k=?',id,ME.id,k).run();else{const c=await q('SELECT COUNT(*) n FROM rx WHERE msg=? AND uid=?',id,ME.id).first();if(c&&c.n>=3)return ER('toomany');await q('INSERT INTO rx(msg,uid,k) VALUES(?,?,?)',id,ME.id,k).run()}return J({ok:true})}
  if(P=='/api/reacts'&&req.method=='GET'){const room=url.searchParams.get('room')||'global';if(!await gm(room))return ER('forbidden',403);const ids=((await q('SELECT id FROM msgs WHERE room=? ORDER BY id DESC LIMIT 80',room).all()).results||[]).map(r=>r.id);const out={},my={};if(ids.length){const rows=(await q('SELECT msg,k,COUNT(*) n,MAX(uid=?) me FROM rx WHERE msg IN ('+ids.map(()=>'?').join(',')+') GROUP BY msg,k',ME.id,...ids).all()).results||[];rows.forEach(r=>{(out[r.msg]=out[r.msg]||{})[r.k]=r.n;if(r.me)(my[r.msg]=my[r.msg]||[]).push(r.k)})}return J({rx:out,my})}
  if(P=='/api/pb'&&req.method=='POST'){const t=Math.round(+body.t),z=String(body.z||'').slice(0,12),ty=body.ty=='ao5'?'ao5':'single';if(!(t>0&&t<36000000)||!/^[A-Za-z0-9_]{1,12}$/.test(z))return ER('bad');const l=await q("SELECT MAX(ts) t FROM msgs WHERE uid=? AND att LIKE '%\"k\":\"pb\"%'",ME.id).first();if(l&&l.t&&now()-l.t<30000)return ER('slow',429);const r=await q('INSERT INTO msgs(room,uid,txt,att,ts) VALUES(?,?,?,?,?)','global',ME.id,'',JSON.stringify({k:'pb',t,z,ty}),now()).run();return J({ok:true,id:r.meta&&r.meta.last_row_id})}
- return ER('notfound',404)}};
+ return ER('notfound',404)}
+const mkDB=sql=>({prepare(s){const mk=a=>({first:async()=>sql.exec(s,...a).toArray()[0]||null,all:async()=>({results:sql.exec(s,...a).toArray()}),run:async()=>{sql.exec(s,...a);const i=/^\s*INSERT/i.test(s)?sql.exec('SELECT last_insert_rowid() AS i').toArray()[0].i:0;return{meta:{last_row_id:i}}}});return{bind:(...a)=>mk(a),...mk([])}}});
+// All API traffic runs through one SQLite-backed Durable Object ("Hub"); static files are served by the assets binding.
+export class Hub{constructor(ctx,env){this.ctx=ctx;this.env=env;this.DB=mkDB(ctx.storage.sql);ctx.blockConcurrencyWhile(async()=>{for(const q of SCHEMA)ctx.storage.sql.exec(q)})}
+ async fetch(req){try{return await handle(req,{DB:this.DB})}catch(e){return ER('server_error',500)}}}
+export default{async fetch(req,env){const u=new URL(req.url);if(u.pathname.startsWith('/api/')){if(req.method=='OPTIONS')return new Response(null,{headers:CORS});return env.HUB.get(env.HUB.idFromName('main')).fetch(req)}return env.ASSETS?env.ASSETS.fetch(req):new Response('Not found',{status:404})}};

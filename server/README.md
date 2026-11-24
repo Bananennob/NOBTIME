@@ -1,8 +1,7 @@
-# NOBTIME Community Server (Cloudflare Worker + D1)
+# NOBTIME community server
 
-1. Cloudflare Dashboard > Storage & Databases > D1 > Create database `nobtime`.
-2. Workers & Pages > Create > Worker `nobtime-api` > Deploy, then Edit code: paste `worker.js`, Deploy.
-3. Worker > Settings > Bindings > Add > D1 database: variable name `DB`, database `nobtime`. Deploy.
-4. Open `https://nobtime-api.<account>.workers.dev/api/ping` (should show ok), then paste that URL in the app under Community > Chat > Server.
+The chat, accounts, friends and sync run inside the same Cloudflare Worker that serves the website
+(`/api/*`). Data lives in a SQLite-backed Durable Object (class `Hub`), created automatically on
+deploy through `wrangler.jsonc`. No separate database or URL is needed.
 
-Tables are created automatically on first request.
+Local test: see `worker.js` (`Hub` expects `ctx.storage.sql`).

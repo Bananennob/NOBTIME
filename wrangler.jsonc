@@ -1,0 +1,8 @@
+{
+  "name": "nobtime",
+  "main": "server/worker.js",
+  "compatibility_date": "2025-01-01",
+  "assets": { "directory": ".", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "durable_objects": { "bindings": [{ "name": "HUB", "class_name": "Hub" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Hub"] }]
+}
