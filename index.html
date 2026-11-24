@@ -235,6 +235,8 @@ body.paper #strp i{border:1.5px solid var(--fg);background:#fffdf6}body.paper #s
 .cha{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px;text-align:left}.cha b{font-size:26px}.cha span{color:var(--mut);font-size:12px}.cha .sc{font:12px/1.4 ui-monospace,monospace;color:var(--mut);margin:4px 0 6px}
 .chin{display:flex;gap:8px;padding-top:8px;flex:none}.chin input{flex:1;background:var(--card);border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:12px 16px;font:inherit;min-width:0}.chs{width:46px;height:46px;border-radius:50%;border:0;background:var(--ac);color:#0a1020;display:grid;place-items:center;flex:none}
 .odot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);vertical-align:middle}.pfn .nm{display:inline-block}
+/* ===== v43 ===== */
+#cm{inset:0 0 var(--navh,76px) 0;padding-bottom:10px}body.cmo #nav button.on:not(#nvc){background:none!important;box-shadow:none!important;color:var(--mut)}body.cmo #nvc{background:var(--line);color:var(--ac)}
 /* ===== v42 ===== */
 .lvp{font-size:10.5px;font-weight:800;padding:1px 7px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--mut);letter-spacing:.03em;white-space:nowrap;align-self:center}.lvp.t1{color:#9fd4ff;border-color:#9fd4ff55}.lvp.t2{color:#f5c542;border-color:#f5c54266}.lvp.t3{color:#ff9bd0;border-color:#ff9bd066}.lvp.t4{color:#0a1020;background:linear-gradient(90deg,#6fe3ff,#b36bff);border-color:transparent}
 .xpb{height:10px;border-radius:99px;background:var(--card);border:1px solid var(--line);overflow:hidden;margin-top:10px}.xpb i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2,var(--ac)));border-radius:99px}
@@ -1705,7 +1707,8 @@ else if(a=='o-stk'){const t=$('#stkt');t&&t.remove();await api('POST','/api/msg'
 else if(a=='o-pbo'){PF.pbo=PF.pbo?0:1;pfSave();cmRender()}
 }catch(er){const m=$('#cmm');if(m){m.textContent=errTx(er);m.className='cmm bad'}}});
 
-const BUILD='v42';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
+{const navFit=()=>{const n=$('#nav');if(n)document.documentElement.style.setProperty('--navh',Math.ceil(innerHeight-n.getBoundingClientRect().top)+'px')},cm=$('#cm');navFit();addEventListener('resize',navFit);new MutationObserver(()=>{navFit();document.body.classList.toggle('cmo',!cm.hidden);if(cm.hidden)chStop()}).observe(cm,{attributes:true,attributeFilter:['hidden']});document.addEventListener('click',e=>{if(cm.hidden)return;const b=e.target.closest('#nav button');if(!b)return;if(b.id=='nvc'){e.stopImmediatePropagation();cm.hidden=true}else cm.hidden=true},true)}
+const BUILD='v43';$('#ver').textContent=T('Version ','Version ')+BUILD+T(' · Tippe auf „App aktualisieren“, falls etwas Altes angezeigt wird.',' · Tap “Update app” if something old is shown.');
 $('#upd').onclick=async()=>{$('#upd').textContent='…';try{const r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(x=>x.unregister()))}catch(e){}try{const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}catch(e){}location.replace(location.pathname+'?u='+Date.now())};
 $('#goal').value=cfg.goal;$('#gn').value=cfg.gn;
 apply();render();setT(solves.length?F(E(solves.at(-1))):'0.00');draw();
