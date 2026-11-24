@@ -7,7 +7,4 @@ deploy through `wrangler.jsonc`. No separate database or URL is needed.
 Local test: see `worker.js` (`Hub` expects `ctx.storage.sql`).
 
 ## Admin
-Admin usernames are listed in `wrangler.jsonc` (`ADMINS`). Those names are reserved: registering one requires the
-secret `ADMIN_KEY` (Cloudflare dashboard > Workers > nobtime > Settings > Variables and Secrets > add secret).
-
-Secret admin login in the app: Settings > General > Stats card, tap the popup title 20 times, enter the value of `ADMIN_KEY`.
+The first account that uses the secret admin door in the app (tap NOBTIME 10 times, or type `nobadmin` on PC) sets the admin password; everyone else needs that password. Optional: set a Cloudflare secret `ADMIN_KEY` to override it.
