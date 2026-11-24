@@ -55,7 +55,8 @@ async function handle(req,env){
  const gm=async(room)=>room=='global'||!!(ME&&(await q('SELECT 1 FROM members WHERE room=? AND uid=?',room,ME.id).first()||(isAdm(ME)&&await q("SELECT 1 FROM rooms WHERE id=? AND kind='group'",room).first())));
  if(P=='/api/msgs'&&req.method=='GET'){const room=url.searchParams.get('room')||'global',after=+url.searchParams.get('after')||0,lim=Math.min(100,+url.searchParams.get('limit')||50);if(!(await gm(room)))return ER('forbidden',403);
   let rows;if(after)rows=(await q('SELECT id,uid,txt,att,ts FROM msgs WHERE room=? AND del=0 AND id>? ORDER BY id ASC LIMIT ?',room,after,lim).all()).results;else rows=((await q('SELECT id,uid,txt,att,ts FROM msgs WHERE room=? AND del=0 ORDER BY id DESC LIMIT ?',room,lim).all()).results||[]).reverse();
-  return J({list:(rows||[]).map(r=>({id:r.id,uid:r.uid,txt:r.txt,att:pj(r.att,null),ts:r.ts}))})}
+  const gone=((await q('SELECT id FROM msgs WHERE room=? AND del=1 ORDER BY id DESC LIMIT 60',room).all()).results||[]).map(r=>r.id);
+  return J({list:(rows||[]).map(r=>({id:r.id,uid:r.uid,txt:r.txt,att:pj(r.att,null),ts:r.ts})),gone})}
  if(!ME)return ER('auth',401);
  if(ME.ban&&P!='/api/logout')return ER('banned',403);
  await q('UPDATE users SET seen=? WHERE id=?',now(),ME.id).run();
