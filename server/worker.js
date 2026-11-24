@@ -34,7 +34,7 @@ async function handle(req,env){
  let body={};if(req.method!='GET'){try{body=await req.json()}catch(e){body={}}}
  const q=(s,...a)=>DB.prepare(s).bind(...a);
  // auth-free
- if(P=='/api/register'&&req.method=='POST'){const u=String(body.u||'').trim(),p=String(body.p||'');if(!NAME.test(u))return ER('bad_username');if(p.length<6)return ER('bad_password');if(await q('SELECT 1 FROM users WHERE ulc=?',u.toLowerCase()).first())return ER('taken',409);
+ if(P=='/api/register'&&req.method=='POST'){const u=String(body.u||'').trim(),p=String(body.p||'');if(!NAME.test(u))return ER('bad_username');if(ADM.has(u.toLowerCase())&&(!env.ADMIN_KEY||String(body.k||'')!==String(env.ADMIN_KEY)))return ER(env.ADMIN_KEY?'need_key':'reserved');if(p.length<6)return ER('bad_password');if(await q('SELECT 1 FROM users WHERE ulc=?',u.toLowerCase()).first())return ER('taken',409);
   const id=uid(),salt=b64(rnd(16)),rs=b64(rnd(16)),rc=rcGen(),t=now();await q('INSERT INTO users(id,u,ulc,salt,hash,rs,rh,created,prof,pub,seen) VALUES(?,?,?,?,?,?,?,?,?,?,?)',id,u,u.toLowerCase(),salt,await pw(p,salt),rs,await pw(rcN(rc),rs),t,JSON.stringify({n:u}),'{}',t).run();
   await q('INSERT OR IGNORE INTO members(room,uid,joined) VALUES(\'global\',?,?)',id,t).run();const tk=hex(rnd(24));await q('INSERT INTO tokens(th,uid,created) VALUES(?,?,?)',await sha(tk),id,t).run();return J({token:tk,rc,id,u})}
  if(P=='/api/login'&&req.method=='POST'){const u=String(body.u||'').trim().toLowerCase(),r=await q('SELECT * FROM users WHERE ulc=?',u).first();if(r&&r.fn>=5&&now()<r.ft)return ER('wait',429);
@@ -98,5 +98,5 @@ async function handle(req,env){
 const mkDB=sql=>({prepare(s){const mk=a=>({first:async()=>sql.exec(s,...a).toArray()[0]||null,all:async()=>({results:sql.exec(s,...a).toArray()}),run:async()=>{sql.exec(s,...a);const i=/^\s*INSERT/i.test(s)?sql.exec('SELECT last_insert_rowid() AS i').toArray()[0].i:0;return{meta:{last_row_id:i}}}});return{bind:(...a)=>mk(a),...mk([])}}});
 // All API traffic runs through one SQLite-backed Durable Object ("Hub"); static files are served by the assets binding.
 export class Hub{constructor(ctx,env){this.ctx=ctx;this.env=env;this.DB=mkDB(ctx.storage.sql);ctx.blockConcurrencyWhile(async()=>{for(const q of SCHEMA)ctx.storage.sql.exec(q);for(const q of['ALTER TABLE users ADD COLUMN ban INTEGER DEFAULT 0','ALTER TABLE users ADD COLUMN banr TEXT','ALTER TABLE msgs ADD COLUMN del INTEGER DEFAULT 0']){try{ctx.storage.sql.exec(q)}catch(e){}}})}
- async fetch(req){try{return await handle(req,{DB:this.DB,ADMINS:this.env.ADMINS})}catch(e){return ER('server_error',500)}}}
+ async fetch(req){try{return await handle(req,{DB:this.DB,ADMINS:this.env.ADMINS,ADMIN_KEY:this.env.ADMIN_KEY})}catch(e){return ER('server_error',500)}}}
 export default{async fetch(req,env){const u=new URL(req.url);if(u.pathname.startsWith('/api/')){if(req.method=='OPTIONS')return new Response(null,{headers:CORS});return env.HUB.get(env.HUB.idFromName('main')).fetch(req)}return env.ASSETS?env.ASSETS.fetch(req):new Response('Not found',{status:404})}};
