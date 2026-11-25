@@ -580,7 +580,8 @@ body.paper #bgfx,body.blue #bgfx,body.term #bgfx,body.pixel #bgfx{display:none!i
 .sk-matte i{filter:saturate(.75) brightness(.9)}
 .sk-gloss i{background-image:linear-gradient(160deg,rgba(255,255,255,.7),transparent 45%)!important}
 .sk-neon{background:#000}.sk-neon i{transform:scale(.8);box-shadow:0 0 10px 1px var(--nc,#fff)}.sk-neon i:nth-child(1){--nc:#e03a3a}.sk-neon i:nth-child(2){--nc:#2fb34a}.sk-neon i:nth-child(3){--nc:#2a62e0}.sk-neon i:nth-child(4){--nc:#ffd23f}
-.sk-pastel{background:#f2f2f5}.sk-pastel i{filter:saturate(.55) brightness(1.25)}
+.sk-frost{gap:1px;padding:2px;background:#15161a}.sk-frost i{border-radius:5px;filter:saturate(1.15);background-image:radial-gradient(rgba(255,255,255,.18) .6px,transparent .7px)!important;background-size:3px 3px!important}
+.sk-bright{gap:1px;padding:2px;background:#2a2c31}.sk-bright i{border-radius:5px;filter:saturate(1.35) brightness(1.08);background-image:linear-gradient(160deg,rgba(255,255,255,.45),transparent 50%)!important}
 .sk-carbon{background:repeating-linear-gradient(45deg,#16181c 0 3px,#0b0c0e 3px 6px)}.sk-carbon i{transform:scale(.86)}
 #sxpad.pad2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:360px;margin:0 auto;width:100%}#sxpad.pad2[hidden]{display:none}.pg{display:flex;gap:4px;padding:4px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}.pg .chip{flex:1;min-width:0!important;padding:9px 0!important;font-weight:700}
 #vhint{text-align:center;font-size:13px;line-height:1.4;display:flex;flex-direction:column;align-items:center;gap:8px}#vhint[hidden]{display:none}
@@ -590,13 +591,32 @@ body:not(.paper):not(.pixel):not(.term):not(.blue) #nav button{color:color-mix(i
 body:not(.paper):not(.pixel):not(.term):not(.blue) #nav button.on{background:linear-gradient(135deg,var(--ac),var(--ac2,var(--ac)))!important;color:#0b0d14!important;box-shadow:0 6px 20px color-mix(in srgb,var(--ac) 40%,transparent),inset 0 1px 0 rgba(255,255,255,.35)!important}
 body.cmo:not(.paper):not(.pixel):not(.term):not(.blue) #nav button.on:not(#nvc){background:none!important;box-shadow:none!important;color:color-mix(in srgb,var(--mut) 75%,var(--ac))!important}
 /* Settings etwas schicker */
-#stabs{position:sticky;top:-12px;z-index:3;padding:8px 0;margin-top:0;background:linear-gradient(180deg,var(--bg0,rgba(8,12,26,.9)) 70%,transparent);display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#stabs::-webkit-scrollbar{display:none}
+#stabs{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;background:none;padding:2px 0}#stabs::-webkit-scrollbar{display:none}
 #stabs .chip{flex:1;min-height:40px;font-weight:600}
 #v-set .prow{border-radius:16px;transition:transform .15s,background .2s}#v-set .prow:active{transform:scale(.98)}
 #v-set .prow .ic{box-shadow:0 6px 16px color-mix(in srgb,var(--ac) 30%,transparent)}
 #v-set .prow i{transition:transform .2s}#v-set .prow:hover i{transform:translateX(3px)}
 #v-set>h2{font-size:26px;letter-spacing:-.01em}
 body.cmo:not(.paper):not(.pixel):not(.term):not(.blue) #nvc{background:linear-gradient(135deg,var(--ac),var(--ac2,var(--ac)))!important;color:#0b0d14!important;box-shadow:0 6px 20px color-mix(in srgb,var(--ac) 40%,transparent)!important}
+/* ===== v89 ===== */
+#bte,#sxe{display:none!important}
+.top .hd{gap:6px}
+body.sx.sxe #app{visibility:visible}body.sx.sxe #app>.view{visibility:hidden}body.sx.sxe #nav{visibility:visible}
+body.sxe #sx{bottom:var(--navh,80px);z-index:4;padding-bottom:6px}body.sxe #sxq{display:none}
+#tinw,#tinh{display:none}
+body.tin #time{display:none}body.tin #tinw{display:flex;align-items:center;gap:10px}body.tin #tinh{display:block;text-align:center;max-width:320px;line-height:1.4}
+#tin{width:min(70vw,320px);font:inherit;font-size:clamp(46px,14vw,88px);font-weight:700;text-align:center;font-variant-numeric:tabular-nums;background:transparent;border:0;border-bottom:2px solid var(--line);color:var(--fg);padding:4px 0;border-radius:0;transition:border-color .2s}
+#tin:focus{outline:none;border-bottom-color:var(--ac)}#tin.bad{border-bottom-color:var(--bad,#ff5f6d);animation:tinsh .3s}#tin::placeholder{color:color-mix(in srgb,var(--fg) 35%,transparent)}
+@keyframes tinsh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+#tinok{min-height:48px;padding:0 18px;font-weight:700}
+.inpg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+.inpt{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 6px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--fg);font:inherit;font-size:13px;font-weight:600}
+.inpt svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.inpt.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 15%,transparent);color:var(--ac)}
+.inpcard .vcx{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 18%,transparent),transparent);border:1px solid color-mix(in srgb,var(--ac) 30%,var(--line));margin:10px 0 4px}.inpcard .vcx div{flex:1}.inpcard .vcx b{display:block}.inpcard .vcx span{display:block;font-size:13px;color:var(--mut);margin-top:2px}
+#sxtoast{position:fixed;left:50%;top:calc(70px + env(safe-area-inset-top,0px));transform:translate(-50%,-10px);z-index:9;padding:10px 16px;border-radius:999px;background:rgba(18,21,32,.96);border:1px solid color-mix(in srgb,var(--ac) 45%,transparent);font-size:14px;font-weight:600;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
+#sxtoast.on{opacity:1;transform:translate(-50%,0)}
+#sco{display:none!important}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2625,18 +2645,20 @@ cmBadges=function(){const s=pfStats(),R=BDG.map(b=>({b,r:b.f(s),c:bCat(b.id)}));
  ${Object.keys(groups).sort((a,b)=>a-b).map(k=>{const G=groups[k],l=G.l.slice().sort((a,b)=>(b.r.ok-a.r.ok)||('bsgd'.indexOf(a.b.t)-'bsgd'.indexOf(b.b.t)));return`<div class="cmk">${G.n} <span class="bdc">${l.filter(x=>x.r.ok).length}/${l.length}</span></div><div class="bdg2">${l.map(x=>`<button class="bd2${CM.sel==x.b.id?' sel':''}" data-cm="bd" data-v="${x.b.id}">${medal(x.b,x.r.ok,x.r.p)}<span>${esc3(bdN(x.b))}</span></button>`).join('')}</div>`}).join('')}`};
 
 /* ---------- Cube-Skins ---------- */
-const SK=[['glow','Glow'],['sticker','Sticker'],['matte',T('Matt','Matte')],['gloss',T('Hochglanz','Gloss')],['neon','Neon'],['pastel','Pastel'],['carbon','Carbon']];window.SKINS=SK;
+const SK=[['glow','Glow'],['frost','Frost'],['bright','Bright'],['sticker','Sticker'],['neon','Neon'],['matte',T('Matt','Matte')],['gloss',T('Hochglanz','Gloss')],['carbon','Carbon']];window.SKINS=SK;
 let stTex=null,logoTex=null,logoImg=null,glitTex=null;
 function texSticker(){if(stTex)return stTex;const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,128,128);g.fillStyle='#fff';g.beginPath();g.roundRect(11,11,106,106,22);g.fill();stTex=new THREE.CanvasTexture(c);return stTex}
 function texGlitter(){if(glitTex)return glitTex;const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');g.fillStyle='#777';g.fillRect(0,0,128,128);for(let i=0;i<900;i++){const v=Math.random();g.fillStyle=v>.93?'#000':v>.5?'#888':'#5a5a5a';g.fillRect(Math.random()*128,Math.random()*128,1.4,1.4)}glitTex=new THREE.CanvasTexture(c);glitTex.wrapS=glitTex.wrapT=THREE.RepeatWrapping;return glitTex}
 function texLogo(sticker){const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');const draw=()=>{g.clearRect(0,0,256,256);if(sticker){g.fillStyle='#000';g.fillRect(0,0,256,256);g.fillStyle='#fff';g.beginPath();g.roundRect(22,22,212,212,42);g.fill()}else{g.fillStyle='#fff';g.fillRect(0,0,256,256)}if(logoImg&&logoImg.complete&&logoImg.naturalWidth)g.drawImage(logoImg,40,40,176,176)};draw();const t=new THREE.CanvasTexture(c);if(!logoImg){logoImg=new Image();logoImg.src=LOGO}logoImg.addEventListener('load',()=>{draw();t.needsUpdate=true;try{c3R()}catch(e){}},{once:true});return t}
 const mix=(c,w,k)=>{const a=new THREE.Color(c),b=new THREE.Color(w);return a.lerp(b,k)};
-window.c3Skin=function(){if(!C3.r)return;const k=cfg.sk||'glow',fc=cfg.fc;let body,mats;const M=o=>new THREE.MeshStandardMaterial(o),PM=o=>new THREE.MeshPhysicalMaterial(o);
+const vivid=(c,sm,lp)=>{const a=new THREE.Color(c),h={};a.getHSL(h);return new THREE.Color().setHSL(h.h,Math.min(1,h.s*sm),Math.min(.97,h.l+lp))};
+window.c3Skin=function(){if(!C3.r)return;let k=cfg.sk||'glow';if(k=='pastel')k='glow';const fc=cfg.fc;let body,mats;const M=o=>new THREE.MeshStandardMaterial(o),PM=o=>new THREE.MeshPhysicalMaterial(o);
  if(k=='sticker'){body=M({color:0x070809,roughness:.5,metalness:.1});mats=fc.map(c=>M({color:c,map:texSticker(),roughness:.32,metalness:.02}))}
  else if(k=='matte'){body=M({color:0x16171b,roughness:1,metalness:0});mats=fc.map(c=>M({color:mix(c,'#7a7a7a',.22),roughness:1,metalness:0}))}
  else if(k=='gloss'){body=PM({color:0x08090b,roughness:.2,metalness:.2,clearcoat:1,clearcoatRoughness:.05});mats=fc.map(c=>PM({color:c,roughness:.06,metalness:.05,clearcoat:1,clearcoatRoughness:.03}))}
  else if(k=='neon'){body=M({color:0x030304,roughness:.6,metalness:.1});mats=fc.map(c=>M({color:mix(c,'#000',.55),map:texSticker(),emissive:new THREE.Color(c),emissiveMap:texSticker(),emissiveIntensity:1.15,roughness:.4}))}
- else if(k=='pastel'){body=M({color:0xf2f2f5,roughness:.6,metalness:0});mats=fc.map(c=>M({color:mix(c,'#ffffff',.42),roughness:.55,metalness:0}))}
+ else if(k=='frost'){body=M({color:0x15161a,roughness:.9,metalness:0});mats=fc.map(c=>M({color:vivid(c,1.15,.02),roughness:.78,metalness:0,roughnessMap:texGlitter()}))}
+ else if(k=='bright'){body=M({color:0x2a2c31,roughness:.5,metalness:0});mats=fc.map(c=>PM({color:vivid(c,1.3,.05),roughness:.22,metalness:0,clearcoat:.6,clearcoatRoughness:.25}))}
  else if(k=='carbon'){body=M({color:0x0b0c0e,roughness:.35,metalness:.6});mats=fc.map(c=>M({color:c,map:texSticker(),roughness:.28,metalness:.15}))}
  else{body=M({color:0x0a0b0f,roughness:.55,metalness:.2});mats=fc.map(c=>M({color:c,roughness:.24,metalness:.12,roughnessMap:texGlitter(),emissive:new THREE.Color(c),emissiveIntensity:.08}))}
  mats.forEach(m=>m.userData.c=m.color.clone());C3.mb=body;C3.mats=mats;const stk=k=='sticker'||k=='neon'||k=='carbon';C3.logoMat=cfg.skl?M({color:0xffffff,map:texLogo(stk),roughness:k=='matte'?.9:.3,metalness:0}):null;
@@ -2676,6 +2698,71 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-vc]');if(!
  if(a=='open'){try{sxOpen();setTimeout(()=>{try{scSetMode('sim');sxStatus()}catch(er){}},120)}catch(er){}return}
  if(a=='sk')cfg.sk=v;else if(a=='skl')cfg.skl=v=='1';else if(a=='vsw')cfg.vsw=cfg.vsw===false?true:false;else if(a=='vpad')cfg.vpad=!cfg.vpad;
  S('nt.c',cfg);vcPaint();try{c3Refresh()}catch(er){}});
+})();
+
+</script>
+<script>
+/* ===== v89 Eingabe-Modus (Timer/Tippen/Smart Cube), Smart Cube auf dem Homescreen, Gyro, U4/D4 ===== */
+(function(){
+const q=s=>document.querySelector(s);
+cfg.inp=cfg.inp||'timer';
+
+/* ---------- Tippen ---------- */
+{const st0=q('#v-timer .stage');if(st0&&!q('#tinw')){const w=document.createElement('div');w.id='tinw';w.innerHTML=`<input id="tin" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="0.00" aria-label="Time"><button class="pill" id="tinok">OK</button>`;const tm=q('#time');tm.parentNode.insertBefore(w,tm.nextSibling);const h=document.createElement('div');h.id='tinh';h.className='k';w.after(h)}}
+function tinHint(){const h=q('#tinh');if(h)h.textContent=T('Zeit tippen, z. B. 1234 = 12.34, 1:05.20, DNF, 12.34+ für +2','Type a time, e.g. 1234 = 12.34, 1:05.20, DNF, 12.34+ for +2')}
+function tinParse(v){v=String(v||'').trim().toLowerCase().replace(',','.');if(!v)return null;if(v=='dnf')return{t:0,p:2};let p=0;if(v.endsWith('+')){p=1;v=v.slice(0,-1)}let ms;if(/^\d+$/.test(v)){const n=v.padStart(3,'0');const cs=+n.slice(-2),sec=+n.slice(-4,-2)||0,min=n.length>4?+n.slice(0,-4):0;ms=(min*60+sec)*1000+cs*10}else{const m=/^(?:(\d+):)?(\d+(?:\.\d+)?)$/.exec(v);if(!m)return null;ms=Math.round(((+m[1]||0)*60+ +m[2])*1000)}if(!(ms>0&&ms<36e6))return null;return{t:ms,p}}
+function tinSave(){const i=q('#tin');const r=tinParse(i.value);if(!r){i.classList.add('bad');setTimeout(()=>i.classList.remove('bad'),500);return}solves.push({t:r.t,p:r.p,s:cur,d:Date.now()});cur=scr();save();render();setT(F(E(solves.at(-1))));try{celebrate()}catch(e){}i.value='';i.placeholder=F(E(solves.at(-1)))}
+document.addEventListener('click',e=>{if(e.target.id=='tinok')tinSave()});
+document.addEventListener('keydown',e=>{if(e.target&&e.target.id=='tin'&&e.key=='Enter'){e.preventDefault();tinSave()}});
+['pointerdown','pointerup','touchstart','touchend','mousedown','mouseup'].forEach(ev=>q('#v-timer').addEventListener(ev,e=>{if(cfg.inp!='type')return;if(e.target.closest('button,input,a,#scr,#wid,.top'))return;e.stopPropagation()},true));
+window.addEventListener('keydown',e=>{if(cfg.inp=='type'&&(e.code=='Space'||e.key==' ')&&!(e.target&&e.target.id=='tin')){e.stopImmediatePropagation()}},true);
+window.addEventListener('keyup',e=>{if(cfg.inp=='type'&&(e.code=='Space'||e.key==' ')&&!(e.target&&e.target.id=='tin')){e.stopImmediatePropagation()}},true);
+
+/* ---------- Smart Cube auf dem Homescreen ---------- */
+function navH(){const n=q('#nav');if(!n)return 80;const r=n.getBoundingClientRect();return Math.max(60,innerHeight-r.top+6)}
+function smSync(){try{const want=cfg.inp=='smart'&&q('#v-timer').classList.contains('on')&&(q('#cm')||{}).hidden!==false;document.documentElement.style.setProperty('--navh',navH()+'px');
+ if(want&&!SX.open){document.body.classList.add('sxe');sxOpen()}else if(want){document.body.classList.add('sxe')}
+ else if(!want&&SX.open&&document.body.classList.contains('sxe')){sxClose();document.body.classList.remove('sxe')}
+ if(!want&&cfg.inp!='smart')document.body.classList.remove('sxe')}catch(e){}}
+window.smSync=smSync;
+document.addEventListener('click',e=>{if(e.target.closest('[data-go],#cmq,#nvc'))setTimeout(smSync,30)});
+{const o=cmOpen;cmOpen=function(){const r=o.apply(this,arguments);if(document.body.classList.contains('sxe')&&SX.open){sxClose();document.body.classList.add('sxe-p')}return r}}
+setInterval(()=>{if(cfg.inp=='smart'&&q('#cm').hidden&&q('#v-timer').classList.contains('on')&&!SX.open&&!q('#intro'))smSync()},700);
+addEventListener('resize',()=>document.documentElement.style.setProperty('--navh',navH()+'px'));
+/* kein +2/DNF beim Smart Cube */
+{const o=sxStart;sxStart=function(){const r=o.apply(this,arguments);SX.pen=0;return r}}
+/* nach dem Solve: Statistik, dann automatisch nächster Solve */
+{const o=sxFinish;sxFinish=function(){const r=o.apply(this,arguments);try{SX.pen=0;const s=solves[SX.ri];if(s)s.p=0;save();render();setTimeout(()=>{if(SX.ph=='done')try{sxStats(SX.ri)}catch(e){}},450)}catch(e){}return r}}
+document.addEventListener('click',e=>{const t=e.target.closest('#sxrcl');if(t&&SX.open&&SX.ph=='done')setTimeout(()=>{if(SX.ph=='done')sxNext()},50)});
+
+/* ---------- Züge: U4 = Gyro zurücksetzen, D4 = Würfel gelöst ---------- */
+let MH=[],dep=0;
+{const o=scMove;scMove=function(m){if(dep)return o.apply(this,arguments);dep=1;try{
+ if(SX.open&&SX.ph=='done'&&m&&LMV[m[0]]){$('#sxr').hidden=true;sxNext()}
+ const now=performance.now();MH.push({m,t:now});if(MH.length>6)MH.shift();
+ const r=o.apply(this,arguments);
+ const L=MH.slice(-4);if(L.length==4&&L[3].t-L[0].t<1800&&L.every(x=>x.m==L[0].m)&&(L[0].m=='U'||L[0].m=="U'"||L[0].m=='D'||L[0].m=="D'")){MH=[];
+  if(L[0].m[0]=='U'){try{scCal();toast2(T('Gyro zurückgesetzt: Weiß oben, Grün vorne','Gyro reset: white top, green front'))}catch(e){}}
+  else if(SX.ph!='solve'){try{sxReset();toast2(T('Würfel auf gelöst gesetzt','Cube set to solved'))}catch(e){}}}
+ return r}finally{dep=0}}}
+function toast2(t){let d=q('#sxtoast');if(!d){d=document.createElement('div');d.id='sxtoast';document.body.appendChild(d)}d.textContent=t;d.classList.add('on');clearTimeout(toast2.tm);toast2.tm=setTimeout(()=>d.classList.remove('on'),1800)}
+
+/* ---------- Gyro: weniger Verzögerung (Vorhersage + schnelleres Nachziehen) ---------- */
+scGyro=function(qq){if(typeof THREE=='undefined'||!cfg.scgyro)return;SC.rq=qq;SC.gyro=true;const a=cfg.scax,t=new THREE.Quaternion(qq.x*a[0],qq.z*a[1],-qq.y*a[2],qq.w).normalize();if(!SC.q0inv)SC.q0inv=t.clone().invert();const tq=t.clone().multiply(SC.q0inv).multiply(c3Def());const now=performance.now();
+ if(SC.lq&&now-SC.lt>3&&now-SC.lt<160){const d=tq.clone().multiply(SC.lq.clone().invert());if(d.w<0){d.x=-d.x;d.y=-d.y;d.z=-d.z;d.w=-d.w}const s=Math.sqrt(Math.max(0,1-d.w*d.w)),ang=2*Math.acos(Math.min(1,d.w));if(s>1e-5&&ang>2e-4){const w=ang/(now-SC.lt);SC.av={ax:new THREE.Vector3(d.x/s,d.y/s,d.z/s),w:SC.av&&SC.av.ax.dot(new THREE.Vector3(d.x/s,d.y/s,d.z/s))>.7?SC.av.w*.4+w*.6:w}}else SC.av=null}else SC.av=null;
+ SC.lq=tq.clone();SC.lt=now;SC.tq=tq;scLoop()};
+scLoop=function(){if(SC.loop)return;let l=performance.now();const pq=new THREE.Quaternion(),tmp=new THREE.Quaternion();const f=now=>{SC.loop=0;if(!SX.open||!C3.r||$('#rc3w').parentNode.id!='sxc')return;const dt=Math.min(50,Math.max(1,now-l));l=now;
+ if(SC.tq&&!C3.drag){pq.copy(SC.tq);const age=now-(SC.lt||now);if(SC.av&&age<140){const lead=Math.min(.6,SC.av.w*Math.min(90,age+45));tmp.setFromAxisAngle(SC.av.ax,lead);pq.premultiply(tmp)}const a=C3.q.angleTo(pq);if(a>.0006){C3.q.slerp(pq,a>.9?1:1-Math.exp(-dt/9));c3R()}}
+ SC.loop=requestAnimationFrame(f)};SC.loop=requestAnimationFrame(f)};
+
+/* ---------- Settings: Eingabe ---------- */
+function inpCard(){const m=cfg.inp;return`<div class="k">${T('Eingabe','Input')}</div><div class="inpg">${[['timer',T('Timer','Timer'),'<circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M9.5 3h5"/>'],['type',T('Tippen','Typing'),'<rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/>'],['smart','Smart Cube','<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>']].map(([k,l,ic])=>`<button class="inpt${m==k?' on':''}" data-inp="${k}"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg><span>${l}</span></button>`).join('')}</div>
+ ${m=='type'?`<div class="k sub">${T('Du tippst deine Zeit nach dem Solve mit der Tastatur ein. Beispiele: 1234 = 12.34 · 1:05.20 · DNF · 12.34+ = +2','You type your time after the solve. Examples: 1234 = 12.34 · 1:05.20 · DNF · 12.34+ = +2')}</div>`:''}
+ ${m=='smart'?`<div class="vcx"><div><b>${T('Smart Cube verbinden','Connect Smart Cube')}</b><span>${T('Danach löst du direkt auf dem Homescreen. Kein +2 oder DNF, nach jedem Solve kommt die Statistik.','Then you solve right on the home screen. No +2 or DNF, stats after every solve.')}</span></div><button class="chip on" data-inp="conn">${T('Verbinden','Connect')}</button></div><div class="k sub">${T('Tipps: 4× U drehen = Gyro zurücksetzen (Weiß oben, Grün vorne). 4× D drehen = Würfel auf gelöst setzen.','Tips: turn U 4 times = reset gyro (white top, green front). Turn D 4 times = set cube to solved.')}</div>`:''}`}
+{const set=q('#v-set');if(set){const c=document.createElement('div');c.className='card inpcard';c.dataset.g='t';c.innerHTML=inpCard();const first=[...set.querySelectorAll(':scope>.card')].find(x=>x.dataset.g=='t');if(first)set.insertBefore(c,first);else set.appendChild(c);c.hidden=!(q('#stabs .chip.on')&&q('#stabs .chip.on').dataset.t=='t')}}
+const inpPaint=()=>{const c=q('#v-set .inpcard');if(c)c.innerHTML=inpCard();document.body.classList.toggle('tin',cfg.inp=='type');tinHint()};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-inp]');if(!b)return;const v=b.dataset.inp;if(v=='conn'){cfg.inp='smart';S('nt.c',cfg);inpPaint();const g=$('[data-go=timer]');g&&g.click();setTimeout(smSync,60);return}cfg.inp=v;S('nt.c',cfg);inpPaint();if(v!='smart'&&SX.open&&document.body.classList.contains('sxe')){sxClose();document.body.classList.remove('sxe')}});
+inpPaint();
 })();
 
 </script>
