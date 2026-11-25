@@ -1075,19 +1075,33 @@ float fl=fb(vec2(q.x*2.2+4.-t*.05,q.y*12.));c=mix(c,vec3(.18,.15,.3),smoothstep(
 vec2 fg=vec2(q.x*9.,q.y);float ti=floor(fg.x),tf=fract(fg.x)-.5;float th=.12+.15*h(vec2(ti,3.));float edge=smoothstep(.05,.3,abs(q.x));float tree=th*edge*(1.-abs(tf)*2.2)-.012*sin(q.y*150.+ti)*step(0.,tf*tf);c=mix(c,vec3(.005,.004,.012),smoothstep(.002,-.002,q.y-max(tree,.035)));
 for(int i=0;i<3;i++){float fi=float(i);vec2 bc=vec2(-.32+mod(t*(.045+.012*fi)+fi*.4,.9),.6+.07*sin(t*.5+fi*2.)+.04*fi);vec2 bp=(q-bc)/(.014+.004*fi);float fl2=.35+.65*sin(t*13.+fi*3.);float th2=.28*(1.-abs(bp.x)*.6);float bat=step(abs(bp.x),1.5)*step(abs(bp.y+abs(bp.x)*fl2*.7-.2*abs(bp.x)),th2);c=mix(c,vec3(.01),bat);}
 gl_FragColor=vec4(c,1.);}`,
-cubes:`vec3 pal(float kk){kk=floor(kk*6.);if(kk<1.)return vec3(.96,.96,.94);if(kk<2.)return vec3(1.,.82,.1);if(kk<3.)return vec3(.88,.1,.12);if(kk<4.)return vec3(1.,.42,.04);if(kk<5.)return vec3(.05,.3,.9);return vec3(.05,.62,.26);}
-float HF(vec2 c){float w=sin(c.x*.5+t*.8)+sin(c.y*.62-t*.65)+sin((c.x+c.y)*.33+t*.45)+.6*sin(length(c-vec2(0.,0.))*.4-t*1.1);return clamp(2.3+.85*w+.5*(h(c)-.5),.35,6.2);}
-void main(){vec2 u=(gl_FragCoord.xy*2.-R)/R.y;vec3 d=normalize(vec3(1.,1.,-1.25));vec3 rr=normalize(vec3(1.,-1.,0.));vec3 uu=normalize(cross(rr,d));float S=5.6;vec2 mo=(m-.5)*1.2;
-vec3 C=vec3(t*.45+mo.x,t*.2+mo.y,0.);vec3 o=C+rr*u.x*S+uu*u.y*S-d*30.;float t0=(6.5-o.z)/d.z;vec3 p0=o+d*t0;vec2 cell=floor(p0.xy);vec2 inv=1./d.xy;vec2 tm=(cell+1.-p0.xy)*inv;float tc=0.,ax=0.,done=0.;vec3 hp=p0;float face=0.;vec2 hc=cell;
-for(int i=0;i<44;i++){if(done<.5){float hh=HF(cell);float ze=p0.z+d.z*tc;float tn=min(tm.x,tm.y);float zx=p0.z+d.z*tn;
-if(ze<=hh){hp=p0+d*tc;face=ax;hc=cell;done=1.;}else if(zx<=hh){hp=p0+d*((hh-p0.z)/d.z);face=0.;hc=cell;done=1.;}
-else if(tm.x<tm.y){tc=tm.x;tm.x+=inv.x;cell.x+=1.;ax=1.;}else{tc=tm.y;tm.y+=inv.y;cell.y+=1.;ax=2.;}}}
-vec2 sf;float zz=floor(hp.z);vec2 f2;if(face<.5){sf=fract(hp.xy);zz=0.;}else if(face<1.5){sf=vec2(fract(hp.y),fract(hp.z));}else{sf=vec2(fract(hp.x),fract(hp.z));}
-vec2 g=abs(sf-.5);float rd=length(max(g-.3,0.));float st=smoothstep(.15,.125,rd);float gl=pow(clamp(1.-length(g)*1.5,0.,1.),3.);
-float cid=h(hc*1.37+vec2(floor(hp.z)*3.1+face*5.3,face*2.));vec3 sc=pal(cid);
-float lit=face<.5?1.:(face<1.5?.62:.4);float ao=.4+.6*smoothstep(0.,3.,hp.z);vec3 body=vec3(.018,.02,.03);
-vec3 col=mix(body,sc*(lit*ao),st)+gl*.18*st*lit;col+=mix(a,b,fract(cid*3.))*.06*st*lit;col+=sc*.12*st*smoothstep(.6,0.,abs(sin(length(hc)*.4-t*1.1)))*.3;
-float vg=1.-.25*length(u*vec2(.55,.45));gl_FragColor=vec4(col*vg,1.);}`,
+cubes:`mat3 rX(float q){float c=cos(q),s=sin(q);return mat3(1.,0.,0.,0.,c,-s,0.,s,c);}
+mat3 rY(float q){float c=cos(q),s=sin(q);return mat3(c,0.,s,0.,1.,0.,-s,0.,c);}
+float rbx(vec3 p,vec3 bb,float r){vec3 q=abs(p)-bb+r;return length(max(q,0.))+min(max(q.x,max(q.y,q.z)),0.)-r;}
+float mx3(vec3 p){return max(p.x,max(p.y,p.z));}
+mat3 RB;
+float big(vec3 p){vec3 q=RB*p;float d=rbx(q,vec3(.9),.12);vec3 aq=abs(q);vec3 gg=abs(aq-.3);float g=min(gg.x,min(gg.y,gg.z))-.024;float reg=max(g,.83-mx3(aq));return max(d,-reg);}
+vec4 sm(float k){float an=t*.16+k*1.2566;float rr=1.75+.3*sin(k*1.7);return vec4(cos(an)*rr,sin(t*.27+k*1.9)*1.7,sin(an)*rr-.4,.2+.07*h(vec2(k,3.)));}
+float smalls(vec3 p,out float id){float d=1e5;id=0.;for(int i=0;i<5;i++){float k=float(i);vec4 s=sm(k);vec3 q=rX(t*.35+k)*rY(t*.28+k*2.)*(p-s.xyz);float e=rbx(q,vec3(s.w),.05);if(e<d){d=e;id=k;}}return d;}
+float mp(vec3 p,out float id){float i2;float d1=big(p),d2=smalls(p,i2);id=d1<d2?-1.:i2;return min(d1,d2);}
+float mp0(vec3 p){float i;return mp(p,i);}
+vec3 nr(vec3 p){vec2 e=vec2(.0015,0.);return normalize(vec3(mp0(p+e.xyy)-mp0(p-e.xyy),mp0(p+e.yxy)-mp0(p-e.yxy),mp0(p+e.yyx)-mp0(p-e.yyx)));}
+void main(){vec2 u=(gl_FragCoord.xy*2.-R)/R.y;
+RB=rY(.785+t*.2+(m.x-.5)*1.4)*rX(.62+.12*sin(t*.19));
+vec3 ro=vec3(0.,.1,9.),rd=normalize(vec3(u*.9,-1.7));
+vec3 bg=vec3(.012,.014,.03)+mix(a,b,.5)*.09*smoothstep(1.3,0.,length(u-vec2(0.,.05)));vec3 c=bg;
+float tt=0.,id=-1.,hit=0.,gin=0.;
+for(int i=0;i<80;i++){vec3 p=ro+rd*tt;float d=mp(p,id);if(d<.0015){hit=1.;break;}tt+=d;if(tt>18.)break;}
+if(hit>.5){vec3 p=ro+rd*tt,nn=nr(p);vec3 L=normalize(vec3(.55,.8,.6));float df=clamp(dot(nn,L),0.,1.);float rim=pow(1.-clamp(dot(nn,-rd),0.,1.),3.);vec3 base;
+ if(id<0.){vec3 ln=RB*nn,q=RB*p,an=abs(ln),aq=abs(q);
+  float g;vec3 fc;if(aq.x>=aq.y&&aq.x>=aq.z){fc=q.x>0.?a:b*.8;g=min(abs(aq.y-.3),abs(aq.z-.3));}else if(aq.y>=aq.z){fc=q.y>0.?vec3(.9,.92,.96):vec3(.3,.32,.38);g=min(abs(aq.x-.3),abs(aq.z-.3));}else{fc=q.z>0.?b:a*.75;g=min(abs(aq.x-.3),abs(aq.y-.3));}
+  gin=max(step(mx3(aq),.86),step(g,.034));base=mix(fc,vec3(.02),gin);}
+ else base=mix(vec3(.07,.08,.11),mix(a,b,fract(id*.37)),.3);
+ float sp=pow(clamp(dot(reflect(-L,nn),-rd),0.,1.),28.);
+ vec3 col=base*(.16+.84*df)+vec3(sp*.3)*(1.-gin)+mix(a,b,.5)*rim*.28*(1.-gin);
+ float fade=id<0.?1.:.75;c=mix(bg,col,fade);}
+c*=1.-.09*dot(u,u);
+gl_FragColor=vec4(c,1.);}`,
 tunnel:`void main(){vec2 u=(gl_FragCoord.xy*2.-R)/R.y;u+=vec2(sin(t*.31),cos(t*.23))*.16+(m-.5)*.3;float r=length(u),an=atan(u.y,u.x);float zz=.55/(r+.02)+t*1.5;vec2 g=vec2(an*2.5465,zz*1.25);vec2 id=floor(g),f=fract(g)-.5;float lit=h(id+floor(t*.4+h(id)*5.));float pv=.1+.9*smoothstep(.45,1.,lit)*(.6+.4*sin(t*3.+h(id)*30.));
 float ed=.5-max(abs(f.x),abs(f.y));float ln=smoothstep(.07,.0,ed)+smoothstep(.3,0.,ed)*.22;float rf2=fract(zz*.1);float ring=exp(-min(rf2,1.-rf2)*34.);
 vec3 ec=mix(a,b,.5+.5*sin(zz*.35+an));vec3 c=vec3(.012,.014,.03)+ec*pv*.9;c+=ec*ln*(.9+ring*1.2);c+=mix(b,a,.5)*ring*.55;
@@ -2353,7 +2367,7 @@ const OB=[['333','3x3'],['222','2x2'],['444','4x4'],['pyr','Pyraminx'],['skb','S
 function obStep(i){const dots=`<div class="obd">${[0,1,2].map(k=>`<i class="${k==i?'on':''}"></i>`).join('')}</div>`;
  if(i==0)return dots+`<div class="nxh"><b>${T('Willkommen bei NOBTIME','Welcome to NOBTIME')}</b><span>${T('Was cubest du am meisten?','What do you cube the most?')}</span></div><div class="obg">${OB.map(([k,l])=>`<button class="chip" data-nx="ob-pz" data-v="${k}">${l}</button>`).join('')}</div>`;
  if(i==1)return dots+`<div class="nxh"><b>${T('Inspektion','Inspection')}</b><span>${T('15 Sekunden zum Anschauen vor dem Solve, wie im Wettkampf.','15 seconds to look at the cube before the solve, like in competition.')}</span></div><div class="obg two"><button class="chip" data-nx="ob-in" data-v="1">${T('Mit Inspektion','With inspection')}</button><button class="chip" data-nx="ob-in" data-v="0">${T('Ohne','Without')}</button></div>`;
- return dots+`<div class="nxh"><b>${T('Dein Hintergrund','Your background')}</b><span>${T('Kannst du jederzeit oben ändern.','You can change it anytime at the top.')}</span></div><div class="obg bgs">${[['pulse','Pulse'],['aurora','Aurora'],['off',T('Schlicht','Plain')]].map(([k,l])=>`<button class="bgt" data-nx="ob-bg" data-v="${k}">${k=='off'?'<span class="obp"></span>':`<img alt="" src="${BGV[k]}">`}<span class="bgn">${l}</span></button>`).join('')}</div>`}
+ return dots+`<div class="nxh"><b>${T('Dein Hintergrund','Your background')}</b><span>${T('Kannst du jederzeit oben ändern.','You can change it anytime at the top.')}</span></div><div class="obg bgs">${[['galaxy','Galaxy'],['saturn','Saturn'],['hole','Black Hole']].map(([k,l])=>`<button class="bgt" data-nx="ob-bg" data-v="${k}">${k=='off'?'<span class="obp"></span>':`<img alt="" src="${BGV[k]}">`}<span class="bgn">${l}</span></button>`).join('')}</div>`}
 function obNeeded(){try{if(localStorage.getItem('nt.onb'))return false;const any=(D.ses||[]).some(z=>(z.sv||[]).length);if(any){localStorage.setItem('nt.onb','1');return false}return true}catch(e){return false}}
 function obOpen(){sheetOpen(obStep(0),'ob')}
 
