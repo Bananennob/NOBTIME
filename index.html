@@ -499,6 +499,39 @@ body.paper #bgfx,body.blue #bgfx,body.term #bgfx,body.pixel #bgfx{display:none!i
 [data-pg="0"] .pfg div{background:rgba(255,255,255,.03);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-color:rgba(255,255,255,.09)}
 [data-pg="2"] .pfg div{background:rgba(255,255,255,.12);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);border-color:rgba(255,255,255,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
 [data-pg="0"] .pfB{background:rgba(255,255,255,.02)}[data-pg="2"] .pfB{background:rgba(255,255,255,.09);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+/* ===== v87 Querformat & Tablet ===== */
+@media (min-width:700px) and (orientation:portrait){
+ #app{max-width:780px!important;margin:0 auto}
+ .view{padding:18px 26px;gap:14px}
+ #time{font-size:calc(clamp(110px,19vw,190px)*var(--ts,1))}
+ #scr{max-height:150px}#st{font-size:18px}#pvm svg{width:104px}
+ .stage::before{width:min(70vw,560px)}
+}
+@media (orientation:landscape) and (min-width:560px){
+ #app{max-width:1500px!important;margin:0 auto}
+ #v-timer.on{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,min(40vw,440px));grid-template-rows:auto auto auto minmax(0,1fr);column-gap:22px;row-gap:10px;overflow:hidden}
+ #v-timer>.top,#v-timer>#cpb,#v-timer>#btb,#v-timer>#prb,#v-timer>#scr,#v-timer>.stage{grid-column:1;min-width:0}
+ #v-timer>.top{grid-row:1}#v-timer>#cpb,#v-timer>#btb,#v-timer>#prb{grid-row:2}#v-timer>#scr{grid-row:3}#v-timer>.stage{grid-row:4;min-height:0}
+ #v-timer>#wid{grid-column:2;grid-row:1/-1;min-height:0;overflow-y:auto;align-content:flex-start;padding-bottom:10px;scrollbar-width:none}
+ body[data-cus]:not([data-lay=zen]) #v-timer>#wid{align-content:start}
+ #v-timer>#wid::-webkit-scrollbar{display:none}
+ [data-lay=zen] #v-timer.on{grid-template-columns:minmax(0,1fr)}
+ #time{font-size:calc(clamp(64px,min(15vw,28vh),240px)*var(--ts,1))}
+ #nav{max-width:640px;align-self:center;width:calc(100% - 28px)}
+ .stage::before{width:min(62vh,480px)}
+ .view.scroll{align-items:center}.view.scroll>*{width:100%;max-width:900px}
+}
+@media (orientation:landscape) and (max-height:520px){
+ .view{padding:8px max(14px,env(safe-area-inset-right,0px)) 8px max(14px,env(safe-area-inset-left,0px));gap:8px}
+ #v-timer.on{row-gap:6px;column-gap:16px}
+ #scr{max-height:76px;padding:6px 10px}#st{font-size:14px;line-height:1.35}#pvm svg{width:58px}
+ .stage{gap:6px}.res .pill{padding:4px 12px}
+ #time{font-size:calc(clamp(56px,min(11vw,30vh),150px)*var(--ts,1))}
+ #nav{margin-bottom:max(6px,env(safe-area-inset-bottom,0px));padding:4px;max-width:560px;align-self:center;width:calc(100% - 28px)}
+ #nav button{height:40px}
+ #wid{gap:8px}#wt{height:64px}
+ h2{font-size:19px}
+}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
