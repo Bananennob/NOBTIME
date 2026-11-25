@@ -1106,7 +1106,7 @@ mat3 rY(float q){float c=cos(q),s=sin(q);return mat3(c,0.,s,0.,1.,0.,-s,0.,c);}
 float rbx(vec3 p,vec3 bb,float r){vec3 q=abs(p)-bb+r;return length(max(q,0.))+min(max(q.x,max(q.y,q.z)),0.)-r;}
 float mx3(vec3 p){return max(p.x,max(p.y,p.z));}
 mat3 RB;
-vec3 pal(float k){k=floor(k*6.);if(k<1.)return vec3(.95,.95,.93);if(k<2.)return vec3(1.,.83,.08);if(k<3.)return vec3(.9,.1,.13);if(k<4.)return vec3(1.,.45,.05);if(k<5.)return vec3(.06,.36,.95);return vec3(.05,.7,.3);}
+vec3 pal(float k){k=floor(k*6.);if(k<1.)return vec3(.97,.97,.96);if(k<2.)return vec3(1.,.78,.0);if(k<3.)return vec3(.72,.04,.12);if(k<4.)return vec3(1.,.33,.0);if(k<5.)return vec3(0.,.25,.75);return vec3(0.,.58,.3);}
 float big(vec3 p){vec3 q=RB*p;float d=rbx(q,vec3(.9),.12);vec3 aq=abs(q);vec3 gg=abs(aq-.3);float g=min(gg.x,min(gg.y,gg.z))-.024;float reg=max(g,.83-mx3(aq));return max(d,-reg);}
 vec4 sm(float k){float an=t*.16+k*1.2566;float rr=1.75+.3*sin(k*1.7);return vec4(cos(an)*rr,sin(t*.27+k*1.9)*1.7,sin(an)*rr-.4,.2+.07*h(vec2(k,3.)));}
 float smalls(vec3 p,out float id){float d=1e5;id=0.;for(int i=0;i<5;i++){float k=float(i);vec4 s=sm(k);vec3 q=rX(t*.35+k)*rY(t*.28+k*2.)*(p-s.xyz);float e=rbx(q,vec3(s.w),.05);if(e<d){d=e;id=k;}}return d;}
@@ -1124,8 +1124,8 @@ if(hit>.5){vec3 p=ro+rd*tt,nn=nr(p);vec3 L=normalize(vec3(.55,.8,.6));float df=c
   vec2 tc;float fi;if(aq.x>=aq.y&&aq.x>=aq.z){tc=q.yz;fi=q.x>0.?0.:1.;}else if(aq.y>=aq.z){tc=q.xz;fi=q.y>0.?2.:3.;}else{tc=q.xy;fi=q.z>0.?4.:5.;}
   vec2 ce=floor((tc+.9)/.6),lc=(tc+.9)-ce*.6-.3;vec2 qd=abs(lc)-.2;float sd=length(max(qd,0.))+min(max(qd.x,qd.y),0.)-.06;
   float stk=smoothstep(.012,-.004,sd)*step(.86,mx3(aq));gin=1.-stk;
-  vec3 fc=pal(h(ce*1.31+vec2(fi*7.3,fi*2.9)));base=mix(vec3(.015,.016,.02),fc,stk);}
- else base=pal(fract(id*.37+.05));
+  float fv=fi<.5?7903308.:fi<1.5?1007672.:fi<2.5?6571101.:fi<3.5?6782065.:fi<4.5?528461.:3349013.;float pw=pow(6.,ce.x+3.*ce.y);float qq=floor((fv+.5)/pw);float cc=qq-6.*floor((qq+.5)/6.);vec3 fc=pal((cc+.5)/6.);base=mix(vec3(.015,.016,.02),fc,stk);}
+ else{vec4 s4=sm(id);vec3 q2=rX(t*.35+id)*rY(t*.28+id*2.)*(p-s4.xyz);vec3 a2=abs(q2);vec2 t2=a2.x>=a2.y&&a2.x>=a2.z?q2.yz:a2.y>=a2.z?q2.xz:q2.xy;vec2 d2=abs(t2)-s4.w*.72;float sd2=length(max(d2,0.))+min(max(d2.x,d2.y),0.)-s4.w*.14;float st2=smoothstep(.01,-.004,sd2);gin=1.-st2;base=mix(vec3(.015,.016,.02),pal(fract(id*.37+.05)),st2);}
  float sp=pow(clamp(dot(reflect(-L,nn),-rd),0.,1.),28.);
  vec3 col=base*(.16+.84*df)+vec3(sp*.3)*(1.-gin)+vec3(.6,.7,.9)*rim*.18*(1.-gin);
  float fade=id<0.?1.:.85;c=mix(bg,col,fade);}
