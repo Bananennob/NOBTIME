@@ -605,11 +605,11 @@ body.cmo:not(.paper):not(.pixel):not(.term):not(.blue) #nvc{background:linear-gr
 #bte,#sxe{display:none!important}
 .top .hd{gap:6px}
 body.sx.sxe #app{visibility:visible}body.sx.sxe #app>.view:not(#v-timer){visibility:hidden}body.sx.sxe #nav{visibility:visible}
-body.sxe #v-timer #scr,body.sxe #v-timer .stage,body.sxe #v-timer #cpb,body.sxe #v-timer #prb{visibility:hidden}
-body.sxe #sx{top:var(--sxt,60px);bottom:var(--sxb,90px);z-index:4;padding:0 14px;gap:6px;background:none}
-body.sxe #sxh{display:none}body.sxe #sxs{min-height:0;padding:12px 44px 12px 14px}body.sxe #sxst{font-size:17px;line-height:1.45}
+body.sxe #v-timer .stage,body.sxe #v-timer #cpb,body.sxe #v-timer #prb{visibility:hidden}body.sxe #v-timer .stage{flex:1 1 auto}@media (orientation:portrait){body.sxe #v-timer .stage{min-height:300px}}
+body.sxe #sx{top:var(--sxt,60px);bottom:var(--sxb,90px);left:var(--sxl,0);right:var(--sxr,0);z-index:4;padding:0;gap:4px;background:none}
+body.sxe #sxh,body.sxe #sxs{display:none!important}
 body.sxe #sxc{min-height:120px}body.sxe #sxn{max-width:320px}
-body.sxe #sxtm{font-size:clamp(56px,17vw,92px)}body.sxe #sxa{justify-content:center}
+body.sxe #sxtm{font-size:clamp(30px,8vw,40px);line-height:1.1}body.sxe #sxp{font-size:12px}body.sxe #sxa{gap:6px}body.sxe #sxa .chip,body.sxe #sxa .big{min-height:38px;padding:0 14px;font-size:14px}body.sxe #sxc{flex:1 1 auto}body.sxe #sxa{justify-content:center}
 #tinw,#tinh{display:none}
 body.tin #time{display:none}body.tin #tinw{display:flex;align-items:center;gap:10px}body.tin #tinh{display:block;text-align:center;max-width:320px;line-height:1.4}
 #tin{width:min(70vw,320px);font:inherit;font-size:clamp(46px,14vw,88px);font-weight:700;text-align:center;font-variant-numeric:tabular-nums;background:transparent;border:0;border-bottom:2px solid var(--line);color:var(--fg);padding:4px 0;border-radius:0;transition:border-color .2s}
@@ -628,10 +628,24 @@ body.tin #time{display:none}body.tin #tinw{display:flex;align-items:center;gap:1
 .inpcard .vcx+.chips{margin:4px 0 2px}
 body.sxe #vhint,body.sxe #sxa [data-vk],body.sxe #sxa .vk{display:none!important}
 #v-set .card:has(#sco){display:none}
+
+body.sxe:not(.scon) #rc3w,body.sxe:not(.scon) #sxm,body.sxe:not(.scon) #sxa{visibility:hidden}
+@media (orientation:landscape) and (max-height:620px){body.sxe #sx{display:grid;grid-template-columns:1.2fr 1fr;grid-template-rows:1fr auto auto 1fr;column-gap:12px}body.sxe #sxc{grid-column:1;grid-row:1/5;min-height:0}body.sxe #sxm{grid-column:2;grid-row:2}body.sxe #sxa{grid-column:2;grid-row:3;flex-wrap:wrap}body.sxe #sxpad,body.sxe #sxo{grid-column:1/3}body.sxe #sxtm{font-size:44px}}
 .rkmine{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px;padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
 .rkmine b{display:block;font-size:14px}.rkmine span{display:block;font-size:12px;color:var(--mut);margin-top:2px;line-height:1.35}
 #rksel{width:100%;font:inherit;font-size:15px;color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;padding:10px 12px;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat}
 #rksel option{background:#151824;color:#fff}
+/* v91 */
+#stabs{flex-shrink:0;min-height:48px;align-items:center}
+#stabs .chip{flex:1 0 auto}
+html{background:var(--bg)}
+#bg,#gl,#fs,#bgi{bottom:-160px!important}
+#gl,#fs,#bg{height:calc(100% + 160px)!important;width:100%!important}
+#cm{background:rgba(0,0,0,.42)!important;backdrop-filter:blur(26px) saturate(1.25);-webkit-backdrop-filter:blur(26px) saturate(1.25)}
+#pbt,#sxtoast{background:color-mix(in srgb,var(--ac) 12%,rgba(12,12,16,.95))!important}
+body.sxe #sxn{display:none!important}
+#sxnc{display:none}body.sxe:not(.scon) #sxnc{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:18px;max-width:300px;position:absolute;inset:0;margin:auto;height:fit-content;z-index:2}
+#sxnc b{font-size:17px}#sxnc span{font-size:13px;color:var(--mut);line-height:1.4}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2734,13 +2748,14 @@ window.addEventListener('keydown',e=>{if(cfg.inp=='type'&&(e.code=='Space'||e.ke
 window.addEventListener('keyup',e=>{if(cfg.inp=='type'&&(e.code=='Space'||e.key==' ')&&!(e.target&&e.target.id=='tin')){e.stopImmediatePropagation()}},true);
 
 /* ---------- Smart Cube auf dem Homescreen ---------- */
-function smVars(){const r=document.documentElement.style,tp=q('#v-timer .top'),w=q('#wid'),n=q('#nav');const top=tp?tp.getBoundingClientRect().bottom+4:60;let bot=n?n.getBoundingClientRect().top-6:innerHeight-80;if(w){const cs=[...w.children].filter(c=>c.offsetParent&&c.getBoundingClientRect().height>8);if(cs.length)bot=Math.min(bot,Math.min(...cs.map(c=>c.getBoundingClientRect().top))-8)}r.setProperty('--sxt',top+'px');r.setProperty('--sxb',Math.max(0,innerHeight-bot)+'px')}
+function smVars(){const r=document.documentElement.style,st=q('#v-timer .stage'),sc=q('#scr');if(!st)return;const a=st.getBoundingClientRect(),b=sc&&sc.offsetParent?sc.getBoundingClientRect():null;let top=a.top;if(b&&b.bottom>top-4&&b.left<a.right&&b.right>a.left)top=b.bottom+6;r.setProperty('--sxt',Math.round(top)+'px');const nv=q('#nav'),nb=nv?nv.getBoundingClientRect().top-6:innerHeight;r.setProperty('--sxb',Math.round(Math.max(0,innerHeight-Math.min(a.bottom,nb)))+'px');r.setProperty('--sxl',Math.round(a.left)+'px');r.setProperty('--sxr',Math.round(Math.max(0,innerWidth-a.right))+'px')}
 function smLay(on){try{if(on&&cfg.wlay!='mini'){cfg.wlay0=cfg.wlay||'std';wlApply('mini')}else if(!on&&cfg.wlay0){const w=cfg.wlay0;delete cfg.wlay0;wlApply(w)}}catch(e){}}
 function smSync(){try{const want=cfg.inp=='smart'&&q('#v-timer').classList.contains('on')&&(q('#cm')||{}).hidden!==false&&!q('#intro');
  if(want){smLay(1);smVars();document.body.classList.add('sxe');if(!SX.open)sxOpen();smVars()}
  else if(SX.open&&document.body.classList.contains('sxe')){sxClose();document.body.classList.remove('sxe')}
  else if(cfg.inp!='smart')document.body.classList.remove('sxe')}catch(e){}}
-window.smSync=smSync;
+window.smSync=smSync;window.smVars=smVars;
+setInterval(()=>{try{if(document.body.classList.contains('sxe')&&SX.open&&SX.ph=='scr'&&cur!=SX.scr){SX.scr=cur;SC.g=null;sxGuide();sxEval()}}catch(e){}},400);
 document.addEventListener('click',e=>{if(e.target.closest('[data-go],#cmq,#nvc'))setTimeout(smSync,30)});
 {const o=cmOpen;cmOpen=function(){const r=o.apply(this,arguments);if(document.body.classList.contains('sxe')&&SX.open){sxClose();document.body.classList.add('sxe-p')}return r}}
 setInterval(()=>{if(cfg.inp=='smart'&&q('#cm').hidden&&q('#v-timer').classList.contains('on')&&!SX.open&&!q('#intro'))smSync()},700);
@@ -2748,7 +2763,7 @@ addEventListener('resize',()=>{if(document.body.classList.contains('sxe'))smVars
 /* kein +2/DNF beim Smart Cube */
 {const o=sxStart;sxStart=function(){const r=o.apply(this,arguments);SX.pen=0;return r}}
 /* nach dem Solve: Statistik, dann automatisch nächster Solve */
-{const o=sxFinish;sxFinish=function(){const r=o.apply(this,arguments);try{SX.pen=0;const s=solves[SX.ri];if(s)s.p=0;save();render();setTimeout(()=>{if(SX.ph=='done')try{sxStats(SX.ri)}catch(e){}},450)}catch(e){}return r}}
+{const o=sxFinish;sxFinish=function(){const r=o.apply(this,arguments);try{SX.pen=0;const s=solves[SX.ri];if(s)s.p=0;save();render();}catch(e){}return r}}
 document.addEventListener('click',e=>{const t=e.target.closest('#sxrcl');if(t&&SX.open&&SX.ph=='done')setTimeout(()=>{if(SX.ph=='done')sxNext()},50)});
 
 /* ---------- Züge: U4 = Gyro zurücksetzen, D4 = Würfel gelöst ---------- */
@@ -2816,6 +2831,20 @@ const esc4=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 document.addEventListener('change',e=>{if(e.target.id!='rksel')return;const pz=CH.rpz||'333';if(e.target.value)cfg.rks[pz]=e.target.value;else delete cfg.rks[pz];S('nt.c',cfg);try{profPush()}catch(x){}setTimeout(()=>{try{rkLoad()}catch(x){}},900)});
 /* bei Start einmal neu hochladen, damit alte Einträge verschwinden */
 if(!localStorage.getItem('nt.rk90')){localStorage.setItem('nt.rk90','1');setTimeout(()=>{try{LOG()&&profPush()}catch(e){}},6000)}
+})();
+/* ===== v91: iPhone Vollbild, Smart Cube Hinweis, Abstände ===== */
+(function(){
+const q=s=>document.querySelector(s);
+/* iPhone-Web-App: unten schwarzer Streifen -> Höhe auf ganze Bildschirmhöhe */
+function fitH(){try{const st=navigator.standalone||matchMedia('(display-mode: standalone)').matches;if(!st)return;const por=innerHeight>innerWidth,sh=por?Math.max(screen.height,screen.width):Math.min(screen.height,screen.width),d=sh-innerHeight;const h=document.documentElement;if(d>0&&d<120){h.style.height=sh+'px';document.body.style.height=sh+'px'}else{h.style.height='';document.body.style.height=''}}catch(e){}}
+fitH();addEventListener('resize',()=>setTimeout(fitH,60));addEventListener('orientationchange',()=>setTimeout(fitH,300));
+/* Smart Cube nicht verbunden: Hinweis statt Bluetooth-Kasten */
+{const c=q('#sxc');if(c&&!q('#sxnc')){const d=document.createElement('div');d.id='sxnc';d.className='card';c.appendChild(d)}}
+function ncPaint(){const d=q('#sxnc');if(!d)return;document.body.classList.toggle('scon',!!SC.mode);d.innerHTML=`<b>${T('Kein Smart Cube verbunden','No smart cube connected')}</b><span>${T('Verbinde ihn in Settings → Timer → Smart Cube.','Connect it in Settings → Timer → Smart Cube.')}</span><button class="chip on" data-ncgo>${T('Zu den Settings','Open settings')}</button>`}
+ncPaint();{const o=sxStatus;sxStatus=function(){const r=o.apply(this,arguments);ncPaint();return r}}
+document.addEventListener('click',e=>{if(!e.target.closest('[data-ncgo]'))return;const g=q('[data-go=set]');g&&g.click();setTimeout(()=>{const t=q('#stabs [data-t=t]');t&&t.click()},60)});
+/* Abstände nach Layout-Wechsel neu messen */
+setInterval(()=>{if(document.body.classList.contains('sxe')&&window.smVars)smVars()},500);
 })();
 
 </script>
