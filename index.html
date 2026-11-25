@@ -598,11 +598,18 @@ body.cmo:not(.paper):not(.pixel):not(.term):not(.blue) #nav button.on:not(#nvc){
 #v-set .prow i{transition:transform .2s}#v-set .prow:hover i{transform:translateX(3px)}
 #v-set>h2{font-size:26px;letter-spacing:-.01em}
 body.cmo:not(.paper):not(.pixel):not(.term):not(.blue) #nvc{background:linear-gradient(135deg,var(--ac),var(--ac2,var(--ac)))!important;color:#0b0d14!important;box-shadow:0 6px 20px color-mix(in srgb,var(--ac) 40%,transparent)!important}
+
+.bdpr{position:relative;background:none!important}.bdpr svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}.bdpr circle{fill:none;stroke-width:6}.bdpr .tr{stroke:rgba(255,255,255,.09)}.bdpr .pr{stroke:var(--ac);stroke-linecap:round}.bdpr b,.bdpr span{position:relative}
+.bm.lk{background-color:transparent}
 /* ===== v89 ===== */
 #bte,#sxe{display:none!important}
 .top .hd{gap:6px}
-body.sx.sxe #app{visibility:visible}body.sx.sxe #app>.view{visibility:hidden}body.sx.sxe #nav{visibility:visible}
-body.sxe #sx{bottom:var(--navh,80px);z-index:4;padding-bottom:6px}body.sxe #sxq{display:none}
+body.sx.sxe #app{visibility:visible}body.sx.sxe #app>.view:not(#v-timer){visibility:hidden}body.sx.sxe #nav{visibility:visible}
+body.sxe #v-timer #scr,body.sxe #v-timer .stage,body.sxe #v-timer #cpb,body.sxe #v-timer #prb{visibility:hidden}
+body.sxe #sx{top:var(--sxt,60px);bottom:var(--sxb,90px);z-index:4;padding:0 14px;gap:6px;background:none}
+body.sxe #sxh{display:none}body.sxe #sxs{min-height:0;padding:12px 44px 12px 14px}body.sxe #sxst{font-size:17px;line-height:1.45}
+body.sxe #sxc{min-height:120px}body.sxe #sxn{max-width:320px}
+body.sxe #sxtm{font-size:clamp(56px,17vw,92px)}body.sxe #sxa{justify-content:center}
 #tinw,#tinh{display:none}
 body.tin #time{display:none}body.tin #tinw{display:flex;align-items:center;gap:10px}body.tin #tinh{display:block;text-align:center;max-width:320px;line-height:1.4}
 #tin{width:min(70vw,320px);font:inherit;font-size:clamp(46px,14vw,88px);font-weight:700;text-align:center;font-variant-numeric:tabular-nums;background:transparent;border:0;border-bottom:2px solid var(--line);color:var(--fg);padding:4px 0;border-radius:0;transition:border-color .2s}
@@ -617,6 +624,14 @@ body.tin #time{display:none}body.tin #tinw{display:flex;align-items:center;gap:1
 #sxtoast{position:fixed;left:50%;top:calc(70px + env(safe-area-inset-top,0px));transform:translate(-50%,-10px);z-index:9;padding:10px 16px;border-radius:999px;background:rgba(18,21,32,.96);border:1px solid color-mix(in srgb,var(--ac) 45%,transparent);font-size:14px;font-weight:600;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap}
 #sxtoast.on{opacity:1;transform:translate(-50%,0)}
 #sco{display:none!important}
+
+.inpcard .vcx+.chips{margin:4px 0 2px}
+body.sxe #vhint,body.sxe #sxa [data-vk],body.sxe #sxa .vk{display:none!important}
+#v-set .card:has(#sco){display:none}
+.rkmine{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px;padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.rkmine b{display:block;font-size:14px}.rkmine span{display:block;font-size:12px;color:var(--mut);margin-top:2px;line-height:1.35}
+#rksel{width:100%;font:inherit;font-size:15px;color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;padding:10px 12px;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+#rksel option{background:#151824;color:#fff}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2635,11 +2650,11 @@ document.addEventListener('click',e=>{const b=e.target.closest('#bte');if(!b)ret
 /* ---------- Badges ---------- */
 const TG={b:['#f0b27a','#8a4b1c','#cd7f32'],s:['#f4f6fa','#8b93a1','#c9ced8'],g:['#ffe39a','#c8902a','#f2c14e'],d:['#b8f4ff','#5b6cff','#8fd8ff']};
 const bCat=id=>/^n\d|^n1k|^n10k/.test(id)?[0,T('Solves','Solves')]:/^s\d/.test(id)?[1,T('3x3 Single','3x3 single')]:/^a(5|12|100)_/.test(id)?[2,T('Averages','Averages')]:/^st\d/.test(id)?[3,T('Serien','Streaks')]:/^e[a-z0-9]+_/.test(id)?[4,T('Andere Events','Other events')]:/^bw/.test(id)?[5,'Battles']:/^(fr|sh)\d/.test(id)?[6,T('Freunde','Social')]:/^c\d/.test(id)?[7,T('Sammeln','Collecting')]:[8,T('Spezial','Special')];
-function medal(b,ok,p){const g=TG[b.t]||TG.b;return`<span class="bm${ok?'':' lk'}" style="--g1:${g[0]};--g2:${g[1]};--gc:${g[2]};--p:${Math.round((p||0)*100)}">${ok?'<em></em>':''}<i>${bdIc(b.ic,ok?g[0]:'currentColor')}</i></span>`}
+function medal(b,ok,p){const g=TG[b.t]||TG.b;return`<span class="bm${ok?'':' lk'}" style="--g1:${g[0]};--g2:${g[1]};--gc:${g[2]};${ok?'':`background:conic-gradient(${g[0]} ${Math.round((p||0)*100)}%,rgba(255,255,255,.1) 0)`}">${ok?'<em></em>':''}<i>${bdIc(b.ic,ok?g[0]:'currentColor')}</i></span>`}
 cmBadges=function(){const s=pfStats(),R=BDG.map(b=>({b,r:b.f(s),c:bCat(b.id)}));const e=R.filter(x=>x.r.ok).length;const sel=CM.sel&&R.find(x=>x.b.id==CM.sel);const tn={b:T('Bronze','Bronze'),s:T('Silber','Silver'),g:T('Gold','Gold'),d:T('Diamant','Diamond')};
  const groups={};R.forEach(x=>{(groups[x.c[0]]=groups[x.c[0]]||{n:x.c[1],l:[]}).l.push(x)});
  const nx=R.filter(x=>!x.r.ok).sort((a,b)=>b.r.p-a.r.p).slice(0,3);
- return`<div class="bdhd"><div class="bdpr" style="--p:${Math.round(e/BDG.length*100)}"><b>${e}</b><span>/ ${BDG.length}</span></div><div><b>${T('Deine Badges','Your badges')}</b><span>${T('Tippe ein Badge an, um zu sehen, wie du es bekommst.','Tap a badge to see how to unlock it.')}</span></div></div>
+ return`<div class="bdhd"><div class="bdpr"><svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="31" class="tr"/><circle cx="36" cy="36" r="31" class="pr" stroke-dasharray="${(194.8*e/BDG.length).toFixed(1)} 400"/></svg><b>${e}</b><span>/ ${BDG.length}</span></div><div><b>${T('Deine Badges','Your badges')}</b><span>${T('Tippe ein Badge an, um zu sehen, wie du es bekommst.','Tap a badge to see how to unlock it.')}</span></div></div>
  ${sel?`<div class="bdsel">${medal(sel.b,sel.r.ok,sel.r.p)}<div><b>${esc3(bdN(sel.b))}</b><span>${tn[sel.b.t]||''} · ${esc3(bdD(sel.b))}</span><em>${sel.r.ok?T('Freigeschaltet','Unlocked'):T('Fortschritt: ','Progress: ')+sel.r.tx}</em></div></div>`:''}
  ${nx.length?`<div class="cmk">${T('Fast geschafft','Almost there')}</div><div class="bdgn">${nx.map(x=>`<button class="bdn" data-cm="bd" data-v="${x.b.id}">${medal(x.b,0,x.r.p)}<span><b>${esc3(bdN(x.b))}</b><em>${x.r.tx}</em><u><i style="width:${Math.round(x.r.p*100)}%"></i></u></span></button>`).join('')}</div>`:''}
  ${Object.keys(groups).sort((a,b)=>a-b).map(k=>{const G=groups[k],l=G.l.slice().sort((a,b)=>(b.r.ok-a.r.ok)||('bsgd'.indexOf(a.b.t)-'bsgd'.indexOf(b.b.t)));return`<div class="cmk">${G.n} <span class="bdc">${l.filter(x=>x.r.ok).length}/${l.length}</span></div><div class="bdg2">${l.map(x=>`<button class="bd2${CM.sel==x.b.id?' sel':''}" data-cm="bd" data-v="${x.b.id}">${medal(x.b,x.r.ok,x.r.p)}<span>${esc3(bdN(x.b))}</span></button>`).join('')}</div>`}).join('')}`};
@@ -2719,16 +2734,17 @@ window.addEventListener('keydown',e=>{if(cfg.inp=='type'&&(e.code=='Space'||e.ke
 window.addEventListener('keyup',e=>{if(cfg.inp=='type'&&(e.code=='Space'||e.key==' ')&&!(e.target&&e.target.id=='tin')){e.stopImmediatePropagation()}},true);
 
 /* ---------- Smart Cube auf dem Homescreen ---------- */
-function navH(){const n=q('#nav');if(!n)return 80;const r=n.getBoundingClientRect();return Math.max(60,innerHeight-r.top+6)}
-function smSync(){try{const want=cfg.inp=='smart'&&q('#v-timer').classList.contains('on')&&(q('#cm')||{}).hidden!==false;document.documentElement.style.setProperty('--navh',navH()+'px');
- if(want&&!SX.open){document.body.classList.add('sxe');sxOpen()}else if(want){document.body.classList.add('sxe')}
- else if(!want&&SX.open&&document.body.classList.contains('sxe')){sxClose();document.body.classList.remove('sxe')}
- if(!want&&cfg.inp!='smart')document.body.classList.remove('sxe')}catch(e){}}
+function smVars(){const r=document.documentElement.style,tp=q('#v-timer .top'),w=q('#wid'),n=q('#nav');const top=tp?tp.getBoundingClientRect().bottom+4:60;let bot=n?n.getBoundingClientRect().top-6:innerHeight-80;if(w){const cs=[...w.children].filter(c=>c.offsetParent&&c.getBoundingClientRect().height>8);if(cs.length)bot=Math.min(bot,Math.min(...cs.map(c=>c.getBoundingClientRect().top))-8)}r.setProperty('--sxt',top+'px');r.setProperty('--sxb',Math.max(0,innerHeight-bot)+'px')}
+function smLay(on){try{if(on&&cfg.wlay!='mini'){cfg.wlay0=cfg.wlay||'std';wlApply('mini')}else if(!on&&cfg.wlay0){const w=cfg.wlay0;delete cfg.wlay0;wlApply(w)}}catch(e){}}
+function smSync(){try{const want=cfg.inp=='smart'&&q('#v-timer').classList.contains('on')&&(q('#cm')||{}).hidden!==false&&!q('#intro');
+ if(want){smLay(1);smVars();document.body.classList.add('sxe');if(!SX.open)sxOpen();smVars()}
+ else if(SX.open&&document.body.classList.contains('sxe')){sxClose();document.body.classList.remove('sxe')}
+ else if(cfg.inp!='smart')document.body.classList.remove('sxe')}catch(e){}}
 window.smSync=smSync;
 document.addEventListener('click',e=>{if(e.target.closest('[data-go],#cmq,#nvc'))setTimeout(smSync,30)});
 {const o=cmOpen;cmOpen=function(){const r=o.apply(this,arguments);if(document.body.classList.contains('sxe')&&SX.open){sxClose();document.body.classList.add('sxe-p')}return r}}
 setInterval(()=>{if(cfg.inp=='smart'&&q('#cm').hidden&&q('#v-timer').classList.contains('on')&&!SX.open&&!q('#intro'))smSync()},700);
-addEventListener('resize',()=>document.documentElement.style.setProperty('--navh',navH()+'px'));
+addEventListener('resize',()=>{if(document.body.classList.contains('sxe'))smVars()});
 /* kein +2/DNF beim Smart Cube */
 {const o=sxStart;sxStart=function(){const r=o.apply(this,arguments);SX.pen=0;return r}}
 /* nach dem Solve: Statistik, dann automatisch nächster Solve */
@@ -2758,11 +2774,48 @@ scLoop=function(){if(SC.loop)return;let l=performance.now();const pq=new THREE.Q
 /* ---------- Settings: Eingabe ---------- */
 function inpCard(){const m=cfg.inp;return`<div class="k">${T('Eingabe','Input')}</div><div class="inpg">${[['timer',T('Timer','Timer'),'<circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M9.5 3h5"/>'],['type',T('Tippen','Typing'),'<rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/>'],['smart','Smart Cube','<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>']].map(([k,l,ic])=>`<button class="inpt${m==k?' on':''}" data-inp="${k}"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg><span>${l}</span></button>`).join('')}</div>
  ${m=='type'?`<div class="k sub">${T('Du tippst deine Zeit nach dem Solve mit der Tastatur ein. Beispiele: 1234 = 12.34 · 1:05.20 · DNF · 12.34+ = +2','You type your time after the solve. Examples: 1234 = 12.34 · 1:05.20 · DNF · 12.34+ = +2')}</div>`:''}
- ${m=='smart'?`<div class="vcx"><div><b>${T('Smart Cube verbinden','Connect Smart Cube')}</b><span>${T('Danach löst du direkt auf dem Homescreen. Kein +2 oder DNF, nach jedem Solve kommt die Statistik.','Then you solve right on the home screen. No +2 or DNF, stats after every solve.')}</span></div><button class="chip on" data-inp="conn">${T('Verbinden','Connect')}</button></div><div class="k sub">${T('Tipps: 4× U drehen = Gyro zurücksetzen (Weiß oben, Grün vorne). 4× D drehen = Würfel auf gelöst setzen.','Tips: turn U 4 times = reset gyro (white top, green front). Turn D 4 times = set cube to solved.')}</div>`:''}`}
+ ${m=='smart'?`<div class="vcx"><div><b>${SC.mode?T('Verbunden','Connected')+(SC.mode=='sim'?' · '+T('Simulator','Simulator'):'')+(SC.bat!=null?' · '+SC.bat+'%':''):T('Smart Cube verbinden','Connect Smart Cube')}</b><span id="inpst">${SC.mode?T('Geh auf Timer und löse direkt auf dem Homescreen. Kein +2 oder DNF, nach jedem Solve kommt die Statistik.','Go to Timer and solve right on the home screen. No +2 or DNF, stats after every solve.'):T('Tippe auf Verbinden und wähle deinen Cube im Bluetooth-Fenster.','Tap Connect and pick your cube in the Bluetooth window.')}</span></div></div><div class="chips">${SC.mode?`<button class="chip" data-inp="dc">${T('Trennen','Disconnect')}</button>`:`<button class="chip on" data-inp="bt">${T('Verbinden','Connect')}</button><button class="chip" data-inp="sim">${T('Simulator','Simulator')}</button>`}</div><div class="k sub">${T('Tipps: 4× U drehen = Gyro zurücksetzen (Weiß oben, Grün vorne). 4× D drehen = Würfel auf gelöst setzen.','Tips: turn U 4 times = reset gyro (white top, green front). Turn D 4 times = set cube to solved.')}</div>`:''}`}
 {const set=q('#v-set');if(set){const c=document.createElement('div');c.className='card inpcard';c.dataset.g='t';c.innerHTML=inpCard();const first=[...set.querySelectorAll(':scope>.card')].find(x=>x.dataset.g=='t');if(first)set.insertBefore(c,first);else set.appendChild(c);c.hidden=!(q('#stabs .chip.on')&&q('#stabs .chip.on').dataset.t=='t')}}
 const inpPaint=()=>{const c=q('#v-set .inpcard');if(c)c.innerHTML=inpCard();document.body.classList.toggle('tin',cfg.inp=='type');tinHint()};
-document.addEventListener('click',e=>{const b=e.target.closest('[data-inp]');if(!b)return;const v=b.dataset.inp;if(v=='conn'){cfg.inp='smart';S('nt.c',cfg);inpPaint();const g=$('[data-go=timer]');g&&g.click();setTimeout(smSync,60);return}cfg.inp=v;S('nt.c',cfg);inpPaint();if(v!='smart'&&SX.open&&document.body.classList.contains('sxe')){sxClose();document.body.classList.remove('sxe')}});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-inp]');if(!b)return;const v=b.dataset.inp;if(v=='bt'){const st=()=>{const e=q('#inpst');if(e)e.textContent=q('#scn').textContent||e.textContent};const iv=setInterval(st,300);scConnect().catch(()=>{}).finally(()=>{clearInterval(iv);inpPaint();const e=q('#inpst');const m=q('#scn').textContent;if(!SC.mode&&m&&e)e.textContent=m});return}
+ if(v=='sim'){SC.st=scFresh();scSetMode('sim');try{if(C3.r)c3Set(SC.st)}catch(e){}inpPaint();return}
+ if(v=='dc'){try{SC.conn&&SC.conn.disconnect&&SC.conn.disconnect()}catch(e){}scSetMode(null);inpPaint();return}
+ cfg.inp=v;S('nt.c',cfg);inpPaint();if(v!='smart'){if(SX.open&&document.body.classList.contains('sxe')){sxClose();document.body.classList.remove('sxe')}smLay(0)}});
 inpPaint();
+{const o=sxStatus;sxStatus=function(){const r=o.apply(this,arguments);try{if(q('#v-set.on')&&cfg.inp=='smart')inpPaint()}catch(e){}return r}}
+})();
+
+</script>
+<script>
+/* ===== v90 Ranking: nur die richtige Session zählt ===== */
+(function(){
+cfg.rks=cfg.rks||{};
+/* Art der Session erkennen: Name + Scrambles */
+function detKind(q){const n=String(q.n||'').toLowerCase(),sc=String(((q.sv||[]).find(s=>s.s)||{}).s||'');let pz=q.pz,x='';
+ if(/\(\s*-?\d+\s*,\s*-?\d+\s*\)/.test(sc)||/\bsq(uare)?[\s-]?1?\b|square/.test(n))pz='sq1';
+ else if(/\b2x2\b|\b222\b/.test(n))pz='222';else if(/\b4x4\b|\b444\b/.test(n))pz='444';else if(/\b5x5\b|\b555\b/.test(n))pz='555';
+ else if(/\b6x6\b/.test(n))pz='666';else if(/\b7x7\b/.test(n))pz='777';else if(/pyra/.test(n))pz='pyr';else if(/skewb/.test(n))pz='skb';
+ else if(/mega|minx/.test(n))pz='mega';else if(/clock/.test(n))pz='clk';
+ if(/\boh\b|one.?hand|einhand/.test(n))x='oh';else if(/bld|blind/.test(n))x='bld';else if(/fmc|fewest/.test(n))x='fmc';
+ else if(/feet|fuß|fuss/.test(n))x='feet';else if(/virt|sim\b|online/.test(n))x='virt';else if(/\b15\b|15.?puz|fifteen/.test(n))x='15';
+ else if(/practice|übung|uebung|training|warm/.test(n))x='prac';
+ return{pz,x}}
+window.detKind=detKind;
+const sesList=()=>D.ses.filter(q=>(q.sv||[]).length).slice(0,12);
+/* welche Session zählt für ein Event */
+function rankedSes(pz){const L=sesList(),want=cfg.rks[pz];if(want){const q=L.find(q=>String(q.n||'').slice(0,30)==want);if(q&&detKind(q).pz==pz)return q}
+ const c=L.filter(q=>{const d=detKind(q);return d.pz==pz&&!d.x});c.sort((a,b)=>b.sv.length-a.sv.length);return c[0]||null}
+window.rankedSes=rankedSes;
+{const o=pfSes;pfSes=function(){const r=o.apply(this,arguments),L=sesList(),R={};r.forEach((s,i)=>{const q=L[i];if(!q)return;const d=detKind(q);s.pz=d.pz;if(d.x)s.x=d.x;if(!(d.pz in R))R[d.pz]=rankedSes(d.pz);if(R[d.pz]===q)s.r=1});return r}}
+/* Auswahl in der Rangliste */
+const esc4=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+{const o=rkChips;rkChips=function(){let h=o.apply(this,arguments);if(CH.top=='n'||CH.top=='ls'||!LOG())return h;const pz=CH.rpz||'333',L=sesList().filter(q=>detKind(q).pz==pz),cur=rankedSes(pz);
+ const nm=PZ[pz]?PZ[pz][0]:pz;
+ const sel=L.length?`<select id="rksel" aria-label="Ranking session"><option value="">${T('Automatisch','Automatic')}${!cfg.rks[pz]&&cur?' ('+esc4(cur.n)+')':''}</option>${L.map(q=>{const v=String(q.n||'').slice(0,30),d=detKind(q);return`<option value="${esc4(v)}"${cfg.rks[pz]==v?' selected':''}>${esc4(q.n)} · ${q.sv.length}${d.x?' · '+({oh:'OH',bld:'BLD',fmc:'FMC',feet:'Feet',virt:T('Virtuell','Virtual'),'15':'15 Puzzle',prac:T('Übung','Practice')})[d.x]:''}</option>`}).join('')}</select>`:`<span class="k">${T('Keine '+nm+'-Session mit Zeiten','No '+nm+' session with times')}</span>`;
+ h=h.replace(/<div class="cmm">[^<]*<\/div>$/,'')+`<div class="rkmine"><div><b>${T('Deine Session im Ranking','Your ranked session')}</b><span>${T('Pro Person zählt nur eine Session je Event. OH, BLD, Virtuell und Übung zählen automatisch nicht.','Only one session per person counts for each event. OH, BLD, virtual and practice sessions are skipped automatically.')}</span></div>${sel}</div>`;return h}}
+document.addEventListener('change',e=>{if(e.target.id!='rksel')return;const pz=CH.rpz||'333';if(e.target.value)cfg.rks[pz]=e.target.value;else delete cfg.rks[pz];S('nt.c',cfg);try{profPush()}catch(x){}setTimeout(()=>{try{rkLoad()}catch(x){}},900)});
+/* bei Start einmal neu hochladen, damit alte Einträge verschwinden */
+if(!localStorage.getItem('nt.rk90')){localStorage.setItem('nt.rk90','1');setTimeout(()=>{try{LOG()&&profPush()}catch(e){}},6000)}
 })();
 
 </script>

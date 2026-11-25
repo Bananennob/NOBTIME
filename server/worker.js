@@ -55,9 +55,13 @@ async function handle(req,env){
  if(P=='/api/top'&&req.method=='GET'){const m=url.searchParams.get('m')||'b',pz=(url.searchParams.get('pz')||'333').replace(/[^a-z0-9]/gi,'').slice(0,8)||'333';
   if(m=='n'||m=='ls'){const path=m=='n'?'$.st.n':'$.st.ls';const rows=(await q(`SELECT id,u,prof,pub,seen FROM users WHERE COALESCE(ban,0)=0 AND json_extract(pub,'${path}') IS NOT NULL ORDER BY CAST(json_extract(pub,'${path}') AS REAL) DESC LIMIT 25`).all()).results||[];return J({list:rows.map(r=>{const o=pubU(r);delete o.pub.ss;return{...o,v:(o.pub.st||{})[m]}}),evs:[]})}
   const rows=(await q("SELECT id,u,prof,pub,seen FROM users WHERE COALESCE(ban,0)=0 AND pub LIKE '%\"ss\"%' LIMIT 800").all()).results||[];const hid={};for(const h of(await q('SELECT uid,k FROM rkhide').all()).results||[])(hid[h.uid]=hid[h.uid]||new Set()).add(h.k);
-  const evc={},ent=[];for(const r of rows){const pu=pj(r.pub,{}),hs=hid[r.id]||new Set();for(const s of(pu.ss||[])){evc[s.pz]=(evc[s.pz]||0)+1;if(s.pz!=pz)continue;const sk=s.pz+':'+s.k;
-    if(m=='b'){const x=(s.bs||[]).find(x=>!hs.has('s:'+(x.d||('t'+x.t))));if(x)ent.push({r,v:x.t,ses:s.k,sc:x.sc||'',d:x.d||0,key:'s:'+(x.d||('t'+x.t))})}
-    else if((m=='a5'||m=='a12')&&s[m]!=null&&!hs.has(m+':'+sk))ent.push({r,v:s[m],ses:s.k,sc:'',d:0,key:m+':'+sk})}}
+  const evc={},ent=[];for(const r of rows){const pu=pj(r.pub,{}),hs=hid[r.id]||new Set();const ss=pu.ss||[],seen={};for(const s of ss)if(!s.x&&!seen[s.pz]){seen[s.pz]=1;evc[s.pz]=(evc[s.pz]||0)+1}
+   const lst=ss.filter(s=>s.pz==pz),use=lst.some(s=>s.r)?lst.filter(s=>s.r):lst.filter(s=>!s.x);let best=null;
+   for(const s of use){const sk=s.pz+':'+s.k;let e=null;
+    if(m=='b'){const x=(s.bs||[]).find(x=>!hs.has('s:'+(x.d||('t'+x.t))));if(x)e={r,v:x.t,ses:s.k,sc:x.sc||'',d:x.d||0,key:'s:'+(x.d||('t'+x.t))}}
+    else if((m=='a5'||m=='a12')&&s[m]!=null&&!hs.has(m+':'+sk))e={r,v:s[m],ses:s.k,sc:'',d:0,key:m+':'+sk};
+    if(e&&(!best||e.v<best.v))best=e}
+   if(best)ent.push(best)}
   ent.sort((a,b)=>a.v-b.v);const evs=Object.keys(evc).sort((a,b)=>(a=='333'?-1:b=='333'?1:evc[b]-evc[a]));
   return J({list:ent.slice(0,30).map(e=>{const o=pubU(e.r);delete o.pub.ss;return{...o,v:e.v,ses:e.ses,sc:e.sc,d:e.d,key:e.key}}),evs})}
 
