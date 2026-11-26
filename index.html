@@ -692,6 +692,12 @@ body.hbg:not(.paper):not(.blue):not(.term) #nav{background-color:color-mix(in sr
 .nxc{background-color:color-mix(in srgb,var(--bgk,#070a18) 97%,transparent)!important}
 #pbt{background-color:color-mix(in srgb,var(--bgk,#070a18) 96%,transparent)!important}
 #sxtoast{background-color:color-mix(in srgb,var(--bgk,#070a18) 96%,transparent)!important}
+
+#cmb{overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-x:none;touch-action:pan-y}
+#cmb>*{max-width:100%;min-width:0;box-sizing:border-box}
+.bdg2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:14px 8px;border-radius:20px;background:var(--card);border:1px solid var(--line)}
+.bdg2i{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:13px;font-weight:600;min-width:0}
+.bdg2i span:last-child{overflow:hidden;text-overflow:ellipsis;max-width:100%;white-space:nowrap}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2711,6 +2717,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('#bte');if(!b)ret
 const TG={b:['#f0b27a','#8a4b1c','#cd7f32'],s:['#f4f6fa','#8b93a1','#c9ced8'],g:['#ffe39a','#c8902a','#f2c14e'],d:['#b8f4ff','#5b6cff','#8fd8ff']};
 const bCat=id=>/^n\d|^n1k|^n10k/.test(id)?[0,T('Solves','Solves')]:/^s\d/.test(id)?[1,T('3x3 Single','3x3 single')]:/^a(5|12|100)_/.test(id)?[2,T('Averages','Averages')]:/^st\d/.test(id)?[3,T('Serien','Streaks')]:/^e[a-z0-9]+_/.test(id)?[4,T('Andere Events','Other events')]:/^bw/.test(id)?[5,'Battles']:/^(fr|sh)\d/.test(id)?[6,T('Freunde','Social')]:/^c\d/.test(id)?[7,T('Sammeln','Collecting')]:[8,T('Spezial','Special')];
 function medal(b,ok,p){const g=TG[b.t]||TG.b;return`<span class="bm${ok?'':' lk'}" style="--g1:${g[0]};--g2:${g[1]};--gc:${g[2]};${ok?'':`background:conic-gradient(${g[0]} ${Math.round((p||0)*100)}%,rgba(255,255,255,.1) 0)`}">${ok?'<em></em>':''}<i>${bdIc(b.ic,ok?g[0]:'currentColor')}</i></span>`}
+window.medal=medal;
 cmBadges=function(){const s=pfStats(),R=BDG.map(b=>({b,r:b.f(s),c:bCat(b.id)}));const e=R.filter(x=>x.r.ok).length;const sel=CM.sel&&R.find(x=>x.b.id==CM.sel);const tn={b:T('Bronze','Bronze'),s:T('Silber','Silver'),g:T('Gold','Gold'),d:T('Diamant','Diamond')};
  const groups={};R.forEach(x=>{(groups[x.c[0]]=groups[x.c[0]]||{n:x.c[1],l:[]}).l.push(x)});
  const nx=R.filter(x=>!x.r.ok).sort((a,b)=>b.r.p-a.r.p).slice(0,3);
@@ -2938,6 +2945,8 @@ function paint(){document.querySelectorAll('#ltabs [data-lt]').forEach(b=>{const
 paint();
 /* Karten-Glas in der Hintergrundfarbe der Palette statt fest Dunkelblau */
 function glass(){try{const c=cfg.bgc&&/^#[0-9a-f]{6}$/i.test(cfg.bgc)?cfg.bgc:'#070a18';document.documentElement.style.setProperty('--bgk',c)}catch(e){}}
+/* Profil-Badges im gleichen Medaillen-Look wie im Badges-Tab */
+showcase=function(o){const ids=(o.sw||[]).filter(x=>bdBy(x)).slice(0,3);if(!ids.length)return'';return`<div class="bdg2">${ids.map(i=>{const b=bdBy(i);return`<div class="bdg2i">${window.medal?medal(b,true,1):bdIc(b.ic,TC[b.t])}<span>${esc(bdN(b))}</span></div>`}).join('')}</div>`};
 glass();{const o=apply;apply=function(){const r=o.apply(this,arguments);glass();return r}}
 })();
 
