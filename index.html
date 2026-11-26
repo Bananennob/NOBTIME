@@ -738,6 +738,15 @@ body:not(.nd) .nse,body:not(.nd) #nst,body:not(.nd) #ntr{display:none}
 #npsel{max-width:62%;font:inherit;font-size:14px;font-weight:600;color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
 #npsel option{background:#15171d;color:#fff}
 .nxb{display:block!important;position:relative}.nxb i{display:block!important;margin:0!important;position:absolute!important;left:0!important;top:0;bottom:0;float:none!important}
+
+.ntp{display:flex;align-items:center;gap:8px;margin-top:6px}.ntp .nxb{flex:1;margin:0}
+/* Cross-Trainer: übersichtlicher */
+.cxst{margin:0 0 14px!important;gap:8px!important}
+#lcx .chips{margin:0 0 14px}
+.cxc{padding:20px 16px!important;gap:16px!important;min-height:300px}
+.cxsc{order:-1;font:700 21px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace!important;word-spacing:9px;letter-spacing:.02em;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line);width:100%;box-sizing:border-box}
+.cxnet{width:min(100%,260px)!important;margin:4px 0}
+.cxtap{font-size:14px!important;padding:10px 18px;border-radius:999px;background:color-mix(in srgb,var(--ac) 16%,transparent);color:var(--fg)!important}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2143,10 +2152,10 @@ return `<svg class="av" viewBox="0 0 100 100" width="${sz}" height="${sz}"><defs
 const BIC={clock:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2',diamond:'M12 3l8 6-8 12L4 9z',skull:'M12 3a7 7 0 0 0-4 12.7V19h8v-3.3A7 7 0 0 0 12 3zM9.5 11h.01M14.5 11h.01M10 19v2M14 19v2',mountain:'M3 19l6-10 4 6 3-4 5 8z',heart:'M12 20s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z',shield:'M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z',calendar:'M5 5h14v15H5zM5 10h14M9 3v4M15 3v4',flame:'M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z',bolt:'M13 3L5 14h6l-1 7 8-11h-6z',target:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM12 11v2',star:'M12 3l2.4 5.6L20 9.5l-4.2 4 1 6-4.8-2.8L7.2 19.5l1-6L4 9.5l5.6-.9z',cube:'M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5',crown:'M4 18l-1-10 5 4 4-7 4 7 5-4-1 10z',trophy:'M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 20h8M10 17h4',swords:'M5 5l10 10M19 5L9 15M4 20l4-4M20 20l-4-4',moon:'M20 14A8 8 0 1 1 10 4a6.5 6.5 0 0 0 10 10z',sun:'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19',users:'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a6 6 0 0 1 12 0M17 11a3 3 0 1 0 0-6M21 20a5 5 0 0 0-4-5',share:'M7 12v7h10v-7M12 3v11M8 7l4-4 4 4',grid:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',medal:'M12 14a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM8.5 13L7 21l5-3 5 3-1.5-8'};
 const TC={b:'#cd7f32',s:'#c0c8d2',g:'#f5c542',d:'#6fe3ff'};
 const bdIc=(ic,col,sz)=>`<svg viewBox="0 0 24 24" ${sz?`width="${sz}" height="${sz}" `:''}style="stroke:${col}"><path d="${BIC[ic]}"/></svg>`;
-const BDG=[];
+const SFX=sec=>sec>=60?(sec/60|0)+':'+String(sec%60).padStart(2,'0'):String(sec);const BDG=[];
 {const A=(id,ic,t,de,en,dde,den,f)=>BDG.push({id,ic,t,de,en,dde,den,f});
 const cnt=(id,ic,t,de,en,k,n,dd,dn)=>A(id,ic,t,de,en,dd||n+' '+de,dn||n+' '+en,s=>({ok:s[k]>=n,p:Math.min(1,(s[k]||0)/n),tx:(s[k]||0)+' / '+n}));
-const sub=(id,ic,t,k,sec,label)=>A(id,ic,t,'Sub-'+sec+' '+label,'Sub-'+sec+' '+label,label+' unter '+sec+' s',label+' under '+sec+' s',s=>{const v=s[k];return{ok:v!=null&&v<sec*1000,p:v==null?0:Math.min(1,sec*1000/v),tx:v==null?'-':F(v)}});
+const sub=(id,ic,t,k,sec,label)=>A(id,ic,t,'Sub-'+SFX(sec)+' '+label,'Sub-'+SFX(sec)+' '+label,label+' unter '+SFX(sec)+(sec>=60?'':' s'),label+' under '+SFX(sec)+(sec>=60?'':' s'),s=>{const v=s[k];return{ok:v!=null&&v<sec*1000,p:v==null?0:Math.min(1,sec*1000/v),tx:v==null?'-':F(v)}});
 cnt('n1','cube','b','Erste Zeit','First solve','n',1,'Deine erste Zeit','Your first solve');cnt('n100','cube','s','100 Zeiten','100 solves','n',100,'100 Zeiten gelöst','Solved 100 times');cnt('n1k','cube','g','1.000 Zeiten','1,000 solves','n',1000,'1.000 Zeiten gelöst','Solved 1,000 times');cnt('n10k','cube','d','10.000 Zeiten','10,000 solves','n',10000,'10.000 Zeiten gelöst','Solved 10,000 times');
 [[30,'b'],[20,'s'],[15,'s'],[10,'g'],[8,'g'],[6,'d'],[5,'d']].forEach(([x,t])=>sub('s'+x,'bolt',t,'b3',x,'3x3'));
 [[20,'b'],[15,'s'],[12,'s'],[10,'g'],[8,'g'],[6,'d']].forEach(([x,t])=>sub('a5_'+x,'target',t,'a5',x,'Ao5'));
@@ -2176,7 +2185,7 @@ cnt('fr10','users','g','Community','Community','fr',10,'10 Freunde hinzugef\u00f
 cnt('c30','shield','g','Hamster','Hoarder','bc',30,'30 Badges','30 badges');cnt('c50','trophy','d','Legende','Legend','bc',50,'50 Badges','50 badges');cnt('c75','crown','d','Mythos','Myth','bc',75,'75 Badges','75 badges');cnt('c90','heart','d','Nobtime-Held','Nobtime hero','bc',90,'90 Badges','90 badges');
 }
 function pfStats0(){const o={dnf:0,p2:0,mins:0,mx:0,wk:0,r10:0,pbs:0,sc:0,n:0,b3:null,a5:null,a12:null,a100:null,ev:{},evn:0,night:0,early:0,days:0,cs:0,ls:0,bw:PF.bw,bm:PF.bm,fr:(typeof FRO!='undefined'&&ONL()?FRO.length:FR.length),shc:PF.shc};const dc={},dset=new Set(),mn=(a,b)=>b==null||!isFinite(b)?a:a==null||b<a?b:a;
-D.ses.forEach(q=>{const sv=q.sv||[];if(!sv.length)return;o.n+=sv.length;o.sc++;o.ev[q.pz]=1;const a=sv.map(E);a.forEach(v=>{o['e'+q.pz]=mn(o['e'+q.pz],v);if(isFinite(v))o.mins+=v/60000});sv.forEach(s=>{if(s.p==2)o.dnf++;else if(s.p==1)o.p2++});if(q.pz=='333'){let run=0,pm=Infinity;a.forEach(v=>{if(v<10000)run++;else run=0;if(run>o.r10)o.r10=run;if(isFinite(v)&&v<pm){if(pm<Infinity)o.pbs++;pm=v}})}sv.forEach(s=>{if(s.d){dset.add(dayNo(s.d));{const dn=dayNo(s.d);dc[dn]=(dc[dn]||0)+1;const wd=new Date(s.d).getDay();if(wd==0||wd==6)o.wk++}const hr=new Date(s.d).getHours();if(hr<4)o.night++;else if(hr>=5&&hr<7)o.early++}});});{const c3=D.ses.filter(q=>q.pz=='333'&&(q.sv||[]).length),cu=D.ses[D.cur],m=(cu&&cu.pz=='333'&&(cu.sv||[]).length>=5?cu:c3.slice().sort((x,y)=>y.sv.length-x.sv.length)[0]);if(m){const a=m.sv.map(E).filter(v=>!isFinite(v)||v>=1500);o.b3=a.reduce(mn,null);o.a5=aoBest(a,5);o.a12=aoBest(a,12);o.a100=aoBest(a,100);o.n3=a.length;o.s3=String(m.n||'3x3')}}
+D.ses.forEach(q=>{const sv=q.sv||[];if(!sv.length)return;o.n+=sv.length;o.sc++;o.ev[q.pz]=1;const a=sv.map(E);a.forEach(v=>{{const dk=window.detKind?detKind(q):{pz:q.pz,x:''};if(!dk.x)o['e'+dk.pz]=mn(o['e'+dk.pz],v)};if(isFinite(v))o.mins+=v/60000});sv.forEach(s=>{if(s.p==2)o.dnf++;else if(s.p==1)o.p2++});if(q.pz=='333'&&!(window.detKind&&detKind(q).x)){let run=0,pm=Infinity;a.forEach(v=>{if(v<10000)run++;else run=0;if(run>o.r10)o.r10=run;if(isFinite(v)&&v<pm){if(pm<Infinity)o.pbs++;pm=v}})}sv.forEach(s=>{if(s.d){dset.add(dayNo(s.d));{const dn=dayNo(s.d);dc[dn]=(dc[dn]||0)+1;const wd=new Date(s.d).getDay();if(wd==0||wd==6)o.wk++}const hr=new Date(s.d).getHours();if(hr<4)o.night++;else if(hr>=5&&hr<7)o.early++}});});{const c3=D.ses.filter(q=>q.pz=='333'&&(q.sv||[]).length),cu=D.ses[D.cur],m=(()=>{try{if(window.rankedSes){const r=rankedSes('333');if(r)return r}}catch(e){}return cu&&cu.pz=='333'&&(cu.sv||[]).length>=5?cu:c3.slice().sort((x,y)=>y.sv.length-x.sv.length)[0]})();if(m){const a=m.sv.map(E).filter(v=>!isFinite(v)||v>=1500);o.b3=a.reduce(mn,null);o.a5=aoBest(a,5);o.a12=aoBest(a,12);o.a100=aoBest(a,100);o.n3=a.length;o.s3=String(m.n||'3x3')}}
 o.evn=Object.keys(o.ev).length;o.mx=Math.max(0,...Object.values(dc));o.mins=Math.round(o.mins);o.days=dset.size;const ds=[...dset].sort((x,y)=>x-y);let run=0,best=0,prev=null;ds.forEach(d=>{run=prev!=null&&d==prev+1?run+1:1;prev=d;if(run>best)best=run});o.ls=best;const td=dayNo(Date.now());let c=0,d=dset.has(td)?td:td-1;while(dset.has(d)){c++;d--}o.cs=c;o.bc=0;
 const r=BDG.filter(b=>b.f(o).ok).length;o.bc=r;return o}
 const bdEarned=s=>BDG.filter(b=>b.f(s).ok).map(b=>b.id);
@@ -3054,9 +3063,8 @@ function stRender(){const d=q('#nst');if(!d)return;if(!ND()||solves.length<3){d.
 const SETS=[['pll','PLL'],['oll','OLL'],['f2l','F2L'],['zbll','ZBLL']];
 function trStat(k){const L=LD[k]||[];let seen=0,sum=0,cn=0;L.forEach((c,i)=>{const r=PS[k+':'+i];if(r&&r.n>=3){seen++;sum+=r.sum/r.n;cn++}});return{n:L.length,seen,avg:cn?sum/cn:null}}
 function trPick(){let best=null;for(const[k]of SETS){const s=trStat(k);if(!s.n)continue;if(s.seen<s.n){const sc=s.seen/s.n;if(!best||sc<best.sc&&k!='zbll')best={k,sc}}}return best?best.k:'pll'}
-function trRender(){const d=q('#ntr');if(!d)return;if(!ND()||lt=='plan'||lt=='metro'||lt=='cross'){d.innerHTML='';return}const k=trPick(),nm=(SETS.find(x=>x[0]==k)||[])[1];
- d.innerHTML=`<div class="ntoday"><div><span class="nmu">${T('Heute für dich','Today for you')}</span><b>${nm} · ${T('8 Fälle','8 cases')}</b><span class="nmu">${T('Neue und schwache Fälle zuerst','New and weak cases first')}</span></div><button class="chip on" data-ntr="${k}">${T('Start','Start')}</button></div>
- <div class="nsets">${SETS.map(([k2,n])=>{const s=trStat(k2),p=s.n?Math.round(s.seen/s.n*100):0;return`<button class="nset${lt==k2?' on':''}" data-nset="${k2}"><b>${n}</b><span>${s.seen}/${s.n}</span><div class="nxb"><i style="width:${p}%"></i></div></button>`}).join('')}</div>`}
+function trRender(){const d=q('#ntr');if(!d)return;const k=lt,nm=(SETS.find(x=>x[0]==k)||[])[1];if(!ND()||!nm){d.innerHTML='';return}const s=trStat(k),p=s.n?Math.round(s.seen/s.n*100):0;
+ d.innerHTML=`<div class="ntoday"><div><span class="nmu">${T('Heute für dich','Today for you')} · ${nm}</span><b>${T('8 schwache und neue Fälle','8 weak and new cases')}</b><div class="ntp"><div class="nxb"><i style="width:${p}%"></i></div><span class="nmu">${s.seen}/${s.n} ${T('geübt','practised')}${s.avg?' · Ø '+F(s.avg):''}</span></div></div><button class="chip on" data-ntr="${k}">${T('Start','Start')}</button></div>`}
 document.addEventListener('click',e=>{const s=e.target.closest('[data-nset]');if(s){const b=q('#ltabs [data-lt='+s.dataset.nset+']');b&&b.click();return}
  const t=e.target.closest('[data-ntr]');if(t){const k=t.dataset.ntr,L=LD[k]||[];const sc=L.map((c,i)=>{const r=PS[k+':'+i];return{i,v:r?(r.n<3?1e9-r.n:r.sum/r.n):2e9+Math.random()}}).sort((a,b)=>b.v-a.v).slice(0,8);cfg.lsel=cfg.lsel.filter(x=>!x.startsWith(k+':')).concat(sc.map(x=>k+':'+x.i));S('nt.c',cfg);const b=q('#ltabs [data-lt='+k+']');b&&b.click();setTimeout(()=>{try{prStart()}catch(er){}},50)}});
 {const o=lrender;lrender=function(){const r=o.apply(this,arguments);try{trRender()}catch(e){}return r}}
@@ -3073,6 +3081,7 @@ function ndPaint(){const c=q('#ndcard');if(c)c.innerHTML=`<div class="k">${T('De
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nd]');if(!b)return;cfg.nd=b.dataset.nd=='1';S('nt.c',cfg);ndPaint();try{render();lsRender();lrender()}catch(er){}});
 ndPaint();
 {const o=render;render=function(){const r=o.apply(this,arguments);try{goalChip();stRender()}catch(e){}return r}}
+try{PSC=null}catch(e){}
 try{goalChip();stRender();trRender()}catch(e){}
 })();
 
