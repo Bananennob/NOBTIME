@@ -747,6 +747,12 @@ body:not(.nd) .nse,body:not(.nd) #nst,body:not(.nd) #ntr{display:none}
 .cxsc{order:-1;font:700 21px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace!important;word-spacing:9px;letter-spacing:.02em;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line);width:100%;box-sizing:border-box}
 .cxnet{width:min(100%,260px)!important;margin:4px 0}
 .cxtap{font-size:14px!important;padding:10px 18px;border-radius:999px;background:color-mix(in srgb,var(--ac) 16%,transparent);color:var(--fg)!important}
+
+.nbx{cursor:pointer}.nbx em{font-style:normal;font-size:12px;color:var(--ac);font-weight:600;margin-top:2px}
+.nbw{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.nbwr{display:grid;grid-template-columns:44px 70px 1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05)}
+.nbwr b{font-variant-numeric:tabular-nums;font-size:16px}.nbwr .chip{min-height:30px;padding:0 10px;font-size:12px}
+.nbsrc{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--line);margin:8px 0}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2603,6 +2609,7 @@ function coachRender(){const e=q('#coach');if(!e)return;const h=coachHtml();if(e
 
 /* ---------- Overlay ---------- */
 function sheetOpen(html,cls){sheetClose();const d=document.createElement('div');d.id='nx';d.innerHTML=`<div class="nxc ${cls||''}">${html}</div>`;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('on'));return d}
+window.sheetOpen=sheetOpen;window.sheetClose=sheetClose;
 function sheetClose(){const d=q('#nx');if(d)d.remove()}
 window.nxClose=sheetClose;
 
@@ -3017,7 +3024,8 @@ function heat(){const day=864e5,t0=new Date();t0.setHours(0,0,0,0);const end=t0.
 function pbLine(){const a=allSolves(PF.fav&&PZ[PF.fav]?PF.fav:'333');let b=Infinity;const pb=[];a.forEach(x=>{const e=E(x);if(fin(e)&&e<b){b=e;pb.push({t:e,d:x.d})}});return pb.slice(-4).reverse()}
 function ago(d){if(!d)return'';const m=(Date.now()-d)/6e4;if(m<60)return T('gerade eben','just now');const h=m/60;if(h<24)return T(`vor ${h|0} Std.`,`${h|0}h ago`);const dd=h/24;if(dd<30)return T(`vor ${dd|0} T.`,`${dd|0}d ago`);const mo=dd/30;return mo<12?T(`vor ${mo|0} Mon.`,`${mo|0}mo ago`):T(`vor ${(mo/12)|0} J.`,`${(mo/12)|0}y ago`)}
 function pSes(){const L=D.ses.filter(x=>(x.sv||[]).length);let q0=cfg.pses!=null?L.find(x=>x.n==cfg.pses):null;if(!q0){const pz=PF.fav&&PZ[PF.fav]?PF.fav:'333';try{q0=window.rankedSes?rankedSes(pz):null}catch(e){}if(!q0)q0=L.filter(x=>x.pz==pz).sort((a,b)=>b.sv.length-a.sv.length)[0]||L[0]}return q0||null}
-function sesStats(q0){const a=q0.sv.map(E),f=a.filter(fin),b=f.length?Math.min(...f):null;return{b,a5:aoBest(a,5),a12:aoBest(a,12),a100:aoBest(a,100),n:a.length}}
+function aoNow(q0,n){const a=q0.sv.slice(-n).map(E);if(a.length<n)return null;const s=a.slice().sort((x,y)=>x-y),k=Math.max(1,Math.ceil(n*.05)),m=s.slice(k,n-k);return m.includes(Infinity)?Infinity:m.reduce((x,y)=>x+y,0)/m.length}
+function sesStats(q0){const a=q0.sv.map(E),f=a.filter(fin),b=f.length?Math.min(...f):null;return{mean:f.length?f.reduce((x,y)=>x+y,0)/f.length:null,b,a5:aoBest(a,5),a12:aoBest(a,12),a100:aoBest(a,100),n:a.length}}
 function sesPB(q0){let b=Infinity;const pb=[];q0.sv.slice().sort((x,y)=>(x.d||0)-(y.d||0)).forEach(x=>{const e=E(x);if(fin(e)&&e<b){b=e;pb.push({t:e,d:x.d})}});return pb.slice(-4).reverse()}
 function sesSel(cur){const L=D.ses.map((x,i)=>({x,i})).filter(o=>(o.x.sv||[]).length);return`<label class="npsel"><span class="nmu">${T('Angezeigte Session','Session shown')}</span><select id="npsel"><option value=""${cfg.pses==null?' selected':''}>${T('Automatisch','Automatic')}${cfg.pses==null&&cur?' ('+esc(cur.n)+')':''}</option>${L.map(o=>`<option value="${o.i}"${cfg.pses!=null&&cfg.pses==o.x.n?' selected':''}>${esc((PZ[o.x.pz]||[o.x.pz])[0])} · ${esc(o.x.n)} · ${o.x.sv.length}</option>`).join('')}</select></label>`}
 document.addEventListener('change',e=>{if(e.target.id!='npsel')return;const v=e.target.value;cfg.pses=v===''?null:(D.ses[+v]||{}).n;S('nt.c',cfg);try{cmOpen('me')}catch(er){}});
@@ -3025,11 +3033,23 @@ function profBlock(st0){const i=LV(),C=2*Math.PI*44,q0=pSes(),ss=q0?sesStats(q0)
  const ring=`<svg viewBox="0 0 100 100" class="nrg"><circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="7"/><circle cx="50" cy="50" r="44" fill="none" stroke="var(--ac)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(C*i.p).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 50 50)"/><polygon points="50,28 69,39 69,61 50,72 31,61 31,39" fill="var(--ac)" opacity=".18"/><text x="50" y="57" text-anchor="middle" font-size="22" font-weight="800" fill="currentColor">${i.lv}</text></svg>`;
  return`${sesSel(q0)}<div class="nrk">${ring}<div><span class="ntag">${esc(rankName(i.lv)).toUpperCase()}</span><b>${T('Level','Level')} ${i.lv}</b><span class="nmu">${Math.max(0,i.b-i.xp)} XP ${T('bis Level','to level')} ${i.lv+1}</span><div class="nxb"><i style="width:${Math.round(i.p*100)}%"></i></div></div></div>
  <div class="npb"><div class="npbh"><span class="nmu">${T('Bestzeit','Best single')} · ${esc(ev)}</span><span class="nmu">${q0?q0.sv.length.toLocaleString():0} ${T('Zeiten','solves')}</span></div><div class="npbt">${fv(st.b)}</div>${spark(sv,'var(--ac)')}</div>
- <div class="nbt"><div><span>Ao5</span><b>${fv(st.a5)}</b></div><div><span>Ao12</span><b>${fv(st.a12)}</b></div><div><span>Ao100</span><b>${fv(st.a100)}</b></div><div><span>${T('Serie','Streak')}</span><b>${st.ls||0}<small> ${T('Tage','days')}</small></b></div><div class="w2"><span>${T('Zeiten insgesamt · alle Sessions','Total solves · all sessions')}</span><b>${(st.n||0).toLocaleString()}</b></div></div>
+ <div class="nbt">${['5','12','100'].map(n=>{const cur=q0?aoNow(q0,+n):null,best=st['a'+n];return`<div class="nbx" data-nbest="${n}"><span>Ao${n} · ${T('aktuell','current')}</span><b>${fv(cur)}</b><em>${T('Bestes','Best')} ${fv(best)} ›</em></div>`}).join('')}<div><span>${T('Schnitt der Session','Session mean')}</span><b>${fv(ss.mean)}</b></div><div><span>${T('Serie','Streak')}</span><b>${st.ls||0}<small> ${T('Tage','days')}</small></b></div><div class="w2"><span>${T('Zeiten insgesamt · alle Sessions','Total solves · all sessions')}</span><b>${(st.n||0).toLocaleString()}</b></div></div>
  <div class="nac"><div class="npbh"><span class="nmu">${T('Aktivität · 12 Wochen','Activity · 12 weeks')}</span><span class="nmu">${hm.days} ${T('aktive Tage','active days')}</span></div>${hm.h}</div>
  ${pbs.length?`<div class="ntl"><span class="nmu">${T('PB-Verlauf','PB history')} · ${esc(ev)}</span>${pbs.map((p,k)=>`<p><i style="background:${k?'var(--mut)':'var(--ac)'}"></i><b>${F(p.t)}</b><em>${ago(p.d)}</em></p>`).join('')}</div>`:''}`}
 {const o=cmMe;cmMe=function(){let h=o.apply(this,arguments);if(!ND())return h;try{const pl=pfPayload(),xb=xpBar(),blk='<div class="nprof">'+showcase(PF)+profBlock(pl.st)+'</div>';[statGrid(pl.st),showcase(PF)].forEach(x=>{if(x&&h.includes(x))h=h.replace(x,'')});
  h=h.includes(xb)?h.replace(xb,blk):blk+h}catch(e){console.warn(e)}return h}}
+
+function bestWin(sv,n){const a=sv.map(E);if(a.length<n)return null;const k=Math.max(1,Math.ceil(n*.05));let bi=-1,bv=Infinity;for(let i=0;i+n<=a.length;i++){const w=a.slice(i,i+n).sort((x,y)=>x-y);if(!isFinite(w[n-k-1]))continue;let s=0;for(let j=k;j<n-k;j++)s+=w[j];const v=s/(n-2*k);if(v<bv){bv=v;bi=i}}return bi<0?null:{i:bi,v:bv}}
+function bestSheet(n){const q0=pSes();if(!q0||!window.sheetOpen)return;const w=bestWin(q0.sv,n);if(!w)return;const L=q0.sv.slice(w.i,w.i+n);
+ const h=`<div class="nxh"><b>${T('Bestes','Best')} Ao${n} · ${F(w.v)}</b><span>${esc(q0.n)} · ${T('Zeiten','solves')} ${w.i+1}–${w.i+n}${L[0]&&L[0].d?' · '+new Date(L[0].d).toLocaleDateString():''}</span></div>
+ <div class="nbw">${L.map((s,j)=>`<div class="nbwr"><span class="nmu">${w.i+j+1}</span><b>${F(E(s))}</b><span class="nmu">${s.d?new Date(s.d).toLocaleString([], {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</span><button class="chip" data-nbdel="${w.i+j}" data-nbn="${n}">${T('Löschen','Delete')}</button></div>`).join('')}</div>
+ <div class="k sub" style="margin-top:8px">${T('Das ist der beste Abschnitt aus','This is the best stretch in')} ${esc(q0.n)}. ${T('Wenn da falsch gestoppte Zeiten drin sind, lösch sie. Dann rechnet alles neu.','If any of these were mistimed, delete them and everything recalculates.')}</div>
+ <div class="chips" style="margin-top:10px"><button class="chip on" data-nbx>${T('Schließen','Close')}</button></div>`;sheetOpen(h)}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-nbest]');if(b){bestSheet(+b.dataset.nbest);return}
+ if(e.target.closest('[data-nbx]')){sheetClose();return}
+ const d=e.target.closest('[data-nbdel]');if(d){const q0=pSes();if(!q0)return;const i=+d.dataset.nbdel,s=q0.sv[i];if(!s)return;if(d.dataset.ok!='1'){d.dataset.ok='1';d.textContent=T('Sicher?','Sure?');d.classList.add('on');return}q0.sv.splice(i,1);try{save();PSC=null;render()}catch(er){}try{profPush()}catch(er){}sheetClose();setTimeout(()=>{try{cmOpen(CM&&CM.tab||'me')}catch(er){}},250)}});
+window.bestSheet=bestSheet;
+{const o=cmBadges;cmBadges=function(){let h=o.apply(this,arguments);try{let m=null;try{m=window.rankedSes?rankedSes('333'):null}catch(e){}if(m){const st=pfStats(),note=`<div class="nbsrc"><span class="nmu">${T('3x3-Zeiten aus','3x3 times from')} <b>${esc(m.n)}</b> · ${T('Bestwerte, wie bei csTimer','best values, like csTimer')}</span><div class="chips"><button class="chip" data-nbest="5">Ao5 ${fv(st.a5)}</button><button class="chip" data-nbest="12">Ao12 ${fv(st.a12)}</button></div></div>`;const k=h.indexOf('</div></div>',h.indexOf('bdhd'));h=k>0?h.slice(0,k+12)+note+h.slice(k+12):note+h}}catch(e){}return h}}
 
 /* ---------- Timer: Ziel-Chip unter der Zeit ---------- */
 {const st=q('#v-timer .stage');if(st&&!q('#ngc')){const d=document.createElement('div');d.id='ngc';const r=st.querySelector('.res');r?st.insertBefore(d,r):st.appendChild(d)}}
