@@ -3302,7 +3302,8 @@ const q=s=>document.querySelector(s);
 const LOOKS=[['std',T('Klassik','Classic')],['lg','Liquid Glass'],['na','Neon Arcade'],['ab','Aurora Bento'],['hc','Holo'],['rh','Race HUD'],['sm','Swiss Mono']];
 const PRES=[['sketch','Sketchbook'],['pixel','Pixel'],['terminal','Terminal'],['blueprint','Blueprint']];
 const SHOW=[{k:'std',n:'Standard'},...LOOKS.filter(x=>x[0]!='std').map(x=>({k:x[0],n:x[1]})),...PRES.map(x=>({k:'p:'+x[0],n:x[1],p:x[0]}))];
-if(cfg.look==null){cfg.look='std';S('nt.c',cfg)}
+if(cfg.look==null){cfg.look='std';if(!cfg.bg||cfg.bg=='pulse'||cfg.bg=='grid')cfg.bg='st_lines';S('nt.c',cfg)}
+if(!cfg.g111){cfg.g111=1;if(cfg.look=='std'&&!cfg.lkp&&!cfg.ctk&&(cfg.bg=='pulse'||cfg.bg=='grid'))cfg.bg='st_lines';S('nt.c',cfg)}
 /* Hintergrund-Ebene für die Looks */
 {let b=q('#lkbg');if(!b){b=document.createElement('div');b.id='lkbg';b.innerHTML='<i class="k1"></i><i class="k2"></i><i class="k3"></i><i class="k4"></i><u></u><s></s>';const a=q('#app');a?a.before(b):document.body.prepend(b)}}
 function lkApply(){const L=cfg.look||'std';const c=document.body.classList;LOOKS.forEach(([k])=>c.remove('lk-'+k));c.add('lk-'+L);c.toggle('lkon',L!='std');if(L!='std'){c.remove('hbg');if(L=='lg')c.add('lg');else c.remove('lg')}}
@@ -3322,7 +3323,7 @@ function lkRefresh(){const s=q('#lksh');if(s)s.innerHTML=lkGrid();lkPaint()}
 function lkPaint(){const c=q('#lkcard');if(!c)return;c.classList.add('popcard');const ic=(typeof ICO!='undefined'&&ICO.Themes)||'<circle cx="12" cy="12" r="8"/><path d="M12 4v16"/>';c.innerHTML=`<button class="prow" data-lkopen><em class="ic"><svg viewBox="0 0 24 24">${ic}</svg></em><span>Themes</span><b>${esc(lkName())}</b><i>&rsaquo;</i></button>`}
 window.lkUse=function(k){const b=document.createElement('button');b.dataset.look=k;b.hidden=true;document.body.appendChild(b);b.click();b.remove()};
 window.lkObHtml=()=>`<div class="lkob">${SHOW.map(o=>`<button class="lkt" data-nx="ob-th" data-v="${o.k}">${tileArt(o.k)}<b>${o.n}</b></button>`).join('')}</div>`;
-function setStd(){cfg.look='std';delete cfg.lkp;cfg.sty='classic';cfg.theme='nacht';['ac','ac2','bgc','pv'].forEach(x=>delete cfg[x]);cfg.bg='pulse'}
+function setStd(){cfg.look='std';delete cfg.lkp;cfg.sty='classic';cfg.theme='nacht';['ac','ac2','bgc','pv'].forEach(x=>delete cfg[x]);cfg.bg='st_lines'}
 function useCustom(t){cfg.ctk=t.id;if(t.look=='std'){setStd();cfg.bg=t.bg||'pulse'}else{cfg.look=t.look;delete cfg.lkp;if(['paper','pixel','term','blue'].includes(cfg.sty))cfg.sty='classic'}if(t.ac){cfg.ac=t.ac;cfg.ac2=t.ac2||t.ac}}
 document.addEventListener('click',e=>{
  if(e.target.closest('[data-lkopen]')){lkSheet();return}
@@ -3337,7 +3338,7 @@ document.addEventListener('click',e=>{
  else{cfg.look=k;delete cfg.lkp;if(['paper','pixel','term','blue'].includes(cfg.sty))cfg.sty='classic'}
  S('nt.c',cfg);lkApply();try{apply();render()}catch(er){}lkRefresh()});
 /* Editor für eigene Themes */
-const ED={look:'lg',ac:'#4d8dff',bg:'pulse'};
+const ED={look:'lg',ac:'#4d8dff',bg:'st_lines'};
 const ACS=['#4d8dff','#37e8ff','#47e891','#ffd23f','#ff8a1f','#ff4d6d','#ff3df2','#b47cff','#ffffff'];
 function lkEditor(){if(!window.sheetOpen)return;sheetOpen(`<div class="nxh"><b>${T('Eigenes Theme','Custom theme')}</b><span>${T('Look, Farbe und Hintergrund wählen','Pick a look, colour and background')}</span></div><div id="lked"></div><input id="lken" class="cmi" maxlength="18" placeholder="${T('Name, z. B. Mein Blau','Name, e.g. My blue')}" style="margin-top:10px"><div class="chips" style="margin-top:12px"><button class="chip on" data-lksave>${T('Speichern und nutzen','Save and use')}</button><button class="chip" data-lkopen>${T('Zurück','Back')}</button></div>`,'lkwide');lkEdPaint()}
 function lkEdPaint(){const d=q('#lked');if(!d)return;const bgs=typeof BN!='undefined'?Object.keys(BN).filter(k=>k!='img'&&!k.startsWith('st_')):['pulse','off'];
