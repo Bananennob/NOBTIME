@@ -3019,7 +3019,7 @@ glass();{const o=apply;apply=function(){const r=o.apply(this,arguments);glass();
 /* ===== v98 Redesign: Profil (Karte+Rang+PB+Bento+Aktivität), Zeiten-Suche, Statistik-Kacheln, Trainer-Fortschritt, Settings-Suche, Ziel-Chip ===== */
 (function(){
 const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
-const ND=()=>cfg.nd!==false;
+const ND=()=>true;
 const fin=v=>v!=null&&isFinite(v);
 function allSolves(pz){const a=[];D.ses.forEach(s=>{if(!pz||s.pz==pz)(s.sv||[]).forEach(x=>a.push(x))});return a.sort((x,y)=>(x.d||0)-(y.d||0))}
 function spark(vals,col,h=46){vals=vals.filter(fin);if(vals.length<2)return'';const w=200,mx=Math.max(...vals),mn=Math.min(...vals),pts=vals.map((v,i)=>[i*w/(vals.length-1),h-4-(v-mn)/(mx-mn||1)*(h-8)]);const d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L');return`<svg class="nsp" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${d} L${w} ${h} L0 ${h}Z" fill="${col}" opacity=".14"/><path d="${d}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>`}
@@ -3108,7 +3108,7 @@ let SQ='';document.addEventListener('input',e=>{if(e.target.id!='ssq')return;SQ=
 function ndPaint(){const c=q('#ndcard');if(c){const nw=`<svg viewBox="0 0 60 44"><rect x="2" y="2" width="56" height="12" rx="4" fill="var(--ac)" opacity=".85"/><rect x="2" y="17" width="27" height="11" rx="4" fill="currentColor" opacity=".35"/><rect x="31" y="17" width="27" height="11" rx="4" fill="currentColor" opacity=".35"/><rect x="2" y="31" width="56" height="11" rx="4" fill="currentColor" opacity=".2"/></svg>`,cl=`<svg viewBox="0 0 60 44"><rect x="2" y="3" width="56" height="7" rx="3" fill="currentColor" opacity=".35"/><rect x="2" y="14" width="56" height="7" rx="3" fill="currentColor" opacity=".25"/><rect x="2" y="25" width="56" height="7" rx="3" fill="currentColor" opacity=".25"/><rect x="2" y="36" width="40" height="6" rx="3" fill="currentColor" opacity=".2"/></svg>`;
  c.innerHTML=`<div class="ndh"><b>${T('App-Design','App design')}</b><span class="nmu">${T('Jederzeit umschaltbar','Switch any time')}</span></div><div class="ndg"><button class="ndt${ND()?' on':''}" data-nd="1">${nw}<b>${T('Neu','New')}</b><span>${T('Kacheln, Suche, Profil-Karte','Tiles, search, profile card')}</span><i>✓</i></button><button class="ndt${ND()?'':' on'}" data-nd="0">${cl}<b>${T('Klassisch','Classic')}</b><span>${T('Wie vorher, schlicht','As before, simple')}</span><i>✓</i></button></div>`}document.body.classList.toggle('nd',ND())}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nd]');if(!b)return;cfg.nd=b.dataset.nd=='1';S('nt.c',cfg);ndPaint();try{render();lsRender();lrender()}catch(er){}});
-ndPaint();
+ndPaint();try{const c=q('#ndcard');c&&c.remove();delete cfg.nd}catch(e){}
 {const o=render;render=function(){const r=o.apply(this,arguments);try{goalChip();stRender()}catch(e){}return r}}
 try{PSC=null}catch(e){}
 try{goalChip();stRender();trRender()}catch(e){}
