@@ -940,6 +940,34 @@ html body .lkm[data-k="p:sketch"] em{font-family:Georgia,'Times New Roman',serif
 html body .lkm[data-k="p:blueprint"] em{color:transparent!important;-webkit-text-stroke:1.2px #fff}
 html body .lkm[data-k=sm] em,html body .lkm[data-k="p:sketch"] em{color:#0b0b0b!important;text-shadow:none!important}
 html body .lkob .lkt b,html body .prow b{font-family:inherit}
+/* v115 */
+.nana{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;margin:10px 0 0;padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:inherit;font:inherit;text-align:left}
+.nana span{font-weight:700}.nana em{font-style:normal;font-size:12px;color:var(--mut)}
+#nx .nxc.anw{max-height:88vh}
+.anfix{margin:8px 0;padding:10px 12px;border-radius:12px;background:rgba(71,232,145,.12);border:1px solid rgba(71,232,145,.35);font-size:12.5px}
+.ang{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.anb{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;flex-direction:column;gap:1px}
+.anb[data-anj]{cursor:pointer}.anb span{font-size:11.5px;color:var(--mut)}.anb b{font-size:20px;font-variant-numeric:tabular-nums}.anb em{font-style:normal;font-size:11px;color:var(--mut)}
+.anh,.anr{display:grid;grid-template-columns:44px 1fr 1fr 1fr 1.5fr 30px;gap:4px;align-items:center;font-size:12.5px;font-variant-numeric:tabular-nums}
+.anh{margin-top:12px;padding:0 6px 6px;color:var(--mut);font-size:11px;border-bottom:1px solid var(--line)}
+.anr{padding:7px 6px;border-bottom:1px solid rgba(255,255,255,.05);border-radius:8px}.anr>span:first-child{color:var(--mut)}.anr>span:nth-child(5){font-size:11px;color:var(--mut)}
+.anr.w5{background:rgba(77,141,255,.12)}.anr.w12:not(.w5){background:rgba(77,141,255,.05)}.anr.pb b{color:#47e891}
+.anr.flash{animation:anfl 1.4s}@keyframes anfl{0%,40%{background:rgba(255,210,63,.35)}}
+.anx{width:28px;height:24px;border:0;border-radius:8px;background:transparent;color:var(--mut);font:inherit;padding:0;white-space:nowrap}
+.anx.on{width:auto;background:#ff5a5a;color:#fff;padding:0 6px;font-size:11px;justify-self:end}
+.anm{margin:10px auto 0;display:block}
+/* Widgets wie am iPhone */
+#wid{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+body.edit #wid>.card{outline:none!important;animation:nwig .26s ease-in-out infinite alternate}
+body.edit #wid>.card:nth-child(2n){animation-delay:-.13s;animation-direction:alternate-reverse}
+body.edit #wid>.card.drag{animation:none;z-index:5;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+body.edit #wid>.card.sel{box-shadow:0 0 0 2px var(--ac)}
+@keyframes nwig{from{transform:rotate(-.9deg)}to{transform:rotate(.9deg)}}
+body.edit #wid>.card::after{content:'−';position:absolute;top:6px;left:6px;width:22px;height:22px;border-radius:50%;background:rgba(120,124,136,.95);color:#fff;font:700 17px/21px system-ui;text-align:center;z-index:3;pointer-events:none}
+#ewg{display:none}
+body.edit #ewg{display:flex;flex-direction:column;gap:8px;position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);z-index:6;padding:12px;border-radius:18px;background:color-mix(in srgb,var(--bgk,#070a18) 94%,transparent);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+#ewg b{font-size:13px}#ewg>div{display:flex;flex-wrap:wrap;gap:6px}
+@media (prefers-reduced-motion:reduce){body.edit #wid>.card{animation:none}}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2462,7 +2490,7 @@ cnt('fr10','users','g','Community','Community','fr',10,'10 Freunde hinzugef\u00f
 cnt('c30','shield','g','Hamster','Hoarder','bc',30,'30 Badges','30 badges');cnt('c50','trophy','d','Legende','Legend','bc',50,'50 Badges','50 badges');cnt('c75','crown','d','Mythos','Myth','bc',75,'75 Badges','75 badges');cnt('c90','heart','d','Nobtime-Held','Nobtime hero','bc',90,'90 Badges','90 badges');
 }
 function pfStats0(){const o={dnf:0,p2:0,mins:0,mx:0,wk:0,r10:0,pbs:0,sc:0,n:0,b3:null,a5:null,a12:null,a100:null,ev:{},evn:0,night:0,early:0,days:0,cs:0,ls:0,bw:PF.bw,bm:PF.bm,fr:(typeof FRO!='undefined'&&ONL()?FRO.length:FR.length),shc:PF.shc};const dc={},dset=new Set(),mn=(a,b)=>b==null||!isFinite(b)?a:a==null||b<a?b:a;
-D.ses.forEach(q=>{const sv=q.sv||[];if(!sv.length)return;o.n+=sv.length;o.sc++;o.ev[q.pz]=1;const a=sv.map(E);a.forEach(v=>{{const dk=window.detKind?detKind(q):{pz:q.pz,x:''};if(!dk.x)o['e'+dk.pz]=mn(o['e'+dk.pz],v)};if(isFinite(v))o.mins+=v/60000});sv.forEach(s=>{if(s.p==2)o.dnf++;else if(s.p==1)o.p2++});if(q.pz=='333'&&!(window.detKind&&detKind(q).x)){let run=0,pm=Infinity;a.forEach(v=>{if(v<10000)run++;else run=0;if(run>o.r10)o.r10=run;if(isFinite(v)&&v<pm){if(pm<Infinity)o.pbs++;pm=v}})}sv.forEach(s=>{if(s.d){dset.add(dayNo(s.d));{const dn=dayNo(s.d);dc[dn]=(dc[dn]||0)+1;const wd=new Date(s.d).getDay();if(wd==0||wd==6)o.wk++}const hr=new Date(s.d).getHours();if(hr<4)o.night++;else if(hr>=5&&hr<7)o.early++}});});{const c3=D.ses.filter(q=>q.pz=='333'&&(q.sv||[]).length),cu=D.ses[D.cur],m=(()=>{try{if(window.rankedSes){const r=rankedSes('333');if(r)return r}}catch(e){}return cu&&cu.pz=='333'&&(cu.sv||[]).length>=5?cu:c3.slice().sort((x,y)=>y.sv.length-x.sv.length)[0]})();if(m){const a=m.sv.map(E).filter(v=>!isFinite(v)||v>=1500);o.b3=a.reduce(mn,null);o.a5=aoBest(a,5);o.a12=aoBest(a,12);o.a100=aoBest(a,100);o.n3=a.length;o.s3=String(m.n||'3x3')}}
+D.ses.forEach(q=>{const sv=q.sv||[];if(!sv.length)return;o.n+=sv.length;o.sc++;o.ev[q.pz]=1;const a=sv.map(E);a.forEach(v=>{{const dk=window.detKind?detKind(q):{pz:q.pz,x:''};if(!dk.x)o['e'+dk.pz]=mn(o['e'+dk.pz],v)};if(isFinite(v))o.mins+=v/60000});sv.forEach(s=>{if(s.p==2)o.dnf++;else if(s.p==1)o.p2++});if(q.pz=='333'&&!(window.detKind&&detKind(q).x)){let run=0,pm=Infinity;a.forEach(v=>{if(v<10000)run++;else run=0;if(run>o.r10)o.r10=run;if(isFinite(v)&&v<pm){if(pm<Infinity)o.pbs++;pm=v}})}sv.forEach(s=>{if(s.d){dset.add(dayNo(s.d));{const dn=dayNo(s.d);dc[dn]=(dc[dn]||0)+1;const wd=new Date(s.d).getDay();if(wd==0||wd==6)o.wk++}const hr=new Date(s.d).getHours();if(hr<4)o.night++;else if(hr>=5&&hr<7)o.early++}});});{const c3=D.ses.filter(q=>q.pz=='333'&&(q.sv||[]).length),cu=D.ses[D.cur],m=(()=>{try{if(window.rankedSes){const r=rankedSes('333');if(r)return r}}catch(e){}return cu&&cu.pz=='333'&&(cu.sv||[]).length>=5?cu:c3.slice().sort((x,y)=>y.sv.length-x.sv.length)[0]})();if(m){const a=m.sv.map(E);o.b3=a.filter(v=>!isFinite(v)||v>=1500).reduce(mn,null);o.a5=aoBest(a,5);o.a12=aoBest(a,12);o.a100=aoBest(a,100);o.n3=a.length;o.s3=String(m.n||'3x3')}}
 o.evn=Object.keys(o.ev).length;o.mx=Math.max(0,...Object.values(dc));o.mins=Math.round(o.mins);o.days=dset.size;const ds=[...dset].sort((x,y)=>x-y);let run=0,best=0,prev=null;ds.forEach(d=>{run=prev!=null&&d==prev+1?run+1:1;prev=d;if(run>best)best=run});o.ls=best;const td=dayNo(Date.now());let c=0,d=dset.has(td)?td:td-1;while(dset.has(d)){c++;d--}o.cs=c;o.bc=0;
 const r=BDG.filter(b=>b.f(o).ok).length;o.bc=r;return o}
 const bdEarned=s=>BDG.filter(b=>b.f(s).ok).map(b=>b.id);
@@ -2610,7 +2638,7 @@ async function ugz(s){if(s[0]=='r')return s.slice(1);const bin=atob(s.slice(1)),
 function snapObj(){const c=Object.assign({},cfg);delete c.api;delete c.intro;return{d:localStorage.getItem('nt.d'),c,cr:CR,pf:PF,t:Date.now()}}
 const sigNow=()=>(localStorage.getItem('nt.d')||'').length+':'+(localStorage.getItem('nt.c')||'').length+':'+(localStorage.getItem('nt.pf')||'').length+':'+(localStorage.getItem('nt.comp')||'').length;
 async function syncPush(){if(!LOG())return;const z=await gz(JSON.stringify(snapObj())),parts=[];for(let i=0;i<z.length;i+=400000)parts.push(z.slice(i,i+400000));await api('PUT','/api/sync',{parts});localStorage.setItem('nt.sig',sigNow())}
-function mergeD(a,b){const mp=new Map(),ord=[];const add=q=>{const k=q.n+'|'+q.pz;let e=mp.get(k);if(!e){e={n:q.n,pz:q.pz,v:[],s:new Set()};mp.set(k,e);ord.push(e)}(q.v||[]).forEach(x=>{const kk=(x[2]||0)+'|'+x[0]+'|'+(x[3]||'');if(!e.s.has(kk)){e.s.add(kk);e.v.push(x)}})};((a&&a.ses)||[]).forEach(add);((b&&b.ses)||[]).forEach(add);ord.forEach(e=>e.v.sort((x,y)=>(x[2]||0)-(y[2]||0)));return{cur:a&&a.cur<ord.length?a.cur:0,ses:ord.map(e=>({n:e.n,pz:e.pz,v:e.v}))}}
+function mergeD(a,b){const mp=new Map(),ord=[];const add=q=>{const k=q.n+'|'+q.pz;let e=mp.get(k);if(!e){e={n:q.n,pz:q.pz,v:[],s:new Set()};mp.set(k,e);ord.push(e)}(q.v||[]).forEach(x=>{const kk=x[2]?x[2]+'|'+x[0]+'|'+(x[1]||0):'n|'+x[0]+'|'+(x[3]||'');if(!e.s.has(kk)){e.s.add(kk);e.v.push(x)}})};((a&&a.ses)||[]).forEach(add);((b&&b.ses)||[]).forEach(add);ord.forEach(e=>e.v.sort((x,y)=>(x[2]||0)-(y[2]||0)));return{cur:a&&a.cur<ord.length?a.cur:0,ses:ord.map(e=>({n:e.n,pz:e.pz,v:e.v}))}}
 async function syncPull(first){if(!LOG())return'off';const r=await api('GET','/api/sync');if(!r.parts||!r.parts.length){return'empty'}const o=JSON.parse(await ugz(r.parts.join('')));let loc=null;try{loc=JSON.parse(localStorage.getItem('nt.d')||'null')}catch(e){}let rem=null;try{rem=o.d?JSON.parse(o.d):null}catch(e){}
 const merged=mergeD(loc,rem),ms=JSON.stringify(merged);let ch=false;if(ms.length!=(localStorage.getItem('nt.d')||'').length||ms!=localStorage.getItem('nt.d')){localStorage.setItem('nt.d',ms);ch=true}
 if(first&&o.c){const nc=Object.assign({},o.c,{api:cfg.api,intro:cfg.intro});localStorage.setItem('nt.c',JSON.stringify(nc));ch=true}
@@ -2909,7 +2937,7 @@ function pbToast(s){let t=q('#pbt');if(t)t.remove();t=document.createElement('di
 
 /* ---------- Session-Zusammenfassung ---------- */
 function sumData(){const last=solves.at(-1);if(!last||!last.d)return null;const bl=blocks(solves);const b=bl[bl.length-1];if(!b||b.length<5)return{skip:1,last};const v=b.map(E),f=fin(v),best=f.length?Math.min(...f):null;
- const aoN=(n)=>{let bst=null;for(let i=n;i<=v.length;i++){const a=v.slice(i-n,i).sort((x,y)=>x-y).slice(1,n-1);if(a.includes(Infinity))continue;const m=mean(a);if(bst==null||m<bst)bst=m}return bst};
+ const aoN=(n)=>{let bst=null;for(let i=n;i<=v.length;i++){const a=v.slice(i-n,i).sort((x,y)=>x-y).slice(Math.max(1,Math.ceil(n*.05)),n-Math.max(1,Math.ceil(n*.05)));if(a.includes(Infinity))continue;const m=mean(a);if(bst==null||m<bst)bst=m}return bst};
  const prev=bl.length>1?fin(bl[bl.length-2].map(E)):[],mN=f.length?tmean(f):null,mP=prev.length>=5?tmean(prev):null;
  const gh=cfg.goal?b.filter(s=>E(s)<=cfg.goal*1000).length/b.length:null;
  return{last,b,n:b.length,best,a5:aoN(5),a12:b.length>=12?aoN(12):null,mean:mN,cmp:mP&&mN?(mP-mN)/mP:null,gh}}
@@ -2977,7 +3005,7 @@ window.pubTrim=function(o){try{let j=JSON.stringify(o);if(j.length<5800)return o
 setTimeout(()=>{try{if(LOG())profPush().catch(()=>{})}catch(e){}},9000);
 
 /* ---------- Letzte Solves ---------- */
-const st5=v=>{const f=v.filter(x=>x!=null);const ao=n=>{let b=null;for(let i=n;i<=f.length;i++){const a=f.slice(i-n,i).map(x=>x<0?Infinity:x).sort((x,y)=>x-y).slice(1,n-1);if(a.includes(Infinity))continue;const m=a.reduce((p,c)=>p+c,0)/a.length;if(b==null||m<b)b=m}return b};const g=f.filter(x=>x>0);return{best:g.length?Math.min(...g):null,a5:ao(5),a12:ao(12),a100:ao(100),mean:g.length?g.reduce((p,c)=>p+c,0)/g.length:null,cur5:f.length>=5?(()=>{const a=f.slice(-5).map(x=>x<0?Infinity:x).sort((x,y)=>x-y).slice(1,4);return a.includes(Infinity)?Infinity:a.reduce((p,c)=>p+c,0)/3})():null}};
+const st5=v=>{const f=v.filter(x=>x!=null);const ao=n=>{let b=null;for(let i=n;i<=f.length;i++){const a=f.slice(i-n,i).map(x=>x<0?Infinity:x).sort((x,y)=>x-y).slice(Math.max(1,Math.ceil(n*.05)),n-Math.max(1,Math.ceil(n*.05)));if(a.includes(Infinity))continue;const m=a.reduce((p,c)=>p+c,0)/a.length;if(b==null||m<b)b=m}return b};const g=f.filter(x=>x>0);return{best:g.length?Math.min(...g):null,a5:ao(5),a12:ao(12),a100:ao(100),mean:g.length?g.reduce((p,c)=>p+c,0)/g.length:null,cur5:f.length>=5?(()=>{const a=f.slice(-5).map(x=>x<0?Infinity:x).sort((x,y)=>x-y).slice(1,4);return a.includes(Infinity)?Infinity:a.reduce((p,c)=>p+c,0)/3})():null}};
 function recentBox(list,ev,who){if(!list||!list.length)return'';const v=list.map(x=>x[0]),s=st5(v),best=s.best,last=list.slice(-5).reverse();
  return`<div class="cmk">${T('Letzte Solves','Recent solves')}${ev?' · '+esc3(ev):''}</div><div class="rsb"><div class="rsl">${last.map(x=>`<span class="${x[0]==best?'pb':''}">${x[0]<0?'DNF':F(x[0])}${x[2]==1?'+':''}</span>`).join('')}</div><div class="rss"><div><i>${T('Beste','Best')}</i><b>${F(best)}</b></div><div><i>Ao5</i><b>${F(s.a5)}</b></div><div><i>Ao12</i><b>${F(s.a12)}</b></div></div><button class="chip" data-rs="${who}">${T('Alle ansehen','See all')}</button></div>`}
 function recentAll(list,ev,name){const v=list.map(x=>x[0]),s=st5(v),best=s.best;const rows=list.slice().reverse().map((x,i)=>{const d=x[1]?new Date(x[1]*1000):null;return`<div class="rsr${x[0]==best?' pb':''}"><span>${list.length-i}</span><b>${x[0]<0?'DNF':F(x[0])}${x[2]==1?' (+2)':''}</b><em>${d?d.toLocaleDateString(cfg.lang=='en'?'en-GB':'de-DE',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString(cfg.lang=='en'?'en-GB':'de-DE',{hour:'2-digit',minute:'2-digit'}):''}</em></div>`}).join('');
@@ -3306,6 +3334,7 @@ function profBlock(st0){const i=LV(),C=2*Math.PI*44,q0=pSes(),ss=q0?sesStats(q0)
  return`${sesSel(q0)}<div class="nrk">${ring}<div><span class="ntag">${esc(rankName(i.lv)).toUpperCase()}</span><b>${T('Level','Level')} ${i.lv}</b><span class="nmu">${Math.max(0,i.b-i.xp)} XP ${T('bis Level','to level')} ${i.lv+1}</span><div class="nxb"><i style="width:${Math.round(i.p*100)}%"></i></div></div></div>
  <div class="npb"><div class="npbh"><span class="nmu">${T('Bestzeit','Best single')} · ${esc(ev)}</span><span class="nmu">${q0?q0.sv.length.toLocaleString():0} ${T('Zeiten','solves')}</span></div><div class="npbt">${fv(st.b)}</div>${spark(sv,'var(--ac)')}</div>
  <div class="nbt">${['5','12','100'].map(n=>{const cur=q0?aoNow(q0,+n):null,best=st['a'+n];return`<div class="nbx" data-nbest="${n}"><span>Ao${n} · ${T('aktuell','current')}</span><b>${fv(cur)}</b><em>${T('Bestes','Best')} ${fv(best)} ›</em></div>`}).join('')}<div><span>${T('Schnitt der Session','Session mean')}</span><b>${fv(ss.mean)}</b></div><div><span>${T('Serie','Streak')}</span><b>${st.ls||0}<small> ${T('Tage','days')}</small></b></div><div class="w2"><span>${T('Zeiten insgesamt · alle Sessions','Total solves · all sessions')}</span><b>${(st.n||0).toLocaleString()}</b></div></div>
+ <button class="nana" data-nana><span>${T('Alle Zeiten prüfen','Check all solves')}</span><em>${T('Nummer, Datum, Ao5 und Ao12 für jeden Solve','Number, date, Ao5 and Ao12 for every solve')} ›</em></button>
  <div class="nac"><div class="npbh"><span class="nmu">${T('Aktivität · 12 Wochen','Activity · 12 weeks')}</span><span class="nmu">${hm.days} ${T('aktive Tage','active days')}</span></div>${hm.h}</div>
  ${pbs.length?`<div class="ntl"><span class="nmu">${T('PB-Verlauf','PB history')} · ${esc(ev)}</span>${pbs.map((p,k)=>`<p><i style="background:${k?'var(--mut)':'var(--ac)'}"></i><b>${F(p.t)}</b><em>${ago(p.d)}</em></p>`).join('')}</div>`:''}`}
 {const o=cmMe;cmMe=function(){let h=o.apply(this,arguments);if(!ND())return h;try{const pl=pfPayload(),xb=xpBar(),blk='<div class="nprof">'+showcase(PF)+profBlock(pl.st)+'</div>';[statGrid(pl.st),showcase(PF)].forEach(x=>{if(x&&h.includes(x))h=h.replace(x,'')});
@@ -3316,11 +3345,11 @@ function bestSheet(n){const q0=pSes();if(!q0||!window.sheetOpen)return;const w=b
  const h=`<div class="nxh"><b>${T('Bestes','Best')} Ao${n} · ${F(w.v)}</b><span>${esc(q0.n)} · ${T('Zeiten','solves')} ${w.i+1}–${w.i+n}${L[0]&&L[0].d?' · '+new Date(L[0].d).toLocaleDateString():''}</span></div>
  <div class="nbw">${L.map((s,j)=>`<div class="nbwr"><span class="nmu">${w.i+j+1}</span><b>${F(E(s))}</b><span class="nmu">${s.d?new Date(s.d).toLocaleString([], {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</span><button class="chip" data-nbdel="${w.i+j}" data-nbn="${n}">${T('Löschen','Delete')}</button></div>`).join('')}</div>
  <div class="k sub" style="margin-top:8px">${T('Das ist der beste Abschnitt aus','This is the best stretch in')} ${esc(q0.n)}. ${T('Wenn da falsch gestoppte Zeiten drin sind, lösch sie. Dann rechnet alles neu.','If any of these were mistimed, delete them and everything recalculates.')}</div>
- <div class="chips" style="margin-top:10px"><button class="chip on" data-nbx>${T('Schließen','Close')}</button></div>`;sheetOpen(h)}
+ <div class="chips" style="margin-top:10px"><button class="chip" data-nana>${T('Alle Zeiten der Session','All solves of this session')}</button><button class="chip on" data-nbx>${T('Schließen','Close')}</button></div>`;sheetOpen(h)}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nbest]');if(b){bestSheet(+b.dataset.nbest);return}
  if(e.target.closest('[data-nbx]')){sheetClose();return}
  const d=e.target.closest('[data-nbdel]');if(d){const q0=pSes();if(!q0)return;const i=+d.dataset.nbdel,s=q0.sv[i];if(!s)return;if(d.dataset.ok!='1'){d.dataset.ok='1';d.textContent=T('Sicher?','Sure?');d.classList.add('on');return}q0.sv.splice(i,1);try{save();PSC=null;render()}catch(er){}try{profPush()}catch(er){}sheetClose();setTimeout(()=>{try{cmOpen(CM&&CM.tab||'me')}catch(er){}},250)}});
-window.bestSheet=bestSheet;
+window.bestSheet=bestSheet;window.pSes=pSes;
 {const o=cmBadges;cmBadges=function(){let h=o.apply(this,arguments);try{let m=null;try{m=window.rankedSes?rankedSes('333'):null}catch(e){}if(m){const st=pfStats(),note=`<div class="nbsrc"><span class="nmu">${T('3x3-Zeiten aus','3x3 times from')} <b>${esc(m.n)}</b> · ${T('Bestwerte, wie bei csTimer','best values, like csTimer')}</span><div class="chips"><button class="chip" data-nbest="5">Ao5 ${fv(st.a5)}</button><button class="chip" data-nbest="12">Ao12 ${fv(st.a12)}</button></div></div>`;const k=h.indexOf('</div></div>',h.indexOf('bdhd'));h=k>0?h.slice(0,k+12)+note+h.slice(k+12):note+h}}catch(e){}return h}}
 
 /* ---------- Timer: Ziel-Chip unter der Zeit ---------- */
@@ -3434,6 +3463,91 @@ function lkEdPaint(){const d=q('#lked');if(!d)return;const bgs=typeof BN!='undef
 function hideOld(){try{document.querySelectorAll('#v-set>.card').forEach(c=>{if(c.dataset.hn=='Themes'||c.dataset.hn=='Style')c.classList.add('lkhide')})}catch(e){}}
 hideOld();setTimeout(hideOld,500);setTimeout(hideOld,2000);
 lkPaint();try{const c=q('#lkcard');c&&c.classList.add('lkrowc')}catch(e){}
+})();
+
+</script>
+<script>
+/* ===== v115: Zeiten bereinigen + Session-Analyse + Widgets wie am iPhone ===== */
+(function(){
+const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)];
+const fm=v=>v==null?'–':!isFinite(v)?'DNF':F(v);
+const kOf=n=>Math.max(1,Math.ceil(n*.05));
+
+/* ---------- 1. Daten bereinigen: doppelte Solves raus, Reihenfolge nach Datum ---------- */
+function cleanSes(){const rep={dup:0,mer:0,srt:0};const cu=D.ses[D.cur];
+ // gleich benannte csTimer-Importe zusammenlegen
+ const seen=new Map();D.ses=D.ses.filter(q0=>{if(!/^cs /.test(q0.n||''))return true;const k=q0.n+'|'+q0.pz,e=seen.get(k);if(!e){seen.set(k,q0);return true}e.sv=e.sv.concat(q0.sv||[]);rep.mer++;if(q0===cu)D.cur=-1;return false});
+ D.ses.forEach(q0=>{const sv=q0.sv||[];const m=new Map(),out=[];sv.forEach(s=>{if(!s.d){out.push(s);return}const k=Math.round(s.d/1000)+'|'+s.t+'|'+s.p,o=m.get(k);if(o){rep.dup++;['s','rc','rm','nt','tg'].forEach(f=>{if(!o[f]&&s[f])o[f]=s[f]});return}m.set(k,s);out.push(s)});
+  if(out.length&&out.every(s=>s.d)){let bad=false;for(let i=1;i<out.length;i++)if(out[i].d<out[i-1].d){bad=true;break}if(bad){out.sort((a,b)=>a.d-b.d);rep.srt++}}
+  q0.sv=out});
+ if(D.cur<0||D.cur>=D.ses.length){const i=D.ses.indexOf(cu);D.cur=i>=0?i:Math.max(0,D.ses.findIndex(x=>x.n==(cu&&cu.n)&&x.pz==(cu&&cu.pz)))}
+ const ch=rep.dup||rep.mer||rep.srt;if(ch){try{solves=D.ses[D.cur].sv;save();PSC=null;render()}catch(e){console.warn(e)}try{window.profPush&&profPush()}catch(e){}}
+ const o=window.__ntClean||{dup:0,mer:0,srt:0};['dup','mer','srt'].forEach(k=>o[k]+=rep[k]);window.__ntClean=o;return rep}
+window.ntCleanSes=cleanSes;
+try{cleanSes()}catch(e){console.warn('clean',e)}
+{const o=impCs;impCs=function(){const r=o.apply(this,arguments);try{cleanSes()}catch(e){}return r}}
+
+/* ---------- 2. Session-Analyse: alle Zeiten mit Nummer, Datum, Ao5/Ao12 ---------- */
+function win(a,n){if(a.length<n)return null;const k=kOf(n);let bi=-1,bv=Infinity;for(let i=0;i+n<=a.length;i++){const w=a.slice(i,i+n).sort((x,y)=>x-y);if(!isFinite(w[n-k-1]))continue;let s=0;for(let j=k;j<n-k;j++)s+=w[j];const v=s/(n-2*k);if(v<bv){bv=v;bi=i}}return bi<0?null:{i:bi,v:bv}}
+function aoAt(a,i,n){if(i+1<n)return null;const w=a.slice(i-n+1,i+1).sort((x,y)=>x-y),k=kOf(n);if(!isFinite(w[n-k-1]))return Infinity;let s=0;for(let j=k;j<n-k;j++)s+=w[j];return s/(n-2*k)}
+function analyse(q0){const sv=q0.sv,a=sv.map(E),n=a.length,f=a.filter(isFinite);let bi=-1;a.forEach((v,i)=>{if(isFinite(v)&&(bi<0||v<a[bi]))bi=i});
+ const r={n,dnf:sv.filter(s=>s.p==2).length,p2:sv.filter(s=>s.p==1).length,mean:f.length?f.reduce((x,y)=>x+y,0)/f.length:null,bi,ao:{}};
+ [5,12,50,100].forEach(m=>{r.ao[m]=win(a,m)});r.c5=aoAt(a,n-1,5);r.c12=aoAt(a,n-1,12);r.a=a;return r}
+const dt=d=>d?new Date(d).toLocaleString([], {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'–';
+const dd=d=>d?new Date(d).toLocaleDateString([], {day:'2-digit',month:'2-digit',year:'2-digit'}):'';
+let AN=null;
+function anaSheet(){const q0=window.pSes?pSes():D.ses[D.cur];if(!q0||!window.sheetOpen)return;const R=analyse(q0),sv=q0.sv;AN={q0,R,lim:150};
+
+ const box=(lab,w,m)=>`<div class="anb"${w?` data-anj="${w.i}"`:''}><span>${lab}</span><b>${fm(w?w.v:null)}</b><em>${w?`Nr. ${w.i+1}–${w.i+m}`:T('zu wenig Zeiten','not enough solves')}</em></div>`;
+ const cl=window.__ntClean||{};
+ const h=`<div class="nxh"><b>${esc(q0.n)}</b><span>${(PZ[q0.pz]||[q0.pz])[0]} · ${R.n.toLocaleString()} ${T('Zeiten','solves')}${sv[0]&&sv[0].d?' · '+dd(sv[0].d)+' – '+dd(sv.at(-1).d):''}</span></div>
+ ${cl.dup||cl.mer?`<div class="anfix">${T(`${cl.dup} doppelte Zeiten gefunden und entfernt`,`${cl.dup} duplicate solves found and removed`)}${cl.mer?T(`, ${cl.mer} doppelte Importe zusammengelegt`,`, ${cl.mer} duplicate imports merged`):''}. ${T('Die kamen vom mehrfachen csTimer-Import und haben die Schnitte verfälscht.','They came from importing csTimer more than once and skewed the averages.')}</div>`:''}
+ <div class="ang">
+  <div class="anb"${R.bi>=0?` data-anj="${R.bi}"`:''}><span>${T('Bestzeit','Best single')}</span><b>${fm(R.bi>=0?R.a[R.bi]:null)}</b><em>${R.bi>=0?'Nr. '+(R.bi+1)+' · '+dd(sv[R.bi].d):''}</em></div>
+  ${box(T('Bestes Ao5','Best Ao5'),R.ao[5],5)}${box(T('Bestes Ao12','Best Ao12'),R.ao[12],12)}${box(T('Bestes Ao50','Best Ao50'),R.ao[50],50)}${box(T('Bestes Ao100','Best Ao100'),R.ao[100],100)}
+  <div class="anb"><span>${T('Schnitt (ohne DNF)','Mean (no DNF)')}</span><b>${fm(R.mean)}</b><em>${R.dnf} DNF · ${R.p2}× +2</em></div>
+  <div class="anb"><span>${T('Aktuell Ao5','Current Ao5')}</span><b>${fm(R.c5)}</b><em>Nr. ${Math.max(1,R.n-4)}–${R.n}</em></div>
+  <div class="anb"><span>${T('Aktuell Ao12','Current Ao12')}</span><b>${fm(R.c12)}</b><em>Nr. ${Math.max(1,R.n-11)}–${R.n}</em></div>
+ </div>
+ <div class="k sub">${T('Ao5 und Ao12 wie bei csTimer: beste und schlechteste Zeit fallen raus, der Rest wird gemittelt. Bei Ao50/Ao100 fallen je 5 % oben und unten raus. Tippe auf einen Wert, um die Zeiten dazu zu sehen.','Ao5 and Ao12 like csTimer: best and worst are dropped, the rest is averaged. For Ao50/Ao100, 5 % are dropped on each end. Tap a value to jump to its solves.')}</div>
+ <div class="anh"><span>Nr.</span><span>${T('Zeit','Time')}</span><span>Ao5</span><span>Ao12</span><span>${T('Datum','Date')}</span><span></span></div>
+ <div id="anl"></div>
+ <div class="chips" style="margin-top:10px"><button class="chip on" data-nbx>${T('Schließen','Close')}</button></div>`;
+ sheetOpen(h,'anw');anaRows()}
+function anaRows(hi){if(!AN)return;const{q0,R}=AN,sv=q0.sv,a=R.a,n=a.length,b5=R.ao[5],b12=R.ao[12];const L=q('#anl');if(!L)return;
+ let from=Math.max(0,n-AN.lim);if(hi!=null&&hi<from){AN.lim=n-hi+20;from=Math.max(0,n-AN.lim)}
+ let h='';for(let i=n-1;i>=from;i--){const s=sv[i],c=[];if(i==R.bi)c.push('pb');if(b5&&i>=b5.i&&i<b5.i+5)c.push('w5');if(b12&&i>=b12.i&&i<b12.i+12)c.push('w12');
+  h+=`<div class="anr ${c.join(' ')}" data-ani="${i}"><span>${i+1}</span><b>${s.p==2?'DNF':F(E(s))+(s.p==1?'+':'')}</b><span>${fm(aoAt(a,i,5))}</span><span>${fm(aoAt(a,i,12))}</span><span>${dt(s.d)}</span><button class="anx" data-anx="${i}" aria-label="${T('Löschen','Delete')}">×</button></div>`}
+ if(from>0)h+=`<button class="chip anm" data-anm>${T(`Ältere zeigen (${from} weitere)`,`Show older (${from} more)`)}</button>`;
+ L.innerHTML=h}
+document.addEventListener('click',e=>{const t=e.target;
+ if(t.closest('[data-nana]')){anaSheet();return}
+ if(!AN||!t.closest('#nx'))return;
+ if(t.closest('[data-anm]')){AN.lim+=300;anaRows();return}
+ const j=t.closest('[data-anj]');if(j){const i=+j.dataset.anj;anaRows(i);const r=q(`.anr[data-ani="${i}"]`);if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.add('flash');setTimeout(()=>r.classList.remove('flash'),1400)}return}
+ const x=t.closest('[data-anx]');if(x){const i=+x.dataset.anx;if(x.dataset.ok!='1'){qa('[data-anx]').forEach(b=>{b.dataset.ok='';b.textContent='×';b.classList.remove('on')});x.dataset.ok='1';x.textContent=T('Löschen?','Delete?');x.classList.add('on');return}
+  AN.q0.sv.splice(i,1);try{if(AN.q0===D.ses[D.cur])solves=AN.q0.sv;save();PSC=null;render()}catch(er){}try{window.profPush&&profPush()}catch(er){}const lim=AN.lim,sc=q('#nx .nxc')&&q('#nx .nxc').scrollTop;anaSheet();AN.lim=lim;anaRows();const c=q('#nx .nxc');if(c&&sc!=null)c.scrollTop=sc}
+},true);
+window.anaSheet=anaSheet;
+
+/* ---------- 3. Widgets wie am iPhone ---------- */
+const EW={wt:[T('Trend','Trend'),'wTrend'],wg:[T('Ziel','Goal'),'wGoal'],wa:[T('Statistik','Stats'),'wAvg'],wl:[T('Liste','List'),'wList'],wp:['Scramble',null],wr:[T('Zuletzt','Recent'),'wRecent']};
+const isOn=id=>{const k=EW[id][1];return k?!!cfg[k]:cfg.pvp=='wid'};
+function setOn(id,v){const k=EW[id][1];if(k)cfg[k]=v;else cfg.pvp=v?'wid':'off';apply();try{if(cfg.pos){if(v){if(cfg.pos[id]==null)cfg.pos[id]=firstFree(id);placeW(id,cfg.pos[id])}}}catch(e){}ordApply();gridApply();S('nt.c',cfg);try{ewRender()}catch(e){}galRender();try{render()}catch(e){}}
+let gal=q('#ewg');if(!gal){gal=document.createElement('div');gal.id='ewg';document.body.appendChild(gal)}
+function galRender(){const off=Object.keys(EW).filter(id=>!isOn(id));gal.innerHTML=`<b>${T('Widget hinzufügen','Add widget')}</b><div>${off.length?off.map(id=>`<button class="chip" data-ewadd="${id}">+ ${EW[id][0]}</button>`).join(''):`<span class="nmu">${T('Alle Widgets sind schon da','All widgets are already shown')}</span>`}</div>`}
+gal.addEventListener('click',e=>{const b=e.target.closest('[data-ewadd]');if(b){setOn(b.dataset.ewadd,true);navigator.vibrate&&cfg.vib&&navigator.vibrate(10)}});
+{const o=edOn;edOn=function(){const r=o.apply(this,arguments);galRender();return r}}
+q('#ed')&&(q('#ed').onclick=()=>edOn());
+{const eb=q('#eb span');if(eb)eb.textContent=T('Ziehen zum Verschieben · Minus zum Entfernen','Drag to move · Minus to remove')}
+// Minus-Ecke oben links entfernt ein Widget
+q('#wid').addEventListener('pointerdown',e=>{if(!document.body.classList.contains('edit'))return;const m=e.target.closest('#wid>.card');if(!m||!EW[m.id])return;const r=m.getBoundingClientRect();if(e.clientX-r.left<38&&e.clientY-r.top<38){e.stopImmediatePropagation();e.preventDefault();setOn(m.id,false);navigator.vibrate&&cfg.vib&&navigator.vibrate(10)}},true);
+// Lange drücken auf ein Widget startet den Bearbeiten-Modus
+let lp=null;
+q('#wid').addEventListener('pointerdown',e=>{if(document.body.classList.contains('edit')||st=='run'||inspecting)return;const m=e.target.closest('#wid>.card');if(!m)return;const x=e.clientX,y=e.clientY;clearTimeout(lp&&lp.t);
+ lp={x,y,t:setTimeout(()=>{lp=null;if(st=='run')return;try{clearTimeout(hold)}catch(er){}if(st=='hold'){st='idle';ready=false;q('#time').className=''}navigator.vibrate&&cfg.vib&&navigator.vibrate(25);edOn()},550)}},true);
+const lpCancel=e=>{if(!lp)return;if(e.type=='pointermove'&&Math.hypot(e.clientX-lp.x,e.clientY-lp.y)<10)return;clearTimeout(lp.t);lp=null};
+['pointerup','pointercancel','pointermove'].forEach(ev=>addEventListener(ev,lpCancel,true));
 })();
 
 </script>
