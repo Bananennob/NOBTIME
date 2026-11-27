@@ -1080,9 +1080,9 @@ function B1(g,t){
 
 
 const cv=document.createElement('canvas');cv.width=720;cv.height=900;cv.className='niv nic';const g=cv.getContext('2d');if(!g)return false;
-const draw=t=>{g.setTransform(1,0,0,1,0,0);g.fillStyle=BG;g.fillRect(0,0,CW,CH);lineCap(g);B1(g,t)};draw(0);
+const HOLD=1.0,DUR=2.9+HOLD;const draw=t=>{g.setTransform(1,0,0,1,0,0);g.fillStyle=BG;g.fillRect(0,0,CW,CH);lineCap(g);B1(g,Math.max(0,t-HOLD))};draw(0);
 const old=it.querySelector('video');if(old)old.remove();it.appendChild(cv);it.classList.add('vid');onStart&&onStart();
-const t0=performance.now();const loop=n=>{const t=(n-t0)/1000;draw(Math.min(t,2.9));if(t<2.9)requestAnimationFrame(loop);else setTimeout(onEnd,350)};requestAnimationFrame(loop);return true}catch(e){return false}};
+const t0=performance.now();const loop=n=>{const t=(n-t0)/1000;draw(Math.min(t,DUR));if(t<DUR)requestAnimationFrame(loop);else setTimeout(onEnd,350)};requestAnimationFrame(loop);return true}catch(e){return false}};
 
 </script>
 <div id="cf" hidden><div class="card" id="cfc"><div id="cft"></div><div class="chips"><button class="chip" id="cfn">Abbrechen</button><button class="chip on" id="cfy">Löschen</button></div></div></div>
