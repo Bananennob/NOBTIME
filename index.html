@@ -3218,7 +3218,7 @@ inpPaint();
 (function(){
 cfg.rks=cfg.rks||{};
 /* Art der Session erkennen: Name + Scrambles */
-function detKind(q){const n=String(q.n||'').toLowerCase(),sc=String(((q.sv||[]).find(s=>s.s)||{}).s||'');let pz=q.pz,x='';
+function detKind(q){const n=String(q.n||'').toLowerCase(),sc=String(((q.sv||[]).find(s=>s.s)||{}).s||'');let pz=q.pz,x='';if(/ohne datum|no date/.test(n))return{pz,x:'nd'};
  if(/\(\s*-?\d+\s*,\s*-?\d+\s*\)/.test(sc)||/\bsq(uare)?[\s-]?1?\b|square/.test(n))pz='sq1';
  else if(/\b2x2\b|\b222\b/.test(n))pz='222';else if(/\b4x4\b|\b444\b/.test(n))pz='444';else if(/\b5x5\b|\b555\b/.test(n))pz='555';
  else if(/\b6x6\b/.test(n))pz='666';else if(/\b7x7\b/.test(n))pz='777';else if(/pyra/.test(n))pz='pyr';else if(/skewb/.test(n))pz='skb';
@@ -3477,15 +3477,19 @@ const fm=v=>v==null?'–':!isFinite(v)?'DNF':F(v);
 const kOf=n=>Math.max(1,Math.ceil(n*.05));
 
 /* ---------- 1. Daten bereinigen: doppelte Solves raus, Reihenfolge nach Datum ---------- */
-function cleanSes(){const rep={dup:0,mer:0,srt:0};const cu=D.ses[D.cur];
+const ND_RE=/ · (ohne Datum|no date)$/;
+function cleanSes(){const rep={dup:0,mer:0,srt:0,und:0};const cu=D.ses[D.cur];
+ // Zeiten ohne Datum in Sessions mit Datum: man weiß nicht, wann sie waren -> eigene Session, sonst landen sie vorne und verfälschen die Schnitte
+ {const add=[];D.ses.forEach(q0=>{const sv=q0.sv||[];if(ND_RE.test(q0.n||''))return;let nu=0;for(const s of sv)if(!s.d)nu++;if(!nu||nu==sv.length)return;const und=sv.filter(s=>!s.d);q0.sv=sv.filter(s=>s.d);rep.und+=nu;
+  const nm=(q0.n||'Session')+' · '+T('ohne Datum','no date');if(!D.ses.some(x=>ND_RE.test(x.n||'')&&x.n.replace(ND_RE,'')==q0.n&&x.pz==q0.pz)&&!add.some(x=>x.n==nm))add.push({n:nm,pz:q0.pz,sv:und})});D.ses.push(...add)}
  // gleich benannte csTimer-Importe zusammenlegen
  const seen=new Map();D.ses=D.ses.filter(q0=>{if(!/^cs /.test(q0.n||''))return true;const k=q0.n+'|'+q0.pz,e=seen.get(k);if(!e){seen.set(k,q0);return true}e.sv=e.sv.concat(q0.sv||[]);rep.mer++;if(q0===cu)D.cur=-1;return false});
  D.ses.forEach(q0=>{const sv=q0.sv||[];const m=new Map(),out=[];sv.forEach(s=>{if(!s.d){out.push(s);return}const k=Math.round(s.d/1000)+'|'+s.t+'|'+s.p,o=m.get(k);if(o){rep.dup++;['s','rc','rm','nt','tg'].forEach(f=>{if(!o[f]&&s[f])o[f]=s[f]});return}m.set(k,s);out.push(s)});
   if(out.length&&out.every(s=>s.d)){let bad=false;for(let i=1;i<out.length;i++)if(out[i].d<out[i-1].d){bad=true;break}if(bad){out.sort((a,b)=>a.d-b.d);rep.srt++}}
   q0.sv=out});
  if(D.cur<0||D.cur>=D.ses.length){const i=D.ses.indexOf(cu);D.cur=i>=0?i:Math.max(0,D.ses.findIndex(x=>x.n==(cu&&cu.n)&&x.pz==(cu&&cu.pz)))}
- const ch=rep.dup||rep.mer||rep.srt;if(ch){try{solves=D.ses[D.cur].sv;save();PSC=null;render()}catch(e){console.warn(e)}try{window.profPush&&profPush()}catch(e){}}
- const o=window.__ntClean||{dup:0,mer:0,srt:0};['dup','mer','srt'].forEach(k=>o[k]+=rep[k]);window.__ntClean=o;return rep}
+ const ch=rep.dup||rep.mer||rep.srt||rep.und;if(ch){try{solves=D.ses[D.cur].sv;save();PSC=null;render()}catch(e){console.warn(e)}try{window.profPush&&profPush()}catch(e){}}
+ const o=window.__ntClean||{dup:0,mer:0,srt:0,und:0};['dup','mer','srt','und'].forEach(k=>o[k]+=rep[k]);window.__ntClean=o;return rep}
 window.ntCleanSes=cleanSes;
 try{cleanSes()}catch(e){console.warn('clean',e)}
 {const o=impCs;impCs=function(){const r=o.apply(this,arguments);try{cleanSes()}catch(e){}return r}}
@@ -3513,6 +3517,7 @@ function anaSheet(qx){const q0=qx||(window.pSes?pSes():D.ses[D.cur]);if(!q0||!wi
  const cl=window.__ntClean||{};
  const sl=D.ses.map((x,i)=>({x,i})).filter(o=>(o.x.sv||[]).length);
  const h=`<label class="ansel"><span class="nmu">Session</span><select id="ansel">${sl.map(o=>`<option value="${o.i}"${o.x===q0?' selected':''}>${esc((PZ[o.x.pz]||[o.x.pz])[0])} · ${esc(o.x.n)} · ${o.x.sv.length.toLocaleString()}</option>`).join('')}</select></label><div class="nxh"><b>${esc(q0.n)}</b><span>${(PZ[q0.pz]||[q0.pz])[0]} · ${R.n.toLocaleString()} ${T('Zeiten','solves')}${sv[0]&&sv[0].d?' · '+dd(sv[0].d)+' – '+dd(sv.at(-1).d):''}</span></div>
+ ${(()=>{const nd=D.ses.find(x=>ND_RE.test(x.n||'')&&x.n.replace(ND_RE,'')==q0.n&&x.pz==q0.pz);return nd?`<div class="anfix">${T(`${nd.sv.length.toLocaleString()} Zeiten ohne Datum sind jetzt in der eigenen Session „${esc(nd.n)}“. Man weiß nicht, wann die waren. Die App hat sie bisher an den Anfang gestellt und mit deinen echten Zeiten zu Schnitten gemischt, daher kamen die falschen Ao5 und Ao12.`,`${nd.sv.length.toLocaleString()} solves without a date are now in their own session “${esc(nd.n)}”. Nobody knows when they happened. The app used to put them at the start and mix them into your real averages, which caused the wrong Ao5 and Ao12.`)}</div>`:''})()}
  ${cl.dup||cl.mer?`<div class="anfix">${T(`${cl.dup} doppelte Zeiten gefunden und entfernt`,`${cl.dup} duplicate solves found and removed`)}${cl.mer?T(`, ${cl.mer} doppelte Importe zusammengelegt`,`, ${cl.mer} duplicate imports merged`):''}. ${T('Die kamen vom mehrfachen csTimer-Import und haben die Schnitte verfälscht.','They came from importing csTimer more than once and skewed the averages.')}</div>`:''}
  ${cfg.mis===true?`<div class="anmis"><div><b>${cfg.mis===false?T('Fehlstopps werden mitgezählt','Mis-stops are counted'):T(`${R.nm} Fehlstopps zählen als DNF`,`${R.nm} mis-stops count as DNF`)}</b><span>${T('Zeiten unter der Hälfte deines normalen Schnitts in dem Zeitraum, z. B. aus Versehen gestoppt.','Times below half of your usual average at that point, e.g. stopped by accident.')}</span></div><button class="chip" data-anmt>${cfg.mis===false?T('Rausrechnen','Exclude'):T('Doch mitzählen','Count them')}</button></div>`:''}
  <div class="ang">
