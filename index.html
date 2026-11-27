@@ -881,7 +881,7 @@ html body.lk-lg .nse input{background:none!important;background-image:none!impor
 #v-set>.card.lkhide{display:none!important}
 .lkp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
-#lkcard.lkrowc{padding:0}
+
 .lkrow{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;background:none;border:0;color:var(--fg);font:inherit;text-align:left}
 .lkri{width:56px;flex:none}.lkri .lkp{height:42px;border-radius:12px}.lkri .lkp em{font-size:13px}
 .lkrt{flex:1;display:flex;flex-direction:column;min-width:0}.lkrt b{font-size:16px}
@@ -3300,9 +3300,9 @@ const tileArt=(k,ac)=>`<span class="lkp lkm" data-k="${k}"${ac?` style="--ta:${a
 function lkGrid(){const cur=lkCur(),ct=cfg.cth||[];return`<div class="lkg">${SHOW.map(o=>`<button class="lkt${cur==o.k?' on':''}" data-look="${o.k}">${tileArt(o.k)}<b>${o.n}</b></button>`).join('')}</div>
  <div class="lkh2"><b>${T('Eigene Themes','Your themes')}</b><button class="chip on" data-lknew>${T('+ Neues Theme','+ New theme')}</button></div>
  ${ct.length?`<div class="lkg">${ct.map(t=>`<div class="lkt${cur=='c:'+t.id?' on':''}" data-look="c:${t.id}" role="button">${tileArt(t.look=='std'?'std':t.look,t.ac)}<b>${esc(t.n)}</b><i class="lkdel" data-lkdel="${t.id}">✕</i></div>`).join('')}</div>`:`<div class="nmu" style="padding:4px 2px 2px">${T('Noch keine. Bau dir eins aus Look, Farbe und Hintergrund.','None yet. Build one from a look, a colour and a background.')}</div>`}`}
-function lkSheet(){if(!window.sheetOpen)return;const d=sheetOpen(`<div class="lksh-h"><div><b>Themes</b><span>${T('Das ganze App-Design','The whole app design')}</span></div><button class="chip on" data-nbx>${T('Fertig','Done')}</button></div><div id="lksh">${lkGrid()}</div>`,'lkwide')}
+function lkSheet(){if(!window.sheetOpen)return;const d=sheetOpen(`<div class="lksh-h"><div><b>Themes</b></div><button class="chip on" data-nbx>${T('Fertig','Done')}</button></div><div id="lksh">${lkGrid()}</div>`,'lkwide')}
 function lkRefresh(){const s=q('#lksh');if(s)s.innerHTML=lkGrid();lkPaint()}
-function lkPaint(){const c=q('#lkcard');if(!c)return;c.innerHTML=`<button class="lkrow" data-lkopen><span class="lkri">${tileArt(lkCur().startsWith('c:')?((cfg.cth||[]).find(x=>'c:'+x.id==lkCur())||{look:'std'}).look:lkCur())}</span><span class="lkrt"><b>Themes</b><span class="nmu">${T('Das ganze App-Design','The whole app design')}</span></span><span class="lkrv">${esc(lkName())} ›</span></button>`}
+function lkPaint(){const c=q('#lkcard');if(!c)return;c.classList.add('popcard');const ic=(typeof ICO!='undefined'&&ICO.Themes)||'<circle cx="12" cy="12" r="8"/><path d="M12 4v16"/>';c.innerHTML=`<button class="prow" data-lkopen><em class="ic"><svg viewBox="0 0 24 24">${ic}</svg></em><span>Themes</span><b>${esc(lkName())}</b><i>&rsaquo;</i></button>`}
 window.lkUse=function(k){const b=document.createElement('button');b.dataset.look=k;b.hidden=true;document.body.appendChild(b);b.click();b.remove()};
 window.lkObHtml=()=>`<div class="lkob">${SHOW.map(o=>`<button class="lkt" data-nx="ob-th" data-v="${o.k}">${tileArt(o.k)}<b>${o.n}</b></button>`).join('')}</div>`;
 function setStd(){cfg.look='std';delete cfg.lkp;cfg.sty='classic';cfg.theme='nacht';['ac','ac2','bgc','pv'].forEach(x=>delete cfg[x]);cfg.bg='pulse'}
