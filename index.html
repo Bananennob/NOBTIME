@@ -876,6 +876,9 @@ html body.lk-sm #time{background:none!important;-webkit-text-fill-color:#0b0b0b!
 html body.lk-sm #wid,html body.lk-sm #wid *{color:#0b0b0b}
 html body.lk-sm .k,html body.lk-sm .nmu{color:#55534e!important}
 html body.lk-lg .nse input{background:none!important;background-image:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding-left:0!important}
+
+#v-set>.card.lkhide{display:none!important}
+.lkp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -3235,6 +3238,8 @@ try{goalChip();stRender();trRender()}catch(e){}
 (function(){
 const q=s=>document.querySelector(s);
 const LOOKS=[['std',T('Klassik','Classic')],['lg','Liquid Glass'],['na','Neon Arcade'],['ab','Aurora Bento'],['hc','Holo'],['rh','Race HUD'],['sm','Swiss Mono']];
+const PRES=[['sketch','Sketchbook'],['pixel','Pixel'],['terminal','Terminal'],['blueprint','Blueprint']];
+const SHOW=[...LOOKS.filter(x=>x[0]!='std').map(x=>({k:x[0],n:x[1]})),...PRES.map(x=>({k:'p:'+x[0],n:x[1],p:x[0]}))];
 if(cfg.look==null){cfg.look='lg';S('nt.c',cfg)}
 /* Hintergrund-Ebene für die Looks */
 {let b=q('#lkbg');if(!b){b=document.createElement('div');b.id='lkbg';b.innerHTML='<i class="k1"></i><i class="k2"></i><i class="k3"></i><i class="k4"></i><u></u><s></s>';const a=q('#app');a?a.before(b):document.body.prepend(b)}}
@@ -3244,8 +3249,15 @@ lkApply();
 /* Auswahl in Settings > Look */
 const PV={std:'<i style="background:linear-gradient(135deg,#0b1026,#1a2550)"></i>',lg:'<i style="background:radial-gradient(circle at 25% 30%,#ff3d9a,transparent 45%),radial-gradient(circle at 75% 60%,#3d7bff,transparent 50%),radial-gradient(circle at 30% 85%,#ffb13d,transparent 45%),#101218"></i><b class="gl"></b>',na:'<i style="background:linear-gradient(#12002b,#2b0040 60%,#0b0014)"></i><b class="ng"></b>',ab:'<i style="background:radial-gradient(70% 50% at 30% 20%,#2bffb2,transparent 70%),radial-gradient(60% 50% at 80% 15%,#7a5cff,transparent 70%),#07080d"></i>',hc:'<i style="background:#0b0b12"></i><b class="hl"></b>',rh:'<i style="background:#06070a"></i><b class="rl"></b>',sm:'<i style="background:#f2f0eb"></i><b class="sl"></b>'};
 {const set=q('#v-set');if(set&&!q('#lkcard')){const c=document.createElement('div');c.className='card';c.id='lkcard';c.dataset.g='a';const f=set.querySelector(':scope>.card');set.insertBefore(c,f);c.hidden=!(q('#stabs .chip.on')&&q('#stabs .chip.on').dataset.t=='a')}}
-function lkPaint(){const c=q('#lkcard');if(!c)return;c.innerHTML=`<div class="lkh"><b>Look</b><span class="nmu">${T('Das ganze App-Design','The whole app design')}</span></div><div class="lkg">${LOOKS.map(([k,n])=>`<button class="lkt${(cfg.look||'std')==k?' on':''}" data-look="${k}"><span class="lkp">${PV[k]}<em>9.04</em></span><b>${n}</b></button>`).join('')}</div>`}
-document.addEventListener('click',e=>{const b=e.target.closest('[data-look]');if(!b)return;cfg.look=b.dataset.look;S('nt.c',cfg);lkApply();lkPaint();try{apply();render()}catch(er){}});
+function lkCur(){return cfg.look&&cfg.look!='std'?cfg.look:(cfg.lkp?'p:'+cfg.lkp:'')}
+function lkPaint(){const c=q('#lkcard');if(!c)return;const cur=lkCur();c.innerHTML=`<div class="lkh"><b>Themes</b><span class="nmu">${T('Das ganze App-Design','The whole app design')}</span></div><div class="lkg">${SHOW.map(o=>`<button class="lkt${cur==o.k?' on':''}" data-look="${o.k}"><span class="lkp">${o.p?`<img alt="" src="${(typeof PREIMG!='undefined'&&PREIMG[o.p])||''}">`:PV[o.k]+'<em>9.04</em>'}</span><b>${o.n}</b></button>`).join('')}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-look]');if(!b)return;const k=b.dataset.look;
+ if(k.startsWith('p:')){const p=k.slice(2),Q=(typeof PRE!='undefined'&&PRE[p])||null;if(!Q)return;cfg.look='std';cfg.lkp=p;['theme','bg','bo','ac','ac2','tg','tc'].forEach(x=>{if(Q[x]!==undefined)cfg[x]=Q[x]});cfg.sty=Q.sty||'classic'}
+ else{cfg.look=k;delete cfg.lkp;if(['paper','pixel','term','blue'].includes(cfg.sty))cfg.sty='classic'}
+ S('nt.c',cfg);lkApply();lkPaint();try{apply();render()}catch(er){}});
+/* alte Themes-Auswahl ausblenden */
+function hideOld(){try{document.querySelectorAll('#v-set>.card').forEach(c=>{if(c.dataset.hn=='Themes'||c.dataset.hn=='Style')c.classList.add('lkhide')})}catch(e){}}
+hideOld();setTimeout(hideOld,500);setTimeout(hideOld,2000);
 lkPaint();
 })();
 
