@@ -761,6 +761,121 @@ body:not(.nd) .nse,body:not(.nd) #nst,body:not(.nd) #ntr{display:none}
 .ndt svg{width:100%;height:auto;margin-bottom:6px;color:var(--fg)}.ndt b{font-size:15px}.ndt span{font-size:12px;color:var(--mut);line-height:1.35}
 .ndt i{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;display:none;place-items:center;font-style:normal;font-size:13px;font-weight:800;background:var(--ac);color:#0b0e12}
 .ndt.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,transparent)}.ndt.on i{display:grid}
+/* ===== v105 Looks ===== */
+#lkbg{position:fixed;inset:0 0 -160px;z-index:0;pointer-events:none;display:none;overflow:hidden}
+body.lkon #lkbg{display:block}
+body.lkon #bg,body.lkon #gl,body.lkon #fs,body.lkon #bgi,body.lkon #bgfx,body.lkon #bgs{display:none!important}
+#lkbg i,#lkbg u,#lkbg s{position:absolute;display:none}
+/* Auswahl */
+#lkcard{padding:14px}.lkh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}.lkh b{font-size:16px}
+.lkg{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:9px}
+.lkt{display:flex;flex-direction:column;gap:6px;padding:6px 6px 9px;border-radius:18px;border:1.5px solid var(--line);background:rgba(255,255,255,.03);color:var(--fg);font:inherit;text-align:center}
+.lkt b{font-size:12.5px}.lkt.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.lkp{position:relative;display:block;height:64px;border-radius:13px;overflow:hidden}
+.lkp i{position:absolute;inset:0}.lkp em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:20px;color:#fff}
+.lkp b.gl{position:absolute;left:14%;right:14%;bottom:10px;height:14px;border-radius:8px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5)}
+.lkp b.ng{position:absolute;left:-10%;right:-10%;bottom:0;height:40%;background:repeating-linear-gradient(90deg,rgba(255,61,242,.7) 0 1px,transparent 1px 10px),repeating-linear-gradient(rgba(255,61,242,.7) 0 1px,transparent 1px 7px);transform:perspective(40px) rotateX(45deg);transform-origin:bottom}
+.lkt[data-look=na] em{color:#fff;text-shadow:0 0 6px #ff3df2,0 0 14px #ff3df2;font-family:ui-monospace,Menlo,monospace}
+.lkp b.hl{position:absolute;inset:6px;border-radius:9px;border:2px solid transparent;background:linear-gradient(135deg,#ff9ad5,#9ad5ff,#b4ffb0,#ffe29a) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.lkt[data-look=hc] em{background:linear-gradient(90deg,#ff9ad5,#9ad5ff,#b4ffb0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lkp b.rl{position:absolute;left:8px;top:8px;bottom:8px;width:3px;background:#ff2b6d}.lkt[data-look=rh] em{font-style:italic;font-family:ui-monospace,Menlo,monospace}
+.lkt[data-look=sm] em{color:#0b0b0b}.lkt[data-look=sm] em::first-letter{color:#0b0b0b}.lkp b.sl{position:absolute;left:8px;right:8px;bottom:12px;height:2px;background:#0b0b0b}
+
+/* ---------- 1 Liquid Glass ---------- */
+body.lk-lg{background:#0a0b10}
+body.lk-lg #lkbg{background:radial-gradient(120% 80% at 50% 0,#1a1d2e,#0a0b10 70%)}
+body.lk-lg #lkbg i{display:block;border-radius:50%;filter:blur(60px);opacity:.85;will-change:transform}
+body.lk-lg #lkbg .k1{width:70vmax;height:70vmax;left:-25vmax;top:-20vmax;background:#ff3d9a;animation:lkd1 34s ease-in-out infinite alternate}
+body.lk-lg #lkbg .k2{width:64vmax;height:64vmax;right:-28vmax;top:22vh;background:#3d7bff;animation:lkd2 40s ease-in-out infinite alternate}
+body.lk-lg #lkbg .k3{width:56vmax;height:56vmax;left:-18vmax;bottom:6vh;background:#ffb13d;animation:lkd3 46s ease-in-out infinite alternate;opacity:.7}
+body.lk-lg #lkbg .k4{width:42vmax;height:42vmax;right:-10vmax;bottom:-8vmax;background:var(--ac);animation:lkd1 52s ease-in-out infinite alternate-reverse;opacity:.6}
+@keyframes lkd1{to{transform:translate(18vmax,14vmax) scale(1.15)}}@keyframes lkd2{to{transform:translate(-16vmax,-10vmax) scale(.9)}}@keyframes lkd3{to{transform:translate(14vmax,-12vmax) scale(1.1)}}
+@media(prefers-reduced-motion:reduce){body.lk-lg #lkbg i{animation:none}}
+html body.lk-lg .card,html body.lk-lg #nav#nav,html body.lk-lg .chip,html body.lk-lg .pill,html body.lk-lg .nse,html body.lk-lg .nbt>div,html body.lk-lg .nset,html body.lk-lg .ntoday{background-color:rgba(255,255,255,.11)!important;background-image:radial-gradient(130% 100% at var(--lx,25%) var(--ly,0%),rgba(255,255,255,.28),rgba(255,255,255,0) 58%),linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.03) 45%,rgba(255,255,255,.12))!important;-webkit-backdrop-filter:blur(26px) saturate(1.8)!important;backdrop-filter:blur(26px) saturate(1.8)!important;border:1px solid rgba(255,255,255,.28)!important;border-top-color:rgba(255,255,255,.6)!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.12),0 14px 40px rgba(0,0,0,.28)!important;color:#fff}
+html body.lk-lg .chip.on,html body.lk-lg #nav#nav button.on{background-color:rgba(255,255,255,.85)!important;background-image:none!important;color:#0a0b10!important;text-shadow:none!important;box-shadow:inset 0 1px 0 #fff,0 6px 22px rgba(255,255,255,.25)!important}
+html body.lk-lg #nav#nav{border-radius:30px!important}
+body.lk-lg #time{font-weight:250;letter-spacing:-.035em;color:#fff;text-shadow:0 6px 40px rgba(255,255,255,.35)}
+body.lk-lg #time.run,body.lk-lg #time.ready{text-shadow:0 6px 40px currentColor}
+body.lk-lg h2{color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.25)}
+body.lk-lg{--fg:#fff;--mut:rgba(255,255,255,.72);--line:rgba(255,255,255,.28)}
+body.lk-lg #cm{background:rgba(10,11,16,.25)!important;-webkit-backdrop-filter:blur(30px) saturate(1.6)!important;backdrop-filter:blur(30px) saturate(1.6)!important}
+body.lk-lg .nxc{background:rgba(30,32,44,.6)!important;-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);border:1px solid rgba(255,255,255,.3)!important}
+
+/* ---------- 2 Neon Arcade ---------- */
+body.lk-na{--fg:#ffe6fb;--mut:#c79bff;--line:#ff3df2;--card:rgba(24,0,46,.78);background:#12002b}
+body.lk-na #lkbg{background:linear-gradient(#12002b,#2b0040 55%,#0b0014)}
+body.lk-na #lkbg u{display:block;left:50%;bottom:30vh;width:60vmin;height:60vmin;transform:translate(-50%,50%);border-radius:50%;background:repeating-linear-gradient(#ffd23f 0 12px,#ff3d9a 12px 16px,transparent 16px 20px);opacity:.32}
+body.lk-na #lkbg s{display:block;left:-30%;right:-30%;bottom:0;height:42vh;background:linear-gradient(transparent,rgba(255,61,242,.18)),repeating-linear-gradient(90deg,rgba(255,61,242,.55) 0 1.5px,transparent 1.5px 46px),repeating-linear-gradient(rgba(255,61,242,.55) 0 1.5px,transparent 1.5px 34px);transform:perspective(220px) rotateX(58deg);transform-origin:bottom;animation:nagr 3s linear infinite}
+@keyframes nagr{to{background-position:0 0,0 0,0 34px}}
+html body.lk-na .card,html body.lk-na .nbt>div,html body.lk-na .nse,html body.lk-na .ntoday{background:rgba(24,0,46,.78)!important;border:1.5px solid #ff3df2!important;border-radius:10px!important;box-shadow:0 0 12px rgba(255,61,242,.45),inset 0 0 12px rgba(255,61,242,.15)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body.lk-na #scr{border-color:#37e8ff!important;box-shadow:0 0 12px rgba(55,232,255,.5),inset 0 0 12px rgba(55,232,255,.2)!important}
+html body.lk-na .chip,html body.lk-na .pill{border:1.5px solid #37e8ff!important;border-radius:8px!important;background:rgba(18,0,43,.7)!important;color:#cffaff!important;box-shadow:0 0 8px rgba(55,232,255,.35)!important}
+html body.lk-na .chip.on{background:#ff3df2!important;color:#12002b!important;border-color:#ff3df2!important;box-shadow:0 0 16px #ff3df2!important}
+html body.lk-na #nav#nav{background:rgba(18,0,43,.88)!important;border:1.5px solid #37e8ff!important;border-radius:14px!important;box-shadow:0 0 16px rgba(55,232,255,.45)!important}
+html body.lk-na #nav#nav button.on{background:#37e8ff!important;color:#12002b!important;border-radius:10px!important;box-shadow:0 0 14px #37e8ff!important}
+body.lk-na #time,body.lk-na .npbt,body.lk-na .nbt b,body.lk-na #scr,body.lk-na h2,body.lk-na .brand{font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important}
+body.lk-na #time{color:#fff;text-shadow:0 0 6px #ff3df2,0 0 22px #ff3df2,0 0 46px #ff3df2;letter-spacing:.02em}
+body.lk-na h2,body.lk-na .brand{color:#37e8ff;text-shadow:0 0 10px #37e8ff;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- 3 Aurora Bento ---------- */
+body.lk-ab{--card:#14161d;--line:rgba(255,255,255,.06);background:#07080d}
+body.lk-ab #lkbg{background:#07080d}
+body.lk-ab #lkbg i{display:block;filter:blur(50px);border-radius:50%;opacity:.7;animation:lkd2 30s ease-in-out infinite alternate}
+body.lk-ab #lkbg .k1{width:70vw;height:40vh;left:-10vw;top:-14vh;background:#2bffb2}
+body.lk-ab #lkbg .k2{width:60vw;height:36vh;right:-14vw;top:-16vh;background:#7a5cff;animation-duration:38s}
+body.lk-ab #lkbg .k3{width:50vw;height:30vh;left:26vw;top:-4vh;background:#37c8ff;opacity:.5;animation-duration:44s}
+html body.lk-ab .card,html body.lk-ab .nbt>div,html body.lk-ab .nse{background:#14161d!important;border:0!important;border-radius:24px!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body.lk-ab #wa,html body.lk-ab .nbt>div:nth-child(1){background:linear-gradient(135deg,#3a1f7a,#241447)!important}
+html body.lk-ab #wg,html body.lk-ab .nbt>div:nth-child(2){background:linear-gradient(135deg,#0e3a5c,#0b2133)!important}
+html body.lk-ab #wt,html body.lk-ab .nbt>div:nth-child(3){background:linear-gradient(135deg,#0f3d33,#11251f)!important}
+html body.lk-ab #wr,html body.lk-ab .nbt>div:nth-child(4){background:linear-gradient(135deg,#5c3a0e,#33210b)!important}
+html body.lk-ab #scr{background:rgba(20,22,29,.6)!important;-webkit-backdrop-filter:blur(20px)!important;backdrop-filter:blur(20px)!important}
+html body.lk-ab #nav#nav{background:#14161d!important;border:0!important;border-radius:28px!important;box-shadow:0 10px 30px rgba(0,0,0,.4)!important}
+html body.lk-ab .chip,html body.lk-ab .pill{background:#1c1f28!important;border:0!important}
+html body.lk-ab .chip.on,html body.lk-ab #nav#nav button.on{background:linear-gradient(135deg,#2bffb2,#37c8ff)!important;color:#07080d!important}
+body.lk-ab #time{font-weight:800;letter-spacing:-.045em}
+
+/* ---------- 4 Holo ---------- */
+body.lk-hc{--card:#15151f;background:#0b0b12}
+body.lk-hc #lkbg{background:radial-gradient(90% 50% at 50% 0,#1d2250,transparent),#0b0b12}
+html body.lk-hc .card,html body.lk-hc .nbt>div,html body.lk-hc .nse,html body.lk-hc .ntoday{border:1.5px solid transparent!important;background:linear-gradient(#15151f,#15151f) padding-box,linear-gradient(135deg,#ff9ad5,#9ad5ff,#b4ffb0,#ffe29a,#ff9ad5) border-box!important;background-size:100% 100%,300% 300%!important;animation:hcf 8s linear infinite;box-shadow:0 10px 30px rgba(154,213,255,.08)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+@keyframes hcf{to{background-position:0 0,300% 300%}}
+html body.lk-hc #nav#nav{background:linear-gradient(#15151f,#15151f) padding-box,linear-gradient(135deg,#ff9ad5,#9ad5ff,#b4ffb0,#ffe29a) border-box!important;border:1.5px solid transparent!important}
+html body.lk-hc .chip.on,html body.lk-hc #nav#nav button.on{background:linear-gradient(135deg,#ff9ad5,#9ad5ff,#b4ffb0)!important;color:#0b0b12!important;border-color:transparent!important}
+body.lk-hc #time,body.lk-hc .npbt{background:linear-gradient(90deg,#ff9ad5,#9ad5ff,#b4ffb0,#ffe29a,#ff9ad5);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:hct 6s linear infinite}
+@keyframes hct{to{background-position:200% 0}}
+@media(prefers-reduced-motion:reduce){html body.lk-hc .card,body.lk-hc #time{animation:none}}
+
+/* ---------- 5 Race HUD ---------- */
+body.lk-rh{--card:#111318;--line:#1e2129;--ac:#ff2b6d;background:#06070a}
+body.lk-rh #lkbg{background:linear-gradient(180deg,#0b0c10,#06070a)}
+html body.lk-rh .card,html body.lk-rh .nbt>div,html body.lk-rh .nse,html body.lk-rh .ntoday{background:#111318!important;border:0!important;border-left:3px solid #ff2b6d!important;border-radius:6px!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body.lk-rh #wa{border-left-color:#b45cff!important}html body.lk-rh #wg{border-left-color:#2bff88!important}html body.lk-rh #wt{border-left-color:#ffd23f!important}
+html body.lk-rh .chip,html body.lk-rh .pill{border-radius:6px!important;background:#111318!important;border:1px solid #23262f!important;text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+html body.lk-rh .chip.on,html body.lk-rh #nav#nav button.on{background:#ff2b6d!important;color:#fff!important;border-color:#ff2b6d!important}
+html body.lk-rh #nav#nav{background:#111318!important;border:1px solid #23262f!important;border-radius:12px!important}
+body.lk-rh #time,body.lk-rh .npbt,body.lk-rh .nbt b,body.lk-rh h2,body.lk-rh .brand,body.lk-rh #scr{font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important}
+body.lk-rh #time,body.lk-rh .npbt,body.lk-rh .nbt b{font-style:italic;font-weight:800;letter-spacing:-.03em}
+body.lk-rh h2{text-transform:uppercase;letter-spacing:.1em;font-size:18px!important}
+
+/* ---------- 6 Swiss Mono ---------- */
+body.lk-sm{--bg:#f2f0eb;--fg:#0b0b0b;--mut:#55534e;--card:transparent;--line:#0b0b0b;--ac:#ff5a1f;--ac2:#ff5a1f;background:#f2f0eb;color:#0b0b0b}
+body.lk-sm #lkbg{background:#f2f0eb}
+html body.lk-sm .card,html body.lk-sm .nbt>div,html body.lk-sm .nse,html body.lk-sm .ntoday{background:transparent!important;border:0!important;border-top:2px solid #0b0b0b!important;border-radius:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#0b0b0b}
+html body.lk-sm #scr{border:2px solid #0b0b0b!important}
+html body.lk-sm .chip,html body.lk-sm .pill{background:transparent!important;border:1.5px solid #0b0b0b!important;color:#0b0b0b!important;border-radius:999px!important}
+html body.lk-sm .chip.on{background:#0b0b0b!important;color:#f2f0eb!important}
+html body.lk-sm #nav#nav{background:#0b0b0b!important;border:0!important;border-radius:16px!important;color:#f2f0eb}
+html body.lk-sm #nav#nav button{color:#f2f0eb!important}html body.lk-sm #nav#nav button.on{background:#ff5a1f!important;color:#0b0b0b!important}
+body.lk-sm #time{font-weight:800;letter-spacing:-.06em;color:#0b0b0b}
+body.lk-sm h2{font-weight:800;letter-spacing:-.03em;color:#0b0b0b}
+body.lk-sm .brand,body.lk-sm .k,body.lk-sm b,body.lk-sm span{color:inherit}
+body.lk-sm .logo img{filter:none!important}
+
+html body.lk-sm #time{background:none!important;-webkit-text-fill-color:#0b0b0b!important;text-shadow:none!important}
+html body.lk-sm #wid,html body.lk-sm #wid *{color:#0b0b0b}
+html body.lk-sm .k,html body.lk-sm .nmu{color:#55534e!important}
+html body.lk-lg .nse input{background:none!important;background-image:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding-left:0!important}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -3112,6 +3227,26 @@ ndPaint();try{const c=q('#ndcard');c&&c.remove();delete cfg.nd}catch(e){}
 {const o=render;render=function(){const r=o.apply(this,arguments);try{goalChip();stRender()}catch(e){}return r}}
 try{PSC=null}catch(e){}
 try{goalChip();stRender();trRender()}catch(e){}
+})();
+
+</script>
+<script>
+/* ===== v105 Looks: Liquid Glass (Standard), Neon Arcade, Aurora Bento, Holo, Race HUD, Swiss Mono ===== */
+(function(){
+const q=s=>document.querySelector(s);
+const LOOKS=[['std',T('Klassik','Classic')],['lg','Liquid Glass'],['na','Neon Arcade'],['ab','Aurora Bento'],['hc','Holo'],['rh','Race HUD'],['sm','Swiss Mono']];
+if(cfg.look==null){cfg.look='lg';S('nt.c',cfg)}
+/* Hintergrund-Ebene für die Looks */
+{let b=q('#lkbg');if(!b){b=document.createElement('div');b.id='lkbg';b.innerHTML='<i class="k1"></i><i class="k2"></i><i class="k3"></i><i class="k4"></i><u></u><s></s>';const a=q('#app');a?a.before(b):document.body.prepend(b)}}
+function lkApply(){const L=cfg.look||'std';const c=document.body.classList;LOOKS.forEach(([k])=>c.remove('lk-'+k));c.add('lk-'+L);c.toggle('lkon',L!='std');if(L!='std'){c.remove('hbg');if(L=='lg')c.add('lg');else c.remove('lg')}}
+{const o=apply;apply=function(){const r=o.apply(this,arguments);try{lkApply()}catch(e){}return r}}
+lkApply();
+/* Auswahl in Settings > Look */
+const PV={std:'<i style="background:linear-gradient(135deg,#0b1026,#1a2550)"></i>',lg:'<i style="background:radial-gradient(circle at 25% 30%,#ff3d9a,transparent 45%),radial-gradient(circle at 75% 60%,#3d7bff,transparent 50%),radial-gradient(circle at 30% 85%,#ffb13d,transparent 45%),#101218"></i><b class="gl"></b>',na:'<i style="background:linear-gradient(#12002b,#2b0040 60%,#0b0014)"></i><b class="ng"></b>',ab:'<i style="background:radial-gradient(70% 50% at 30% 20%,#2bffb2,transparent 70%),radial-gradient(60% 50% at 80% 15%,#7a5cff,transparent 70%),#07080d"></i>',hc:'<i style="background:#0b0b12"></i><b class="hl"></b>',rh:'<i style="background:#06070a"></i><b class="rl"></b>',sm:'<i style="background:#f2f0eb"></i><b class="sl"></b>'};
+{const set=q('#v-set');if(set&&!q('#lkcard')){const c=document.createElement('div');c.className='card';c.id='lkcard';c.dataset.g='a';const f=set.querySelector(':scope>.card');set.insertBefore(c,f);c.hidden=!(q('#stabs .chip.on')&&q('#stabs .chip.on').dataset.t=='a')}}
+function lkPaint(){const c=q('#lkcard');if(!c)return;c.innerHTML=`<div class="lkh"><b>Look</b><span class="nmu">${T('Das ganze App-Design','The whole app design')}</span></div><div class="lkg">${LOOKS.map(([k,n])=>`<button class="lkt${(cfg.look||'std')==k?' on':''}" data-look="${k}"><span class="lkp">${PV[k]}<em>9.04</em></span><b>${n}</b></button>`).join('')}</div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-look]');if(!b)return;cfg.look=b.dataset.look;S('nt.c',cfg);lkApply();lkPaint();try{apply();render()}catch(er){}});
+lkPaint();
 })();
 
 </script>
