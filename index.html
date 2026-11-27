@@ -971,6 +971,8 @@ body.edit #ewg{display:flex;flex-direction:column;gap:8px;position:fixed;left:12
 .ansel{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}.ansel select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:inherit;font:inherit}
 .anmis{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;border-radius:12px;background:rgba(255,170,60,.12);border:1px solid rgba(255,170,60,.35)}.anmis>div{flex:1;display:flex;flex-direction:column;gap:2px}.anmis b{font-size:13px}.anmis span{font-size:11.5px;color:var(--mut)}
 .anr.mis b{color:#ffaa3c}.anr b small{display:block;font-size:9.5px;font-weight:600;color:#ffaa3c}
+.nstb[data-stj]{cursor:pointer}.nstb em{display:block;font-style:normal;font-size:11px;color:var(--mut);margin-top:2px}
+#nst .nana{margin:10px 0}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2641,7 +2643,7 @@ async function ugz(s){if(s[0]=='r')return s.slice(1);const bin=atob(s.slice(1)),
 function snapObj(){const c=Object.assign({},cfg);delete c.api;delete c.intro;return{d:localStorage.getItem('nt.d'),c,cr:CR,pf:PF,t:Date.now()}}
 const sigNow=()=>(localStorage.getItem('nt.d')||'').length+':'+(localStorage.getItem('nt.c')||'').length+':'+(localStorage.getItem('nt.pf')||'').length+':'+(localStorage.getItem('nt.comp')||'').length;
 async function syncPush(){if(!LOG())return;const z=await gz(JSON.stringify(snapObj())),parts=[];for(let i=0;i<z.length;i+=400000)parts.push(z.slice(i,i+400000));await api('PUT','/api/sync',{parts});localStorage.setItem('nt.sig',sigNow())}
-function mergeD(a,b){const mp=new Map(),ord=[];const add=q=>{const k=q.n+'|'+q.pz;let e=mp.get(k);if(!e){e={n:q.n,pz:q.pz,v:[],s:new Set()};mp.set(k,e);ord.push(e)}(q.v||[]).forEach(x=>{const kk=x[2]?x[2]+'|'+x[0]+'|'+(x[1]||0):'n|'+x[0]+'|'+(x[3]||'');if(!e.s.has(kk)){e.s.add(kk);e.v.push(x)}})};((a&&a.ses)||[]).forEach(add);((b&&b.ses)||[]).forEach(add);ord.forEach(e=>e.v.sort((x,y)=>(x[2]||0)-(y[2]||0)));return{cur:a&&a.cur<ord.length?a.cur:0,ses:ord.map(e=>({n:e.n,pz:e.pz,v:e.v}))}}
+function mergeD(a,b){const mp=new Map(),ord=[];const add=q=>{const k=q.n+'|'+q.pz;let e=mp.get(k);if(!e){e={n:q.n,pz:q.pz,v:[],s:new Set()};mp.set(k,e);ord.push(e)}const oc={};(q.v||[]).forEach(x=>{let kk;if(x[2])kk=x[2]+'|'+x[0]+'|'+(x[1]||0);else{const b='n|'+x[0]+'|'+(x[1]||0)+'|'+(x[3]||'');oc[b]=(oc[b]||0)+1;kk=b+'|'+oc[b]}if(!e.s.has(kk)){e.s.add(kk);e.v.push(x)}})};((a&&a.ses)||[]).forEach(add);((b&&b.ses)||[]).forEach(add);ord.forEach(e=>e.v.sort((x,y)=>(x[2]||0)-(y[2]||0)));const R={cur:a&&a.cur<ord.length?a.cur:0,ses:ord.map(e=>({n:e.n,pz:e.pz,v:e.v}))};return window.ntCleanV?ntCleanV(R):R}
 async function syncPull(first){if(!LOG())return'off';const r=await api('GET','/api/sync');if(!r.parts||!r.parts.length){return'empty'}const o=JSON.parse(await ugz(r.parts.join('')));let loc=null;try{loc=JSON.parse(localStorage.getItem('nt.d')||'null')}catch(e){}let rem=null;try{rem=o.d?JSON.parse(o.d):null}catch(e){}
 const merged=mergeD(loc,rem),ms=JSON.stringify(merged);let ch=false;if(ms.length!=(localStorage.getItem('nt.d')||'').length||ms!=localStorage.getItem('nt.d')){localStorage.setItem('nt.d',ms);ch=true}
 if(first&&o.c){const nc=Object.assign({},o.c,{api:cfg.api,intro:cfg.intro});localStorage.setItem('nt.c',JSON.stringify(nc));ch=true}
@@ -2651,7 +2653,7 @@ return ch?'changed':'same'}
 async function profPush(){if(!LOG())return;const pl=pfPayload();pl.u=ME.u;const b={prof:pl,pub:(window.pubTrim?pubTrim:x=>x)({st:pl.st,bd:pl.bd,ts:pl.ts,ss:pfSes(),rs:window.pfRecent?pfRecent():null})};if(PF.imgDirty){b.img=PF.img||'';}if(PF.bimgDirty){b.bimg=PF.bimg||''}await api('PUT','/api/profile',b);if(PF.imgDirty||PF.bimgDirty){PF.imgDirty=0;PF.bimgDirty=0;S('nt.pf',PF)}}
 let pfst=0;function profSoon(){if(!LOG())return;clearTimeout(pfst);pfst=setTimeout(()=>{profPush().catch(()=>{})},1500)}
 async function onlBoot(first){if(!LOG())return;try{const me=await api('GET','/api/me');ME={id:me.id,u:me.u,adm:!!me.adm};S('nt.me',ME);if(first){if(me.img){PF.img=me.img}if(me.bimg&&!PF.bimg){PF.bimg=me.bimg}if(me.prof&&me.prof.n&&!PF.name)PF.name=me.prof.n}
-const r=await syncPull(first);if(r=='changed'){sessionStorage.setItem('nt.reopen','1');sessionStorage.setItem('nt.noi','1');if(CM.rc)sessionStorage.setItem('nt.rcs',CM.rc);location.reload();return}if(r=='empty'||first){if(!PF.name)PF.name=me.u;pfSave();await profPush();await syncPush()}else if(localStorage.getItem('nt.sig')!=sigNow()){await syncPush();await profPush()}if(localStorage.getItem('nt.ssv')!='1'){await profPush();localStorage.setItem('nt.ssv','1')}}catch(e){if(e.status==401){TK=null;ME=null;S('nt.tk',null);S('nt.me',null)}}}
+const r=await syncPull(first);if(r=='changed'&&Date.now()-(+sessionStorage.getItem('nt.syr')||0)<30000){await syncPush();sessionStorage.setItem('nt.syr','0')}if(r=='changed'){sessionStorage.setItem('nt.syr',String(Date.now()));sessionStorage.setItem('nt.reopen','1');sessionStorage.setItem('nt.noi','1');if(CM.rc)sessionStorage.setItem('nt.rcs',CM.rc);location.reload();return}if(r=='empty'||first){if(!PF.name)PF.name=me.u;pfSave();await profPush();await syncPush()}else if(localStorage.getItem('nt.sig')!=sigNow()){await syncPush();await profPush()}if(localStorage.getItem('nt.ssv')!='1'){await profPush();localStorage.setItem('nt.ssv','1')}}catch(e){if(e.status==401){TK=null;ME=null;S('nt.tk',null);S('nt.me',null)}}}
 setInterval(()=>{if(LOG()&&!document.hidden&&localStorage.getItem('nt.sig')!=sigNow()&&!window.__sy){window.__sy=1;syncPush().catch(()=>{}).finally(()=>{window.__sy=0})}},15000);
 addEventListener('visibilitychange',()=>{if(document.hidden&&LOG()&&localStorage.getItem('nt.sig')!=sigNow())syncPush().catch(()=>{})});
 async function onlAuth(mode,u,p,p2,rc){try{let j;if(mode=='up'){if(p!=p2)return T('Passwörter stimmen nicht überein.','Passwords do not match.');(CM.v=CM.v||{}).au=u;j=await api('POST','/api/register',{u,p,em:(($('#ae')||{}).value||'').trim(),k:(($('#ak')||{}).value||'')});CM.rc=j.rc;CM.needk=false}else if(mode=='fp'){j=await api('POST','/api/reset',{u,rc,np:p});CM.rc=j.rc}else j=await api('POST','/api/login',{u,p});TK=j.token;ME={id:j.id,u:j.u};S('nt.tk',TK);S('nt.me',ME);CM.au=null;await onlBoot(true);return''}catch(e){if(e.code=='need_key')CM.needk=true;return errTx(e)}}
@@ -3373,12 +3375,13 @@ function lsPost(){const box=q('#ls');if(!box)return;const rows=[...box.querySele
 /* ---------- Statistik: Kacheln, Vergleich, Verteilung ---------- */
 {const v=q('#v-stats'),h2=v&&v.querySelector('h2');if(h2&&!q('#nst')){const d=document.createElement('div');d.id='nst';h2.after(d)}}
 function aoOf(a,n){if(a.length<n)return null;const x=a.slice(-n).sort((p,q)=>p-q),k=n<12?1:Math.ceil(n*.05),m=x.slice(k,n-k);return m.includes(Infinity)?Infinity:m.reduce((s,y)=>s+y,0)/m.length}
-function stRender(){const d=q('#nst');if(!d)return;if(!ND()||solves.length<3){d.innerHTML='';return}const a=solves.map(E),f=a.filter(fin),best=Math.min(...f),tot=f.reduce((s,x)=>s+x,0);
+function stRender(){const d=q('#nst');if(!d)return;if(!ND()||solves.length<3){d.innerHTML='';return}const a=solves.map(E),f=a.filter(fin),best=f.reduce((x,y)=>y<x?y:x,Infinity),tot=f.reduce((s,x)=>s+x,0);const bw=n=>window.ntWin?ntWin(a,n):null;
  const wk=7*864e5,now=Date.now(),w1=solves.filter(s=>s.d>now-wk).map(E),w0=solves.filter(s=>s.d<=now-wk&&s.d>now-2*wk).map(E);const c1=w1.length>=3?aoOf(w1,Math.min(12,w1.length)):null,c0=w0.length>=3?aoOf(w0,Math.min(12,w0.length)):null;
  const diff=fin(c1)&&fin(c0)?c1-c0:null;
  const mean=f.length?tot/f.length:0,lo=Math.max(0,Math.floor(mean/1000)-4),bins=new Array(9).fill(0);f.slice(-500).forEach(x=>{const b=Math.floor(x/1000)-lo;if(b>=0&&b<9)bins[b]++});const bm=Math.max(1,...bins);
  const hrs=tot/36e5;
- d.innerHTML=`<div class="nbt st"><div><span>Single</span><b style="color:var(--ac)">${F(best)}</b></div><div><span>Ao5</span><b>${F(ao(5))}</b></div><div><span>Ao12</span><b>${F(ao(12))}</b></div><div><span>Ao100</span><b>${F(ao(100))}</b></div><div><span>${T('Zeiten','Solves')}</span><b>${solves.length.toLocaleString()}</b></div><div><span>${T('Cube-Zeit','Cube time')}</span><b>${hrs>=1?hrs.toFixed(1)+' h':Math.round(hrs*60)+' min'}</b></div></div>
+ d.innerHTML=`<div class="nbt st"><div><span>Single</span><b style="color:var(--ac)">${F(best)}</b></div>${[5,12,100].map(n=>{const w=bw(n);return`<div class="nstb"${w?` data-stj="${w.i}"`:''}><span>Ao${n} · ${T('aktuell','current')}</span><b>${F(ao(n))}</b><em>${T('Bestes','Best')} ${w?F(w.v):'–'}${w?' ›':''}</em></div>`}).join('')}<div><span>${T('Zeiten','Solves')}</span><b>${solves.length.toLocaleString()}</b></div><div><span>${T('Cube-Zeit','Cube time')}</span><b>${hrs>=1?hrs.toFixed(1)+' h':Math.round(hrs*60)+' min'}</b></div></div>
+ <button class="nana" data-nana-cur><span>${T('Alle Zeiten und Bestwerte','All solves and best averages')}</span><em>${T('Bestes Ao5, Ao12, Ao50, Ao100 mit Nummern und Datum','Best Ao5, Ao12, Ao50, Ao100 with numbers and dates')} ›</em></button>
  <div class="ncmp"><div><span class="nmu">${T('Diese Woche','This week')}</span><b>${F(c1)}</b><span class="nmu">Ao12 · ${w1.length}</span></div><div class="nd ${diff==null?'':diff<0?'up':'dn'}">${diff==null?'–':(diff<0?'−':'+')+(Math.abs(diff)/1000).toFixed(2)}</div><div><span class="nmu">${T('Letzte Woche','Last week')}</span><b>${F(c0)}</b><span class="nmu">Ao12 · ${w0.length}</span></div></div>
  <div class="nhi"><div class="npbh"><span class="nmu">${T('Verteilung','Distribution')} · ${T('letzte','last')} ${Math.min(500,f.length)}</span></div><div class="nhb">${bins.map((b,i)=>`<div><i style="height:${Math.round(b/bm*100)}%"></i><span>${lo+i}</span></div>`).join('')}</div></div>`}
 
@@ -3491,6 +3494,12 @@ function cleanSes(){const rep={dup:0,mer:0,srt:0,und:0};const cu=D.ses[D.cur];
  const ch=rep.dup||rep.mer||rep.srt||rep.und;if(ch){try{solves=D.ses[D.cur].sv;save();PSC=null;render()}catch(e){console.warn(e)}try{window.profPush&&profPush()}catch(e){}}
  const o=window.__ntClean||{dup:0,mer:0,srt:0,und:0};['dup','mer','srt','und'].forEach(k=>o[k]+=rep[k]);window.__ntClean=o;return rep}
 window.ntCleanSes=cleanSes;
+function cleanV(d){if(!d||!Array.isArray(d.ses))return d;const seen=new Map(),ses=[];
+ d.ses.forEach(q0=>{if(/^cs /.test(q0.n||'')){const k=q0.n+'|'+q0.pz,e=seen.get(k);if(e){e.v=(e.v||[]).concat(q0.v||[]);return}seen.set(k,q0)}ses.push(q0)});
+ const add=[];ses.forEach(q0=>{const v=q0.v||[];if(ND_RE.test(q0.n||''))return;let nu=0;for(const x of v)if(!x[2])nu++;if(!nu||nu==v.length)return;const und=v.filter(x=>!x[2]);q0.v=v.filter(x=>x[2]);const nm=(q0.n||'Session')+' · '+T('ohne Datum','no date');if(!ses.some(x=>ND_RE.test(x.n||'')&&x.n.replace(ND_RE,'')==q0.n&&x.pz==q0.pz)&&!add.some(x=>x.n==nm))add.push({n:nm,pz:q0.pz,v:und})});ses.push(...add);
+ ses.forEach(q0=>{const m=new Set(),out=[];(q0.v||[]).forEach(x=>{if(!x[2]){out.push(x);return}const k=x[2]+'|'+x[0]+'|'+(x[1]||0);if(m.has(k))return;m.add(k);out.push(x)});if(out.length&&out.every(x=>x[2]))out.sort((a,b)=>a[2]-b[2]);q0.v=out});
+ d.ses=ses;if(!(d.cur>=0&&d.cur<ses.length))d.cur=0;return d}
+window.ntCleanV=cleanV;
 try{cleanSes()}catch(e){console.warn('clean',e)}
 {const o=impCs;impCs=function(){const r=o.apply(this,arguments);try{cleanSes()}catch(e){}return r}}
 
@@ -3539,6 +3548,8 @@ function anaRows(hi){if(!AN)return;const{q0,R}=AN,sv=q0.sv,a=R.a,n=a.length,b5=R
  if(from>0)h+=`<button class="chip anm" data-anm>${T(`Ältere zeigen (${from} weitere)`,`Show older (${from} more)`)}</button>`;
  L.innerHTML=h}
 document.addEventListener('click',e=>{const t=e.target;
+ if(t.closest('[data-nana-cur]')){anaSheet(D.ses[D.cur]);return}
+ {const j=t.closest('[data-stj]');if(j&&!t.closest('#nx')){anaSheet(D.ses[D.cur]);const i=+j.dataset.stj;setTimeout(()=>{anaRows(i);const r=q(`.anr[data-ani="${i}"]`);if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.add('flash');setTimeout(()=>r.classList.remove('flash'),1400)}},350);return}}
  if(t.closest('[data-nana]')){anaSheet();return}
  if(!AN||!t.closest('#nx'))return;
  if(t.closest('[data-anmt]')){cfg.mis=cfg.mis===true?false:true;S('nt.c',cfg);PSC=null;try{render()}catch(er){}try{window.profPush&&profPush()}catch(er){}anaSheet(AN.q0);return}
@@ -3568,6 +3579,7 @@ q('#wid').addEventListener('pointerdown',e=>{if(document.body.classList.contains
  lp={x,y,t:setTimeout(()=>{lp=null;if(st=='run')return;try{clearTimeout(hold)}catch(er){}if(st=='hold'){st='idle';ready=false;q('#time').className=''}navigator.vibrate&&cfg.vib&&navigator.vibrate(25);edOn()},550)}},true);
 const lpCancel=e=>{if(!lp)return;if(e.type=='pointermove'&&Math.hypot(e.clientX-lp.x,e.clientY-lp.y)<10)return;clearTimeout(lp.t);lp=null};
 ['pointerup','pointercancel','pointermove'].forEach(ev=>addEventListener(ev,lpCancel,true));
+try{render()}catch(e){}
 })();
 
 </script>
