@@ -753,6 +753,14 @@ body:not(.nd) .nse,body:not(.nd) #nst,body:not(.nd) #ntr{display:none}
 .nbwr{display:grid;grid-template-columns:44px 70px 1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05)}
 .nbwr b{font-variant-numeric:tabular-nums;font-size:16px}.nbwr .chip{min-height:30px;padding:0 10px;font-size:12px}
 .nbsrc{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--line);margin:8px 0}
+
+#ndcard{padding:14px}
+.ndh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}.ndh b{font-size:16px}
+.ndg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ndt{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px;border-radius:18px;border:1.5px solid var(--line);background:rgba(255,255,255,.03);color:var(--fg);font:inherit;text-align:left}
+.ndt svg{width:100%;height:auto;margin-bottom:6px;color:var(--fg)}.ndt b{font-size:15px}.ndt span{font-size:12px;color:var(--mut);line-height:1.35}
+.ndt i{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;display:none;place-items:center;font-style:normal;font-size:13px;font-weight:800;background:var(--ac);color:#0b0e12}
+.ndt.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,transparent)}.ndt.on i{display:grid}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2927,7 +2935,7 @@ function detKind(q){const n=String(q.n||'').toLowerCase(),sc=String(((q.sv||[]).
 window.detKind=detKind;
 const sesList=()=>D.ses.filter(q=>(q.sv||[]).length).slice(0,12);
 /* welche Session zählt für ein Event */
-function rankedSes(pz){const L=sesList(),want=cfg.rks[pz];if(want){const q=L.find(q=>String(q.n||'').slice(0,30)==want);if(q&&detKind(q).pz==pz)return q}
+function rankedSes(pz){const L=D.ses.filter(x=>(x.sv||[]).length),want=cfg.rks[pz];if(want){const q=L.find(q=>String(q.n||'').slice(0,30)==want);if(q&&detKind(q).pz==pz)return q}
  const c=L.filter(q=>{const d=detKind(q);return d.pz==pz&&!d.x});c.sort((a,b)=>b.sv.length-a.sv.length);return c[0]||null}
 window.rankedSes=rankedSes;
 {const o=pfSes;pfSes=function(){const r=o.apply(this,arguments),L=sesList(),R={};r.forEach((s,i)=>{const q=L[i];if(!q)return;const d=detKind(q);s.pz=d.pz;if(d.x)s.x=d.x;if(!(d.pz in R))R[d.pz]=rankedSes(d.pz);if(R[d.pz]===q)s.r=1});return r}}
@@ -3097,7 +3105,8 @@ let SQ='';document.addEventListener('input',e=>{if(e.target.id!='ssq')return;SQ=
 
 /* ---------- Schalter: neues Design an/aus ---------- */
 {const set=q('#v-set');if(set&&!q('#ndcard')){const c=document.createElement('div');c.className='card';c.id='ndcard';c.dataset.g='a';set.insertBefore(c,set.querySelector(':scope>.card'));c.hidden=!(q('#stabs .chip.on')&&q('#stabs .chip.on').dataset.t=='a')}}
-function ndPaint(){const c=q('#ndcard');if(c)c.innerHTML=`<div class="k">${T('Design','Design')}</div><div class="chips"><button class="chip${ND()?' on':''}" data-nd="1">${T('Neues Design','New design')}</button><button class="chip${ND()?'':' on'}" data-nd="0">${T('Klassisch','Classic')}</button></div><div class="k sub">${T('Neues Profil, Kacheln in der Statistik, Suche bei Zeiten und Settings, Trainer-Fortschritt.','New profile, stat tiles, search for times and settings, trainer progress.')}</div>`;document.body.classList.toggle('nd',ND())}
+function ndPaint(){const c=q('#ndcard');if(c){const nw=`<svg viewBox="0 0 60 44"><rect x="2" y="2" width="56" height="12" rx="4" fill="var(--ac)" opacity=".85"/><rect x="2" y="17" width="27" height="11" rx="4" fill="currentColor" opacity=".35"/><rect x="31" y="17" width="27" height="11" rx="4" fill="currentColor" opacity=".35"/><rect x="2" y="31" width="56" height="11" rx="4" fill="currentColor" opacity=".2"/></svg>`,cl=`<svg viewBox="0 0 60 44"><rect x="2" y="3" width="56" height="7" rx="3" fill="currentColor" opacity=".35"/><rect x="2" y="14" width="56" height="7" rx="3" fill="currentColor" opacity=".25"/><rect x="2" y="25" width="56" height="7" rx="3" fill="currentColor" opacity=".25"/><rect x="2" y="36" width="40" height="6" rx="3" fill="currentColor" opacity=".2"/></svg>`;
+ c.innerHTML=`<div class="ndh"><b>${T('App-Design','App design')}</b><span class="nmu">${T('Jederzeit umschaltbar','Switch any time')}</span></div><div class="ndg"><button class="ndt${ND()?' on':''}" data-nd="1">${nw}<b>${T('Neu','New')}</b><span>${T('Kacheln, Suche, Profil-Karte','Tiles, search, profile card')}</span><i>✓</i></button><button class="ndt${ND()?'':' on'}" data-nd="0">${cl}<b>${T('Klassisch','Classic')}</b><span>${T('Wie vorher, schlicht','As before, simple')}</span><i>✓</i></button></div>`}document.body.classList.toggle('nd',ND())}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nd]');if(!b)return;cfg.nd=b.dataset.nd=='1';S('nt.c',cfg);ndPaint();try{render();lsRender();lrender()}catch(er){}});
 ndPaint();
 {const o=render;render=function(){const r=o.apply(this,arguments);try{goalChip();stRender()}catch(e){}return r}}
