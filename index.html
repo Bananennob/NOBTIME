@@ -968,6 +968,9 @@ body.edit #wid>.card::after{content:'−';position:absolute;top:6px;left:6px;wid
 body.edit #ewg{display:flex;flex-direction:column;gap:8px;position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);z-index:6;padding:12px;border-radius:18px;background:color-mix(in srgb,var(--bgk,#070a18) 94%,transparent);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.45)}
 #ewg b{font-size:13px}#ewg>div{display:flex;flex-wrap:wrap;gap:6px}
 @media (prefers-reduced-motion:reduce){body.edit #wid>.card{animation:none}}
+.ansel{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}.ansel select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:inherit;font:inherit}
+.anmis{display:flex;gap:10px;align-items:center;margin:8px 0;padding:10px 12px;border-radius:12px;background:rgba(255,170,60,.12);border:1px solid rgba(255,170,60,.35)}.anmis>div{flex:1;display:flex;flex-direction:column;gap:2px}.anmis b{font-size:13px}.anmis span{font-size:11.5px;color:var(--mut)}
+.anr.mis b{color:#ffaa3c}.anr b small{display:block;font-size:9.5px;font-weight:600;color:#ffaa3c}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2490,7 +2493,7 @@ cnt('fr10','users','g','Community','Community','fr',10,'10 Freunde hinzugef\u00f
 cnt('c30','shield','g','Hamster','Hoarder','bc',30,'30 Badges','30 badges');cnt('c50','trophy','d','Legende','Legend','bc',50,'50 Badges','50 badges');cnt('c75','crown','d','Mythos','Myth','bc',75,'75 Badges','75 badges');cnt('c90','heart','d','Nobtime-Held','Nobtime hero','bc',90,'90 Badges','90 badges');
 }
 function pfStats0(){const o={dnf:0,p2:0,mins:0,mx:0,wk:0,r10:0,pbs:0,sc:0,n:0,b3:null,a5:null,a12:null,a100:null,ev:{},evn:0,night:0,early:0,days:0,cs:0,ls:0,bw:PF.bw,bm:PF.bm,fr:(typeof FRO!='undefined'&&ONL()?FRO.length:FR.length),shc:PF.shc};const dc={},dset=new Set(),mn=(a,b)=>b==null||!isFinite(b)?a:a==null||b<a?b:a;
-D.ses.forEach(q=>{const sv=q.sv||[];if(!sv.length)return;o.n+=sv.length;o.sc++;o.ev[q.pz]=1;const a=sv.map(E);a.forEach(v=>{{const dk=window.detKind?detKind(q):{pz:q.pz,x:''};if(!dk.x)o['e'+dk.pz]=mn(o['e'+dk.pz],v)};if(isFinite(v))o.mins+=v/60000});sv.forEach(s=>{if(s.p==2)o.dnf++;else if(s.p==1)o.p2++});if(q.pz=='333'&&!(window.detKind&&detKind(q).x)){let run=0,pm=Infinity;a.forEach(v=>{if(v<10000)run++;else run=0;if(run>o.r10)o.r10=run;if(isFinite(v)&&v<pm){if(pm<Infinity)o.pbs++;pm=v}})}sv.forEach(s=>{if(s.d){dset.add(dayNo(s.d));{const dn=dayNo(s.d);dc[dn]=(dc[dn]||0)+1;const wd=new Date(s.d).getDay();if(wd==0||wd==6)o.wk++}const hr=new Date(s.d).getHours();if(hr<4)o.night++;else if(hr>=5&&hr<7)o.early++}});});{const c3=D.ses.filter(q=>q.pz=='333'&&(q.sv||[]).length),cu=D.ses[D.cur],m=(()=>{try{if(window.rankedSes){const r=rankedSes('333');if(r)return r}}catch(e){}return cu&&cu.pz=='333'&&(cu.sv||[]).length>=5?cu:c3.slice().sort((x,y)=>y.sv.length-x.sv.length)[0]})();if(m){const a=m.sv.map(E);o.b3=a.filter(v=>!isFinite(v)||v>=1500).reduce(mn,null);o.a5=aoBest(a,5);o.a12=aoBest(a,12);o.a100=aoBest(a,100);o.n3=a.length;o.s3=String(m.n||'3x3')}}
+D.ses.forEach(q=>{const sv=q.sv||[];if(!sv.length)return;o.n+=sv.length;o.sc++;o.ev[q.pz]=1;const a=sv.map(E),dk=window.detKind?detKind(q):{pz:q.pz,x:''};a.forEach(v=>{{if(!dk.x)o['e'+dk.pz]=mn(o['e'+dk.pz],v)};if(isFinite(v))o.mins+=v/60000});sv.forEach(s=>{if(s.p==2)o.dnf++;else if(s.p==1)o.p2++});if(q.pz=='333'&&!dk.x){let run=0,pm=Infinity;a.forEach(v=>{if(v<10000)run++;else run=0;if(run>o.r10)o.r10=run;if(isFinite(v)&&v<pm){if(pm<Infinity)o.pbs++;pm=v}})}sv.forEach(s=>{if(s.d){dset.add(dayNo(s.d));{const dn=dayNo(s.d);dc[dn]=(dc[dn]||0)+1;const wd=new Date(s.d).getDay();if(wd==0||wd==6)o.wk++}const hr=new Date(s.d).getHours();if(hr<4)o.night++;else if(hr>=5&&hr<7)o.early++}});});{const c3=D.ses.filter(q=>q.pz=='333'&&(q.sv||[]).length),cu=D.ses[D.cur],m=(()=>{try{if(window.rankedSes){const r=rankedSes('333');if(r)return r}}catch(e){}return cu&&cu.pz=='333'&&(cu.sv||[]).length>=5?cu:c3.slice().sort((x,y)=>y.sv.length-x.sv.length)[0]})();if(m){const a=window.effA?effA(m.sv):m.sv.map(E);o.b3=a.filter(v=>!isFinite(v)||v>=1500).reduce(mn,null);o.a5=aoBest(a,5);o.a12=aoBest(a,12);o.a100=aoBest(a,100);o.n3=a.length;o.s3=String(m.n||'3x3')}}
 o.evn=Object.keys(o.ev).length;o.mx=Math.max(0,...Object.values(dc));o.mins=Math.round(o.mins);o.days=dset.size;const ds=[...dset].sort((x,y)=>x-y);let run=0,best=0,prev=null;ds.forEach(d=>{run=prev!=null&&d==prev+1?run+1:1;prev=d;if(run>best)best=run});o.ls=best;const td=dayNo(Date.now());let c=0,d=dset.has(td)?td:td-1;while(dset.has(d)){c++;d--}o.cs=c;o.bc=0;
 const r=BDG.filter(b=>b.f(o).ok).length;o.bc=r;return o}
 const bdEarned=s=>BDG.filter(b=>b.f(s).ok).map(b=>b.id);
@@ -2499,7 +2502,7 @@ const bdN=b=>T(b.de,b.en),bdD=b=>T(b.dde,b.den);
 const frLv=[0,0,3,6,10,15,22,30];
 const enc=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const dec=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));
-function pfSes(){const fin=x=>x!=null&&isFinite(x)?x:null;return D.ses.filter(q=>(q.sv||[]).length).slice(0,12).map(q=>{const sv=q.sv,a=sv.map(E);const bs=sv.map(s=>({t:E(s),d:s.d||0,sc:String(s.s||'').slice(0,140)})).filter(x=>isFinite(x.t)).sort((x,y)=>x.t-y.t).slice(0,5);return{k:String(q.n||'').slice(0,30),pz:q.pz,n:sv.length,a5:fin(aoBest(a,5)),a12:fin(aoBest(a,12)),bs}})}
+function pfSes(){const fin=x=>x!=null&&isFinite(x)?x:null;return D.ses.filter(q=>(q.sv||[]).length).slice(0,12).map(q=>{const sv=q.sv,a=window.effA?effA(sv):sv.map(E);const bs=sv.map(s=>({t:E(s),d:s.d||0,sc:String(s.s||'').slice(0,140)})).filter(x=>isFinite(x.t)).sort((x,y)=>x.t-y.t).slice(0,5);return{k:String(q.n||'').slice(0,30),pz:q.pz,n:sv.length,a5:fin(aoBest(a,5)),a12:fin(aoBest(a,12)),bs}})}
 function pfPayload(){const st=pfStats();return{u:ME?ME.u:(AS||''),ns:PF.ns,i:PF.id,n:PF.name,b:PF.bio,c:[PF.c1,PF.c2],s:PF.sh,p:PF.pt,g:PF.bn,f:PF.fr,t:PF.ti,w:PF.sw,v:PF.fav,y:PF.ctry,st:{b:st.b3,a5:st.a5,a12:st.a12,a100:st.a100,n:st.n3!=null?st.n3:st.n,cs:st.cs,ls:st.ls,bw:PF.bw,bm:PF.bm,xp:xpOf(st)},bd:bdEarned(st),ts:Date.now()}}
 const pfCode=()=>'NTP1.'+enc(pfPayload());
 const pfLink=()=>location.href.split('#')[0]+'#c='+pfCode();
@@ -3324,8 +3327,8 @@ function heat(){const day=864e5,t0=new Date();t0.setHours(0,0,0,0);const end=t0.
 function pbLine(){const a=allSolves(PF.fav&&PZ[PF.fav]?PF.fav:'333');let b=Infinity;const pb=[];a.forEach(x=>{const e=E(x);if(fin(e)&&e<b){b=e;pb.push({t:e,d:x.d})}});return pb.slice(-4).reverse()}
 function ago(d){if(!d)return'';const m=(Date.now()-d)/6e4;if(m<60)return T('gerade eben','just now');const h=m/60;if(h<24)return T(`vor ${h|0} Std.`,`${h|0}h ago`);const dd=h/24;if(dd<30)return T(`vor ${dd|0} T.`,`${dd|0}d ago`);const mo=dd/30;return mo<12?T(`vor ${mo|0} Mon.`,`${mo|0}mo ago`):T(`vor ${(mo/12)|0} J.`,`${(mo/12)|0}y ago`)}
 function pSes(){const L=D.ses.filter(x=>(x.sv||[]).length);let q0=cfg.pses!=null?L.find(x=>x.n==cfg.pses):null;if(!q0){const pz=PF.fav&&PZ[PF.fav]?PF.fav:'333';try{q0=window.rankedSes?rankedSes(pz):null}catch(e){}if(!q0)q0=L.filter(x=>x.pz==pz).sort((a,b)=>b.sv.length-a.sv.length)[0]||L[0]}return q0||null}
-function aoNow(q0,n){const a=q0.sv.slice(-n).map(E);if(a.length<n)return null;const s=a.slice().sort((x,y)=>x-y),k=Math.max(1,Math.ceil(n*.05)),m=s.slice(k,n-k);return m.includes(Infinity)?Infinity:m.reduce((x,y)=>x+y,0)/m.length}
-function sesStats(q0){const a=q0.sv.map(E),f=a.filter(fin),b=f.length?Math.min(...f):null;return{mean:f.length?f.reduce((x,y)=>x+y,0)/f.length:null,b,a5:aoBest(a,5),a12:aoBest(a,12),a100:aoBest(a,100),n:a.length}}
+function aoNow(q0,n){const a=(window.effA?effA(q0.sv):q0.sv.map(E)).slice(-n);if(a.length<n)return null;const s=a.slice().sort((x,y)=>x-y),k=Math.max(1,Math.ceil(n*.05)),m=s.slice(k,n-k);return m.includes(Infinity)?Infinity:m.reduce((x,y)=>x+y,0)/m.length}
+function sesStats(q0){const a=window.effA?effA(q0.sv):q0.sv.map(E),f=a.filter(fin),b=f.length?f.reduce((x,y)=>y<x?y:x,Infinity):null;return{mean:f.length?f.reduce((x,y)=>x+y,0)/f.length:null,b,a5:aoBest(a,5),a12:aoBest(a,12),a100:aoBest(a,100),n:a.length}}
 function sesPB(q0){let b=Infinity;const pb=[];q0.sv.slice().sort((x,y)=>(x.d||0)-(y.d||0)).forEach(x=>{const e=E(x);if(fin(e)&&e<b){b=e;pb.push({t:e,d:x.d})}});return pb.slice(-4).reverse()}
 function sesSel(cur){const L=D.ses.map((x,i)=>({x,i})).filter(o=>(o.x.sv||[]).length);return`<label class="npsel"><span class="nmu">${T('Angezeigte Session','Session shown')}</span><select id="npsel"><option value=""${cfg.pses==null?' selected':''}>${T('Automatisch','Automatic')}${cfg.pses==null&&cur?' ('+esc(cur.n)+')':''}</option>${L.map(o=>`<option value="${o.i}"${cfg.pses!=null&&cfg.pses==o.x.n?' selected':''}>${esc((PZ[o.x.pz]||[o.x.pz])[0])} · ${esc(o.x.n)} · ${o.x.sv.length}</option>`).join('')}</select></label>`}
 document.addEventListener('change',e=>{if(e.target.id!='npsel')return;const v=e.target.value;cfg.pses=v===''?null:(D.ses[+v]||{}).n;S('nt.c',cfg);try{cmOpen('me')}catch(er){}});
@@ -3340,10 +3343,10 @@ function profBlock(st0){const i=LV(),C=2*Math.PI*44,q0=pSes(),ss=q0?sesStats(q0)
 {const o=cmMe;cmMe=function(){let h=o.apply(this,arguments);if(!ND())return h;try{const pl=pfPayload(),xb=xpBar(),blk='<div class="nprof">'+showcase(PF)+profBlock(pl.st)+'</div>';[statGrid(pl.st),showcase(PF)].forEach(x=>{if(x&&h.includes(x))h=h.replace(x,'')});
  h=h.includes(xb)?h.replace(xb,blk):blk+h}catch(e){console.warn(e)}return h}}
 
-function bestWin(sv,n){const a=sv.map(E);if(a.length<n)return null;const k=Math.max(1,Math.ceil(n*.05));let bi=-1,bv=Infinity;for(let i=0;i+n<=a.length;i++){const w=a.slice(i,i+n).sort((x,y)=>x-y);if(!isFinite(w[n-k-1]))continue;let s=0;for(let j=k;j<n-k;j++)s+=w[j];const v=s/(n-2*k);if(v<bv){bv=v;bi=i}}return bi<0?null:{i:bi,v:bv}}
+function bestWin(sv,n){if(window.ntWin)return ntWin(effA(sv),n);const a=sv.map(E);if(a.length<n)return null;const k=Math.max(1,Math.ceil(n*.05));let bi=-1,bv=Infinity;for(let i=0;i+n<=a.length;i++){const w=a.slice(i,i+n).sort((x,y)=>x-y);if(!isFinite(w[n-k-1]))continue;let s=0;for(let j=k;j<n-k;j++)s+=w[j];const v=s/(n-2*k);if(v<bv){bv=v;bi=i}}return bi<0?null:{i:bi,v:bv}}
 function bestSheet(n){const q0=pSes();if(!q0||!window.sheetOpen)return;const w=bestWin(q0.sv,n);if(!w)return;const L=q0.sv.slice(w.i,w.i+n);
  const h=`<div class="nxh"><b>${T('Bestes','Best')} Ao${n} · ${F(w.v)}</b><span>${esc(q0.n)} · ${T('Zeiten','solves')} ${w.i+1}–${w.i+n}${L[0]&&L[0].d?' · '+new Date(L[0].d).toLocaleDateString():''}</span></div>
- <div class="nbw">${L.map((s,j)=>`<div class="nbwr"><span class="nmu">${w.i+j+1}</span><b>${F(E(s))}</b><span class="nmu">${s.d?new Date(s.d).toLocaleString([], {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</span><button class="chip" data-nbdel="${w.i+j}" data-nbn="${n}">${T('Löschen','Delete')}</button></div>`).join('')}</div>
+ <div class="nbw">${L.map((s,j)=>`<div class="nbwr"><span class="nmu">${w.i+j+1}</span><b>${F(E(s))}${window.misOf&&misOf(q0.sv)[w.i+j]?' <small class="nmu">'+T('Fehlstopp, zählt als DNF','mis-stop, counts as DNF')+'</small>':''}</b><span class="nmu">${s.d?new Date(s.d).toLocaleString([], {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</span><button class="chip" data-nbdel="${w.i+j}" data-nbn="${n}">${T('Löschen','Delete')}</button></div>`).join('')}</div>
  <div class="k sub" style="margin-top:8px">${T('Das ist der beste Abschnitt aus','This is the best stretch in')} ${esc(q0.n)}. ${T('Wenn da falsch gestoppte Zeiten drin sind, lösch sie. Dann rechnet alles neu.','If any of these were mistimed, delete them and everything recalculates.')}</div>
  <div class="chips" style="margin-top:10px"><button class="chip" data-nana>${T('Alle Zeiten der Session','All solves of this session')}</button><button class="chip on" data-nbx>${T('Schließen','Close')}</button></div>`;sheetOpen(h)}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-nbest]');if(b){bestSheet(+b.dataset.nbest);return}
@@ -3488,20 +3491,30 @@ try{cleanSes()}catch(e){console.warn('clean',e)}
 {const o=impCs;impCs=function(){const r=o.apply(this,arguments);try{cleanSes()}catch(e){}return r}}
 
 /* ---------- 2. Session-Analyse: alle Zeiten mit Nummer, Datum, Ao5/Ao12 ---------- */
-function win(a,n){if(a.length<n)return null;const k=kOf(n);let bi=-1,bv=Infinity;for(let i=0;i+n<=a.length;i++){const w=a.slice(i,i+n).sort((x,y)=>x-y);if(!isFinite(w[n-k-1]))continue;let s=0;for(let j=k;j<n-k;j++)s+=w[j];const v=s/(n-2*k);if(v<bv){bv=v;bi=i}}return bi<0?null:{i:bi,v:bv}}
+function win(a,n){if(a.length<n)return null;const k=kOf(n),cnt=n-2*k,w=a.slice(0,n).sort((x,y)=>x-y);const bs=v=>{let lo=0,hi=w.length;while(lo<hi){const m=(lo+hi)>>1;if(w[m]<v)lo=m+1;else hi=m}return lo};let bv=Infinity,bi=-1;
+ for(let i=0;;i++){if(isFinite(w[n-k-1])){let t=0;for(let j=k;j<n-k;j++)t+=w[j];const v=t/cnt;if(v<bv){bv=v;bi=i}}if(i+n>=a.length)break;w.splice(bs(a[i]),1);const x=a[i+n];w.splice(bs(x),0,x)}return bi<0?null:{i:bi,v:bv}}
+window.ntWin=win;
+/* Fehlstopps: Zeit unter der Hälfte vom Median der Zeiten drumherum -> zählt wie DNF */
+const EC=new WeakMap();
+function misFlags(sv){const a=sv.map(E),n=a.length,B=200,fl=new Uint8Array(n);for(let b=0;b*B<n;b++){const lo=Math.max(0,b*B-B),hi=Math.min(n,b*B+2*B),f=[];for(let i=lo;i<hi;i++)if(isFinite(a[i]))f.push(a[i]);if(f.length<20)continue;f.sort((x,y)=>x-y);const thr=f[f.length>>1]*.5;for(let i=b*B;i<Math.min(n,b*B+B);i++)if(isFinite(a[i])&&a[i]<thr)fl[i]=1}return{a,fl}}
+function effA(sv){if(!sv)return[];const key=sv.length+'|'+(sv.length?(sv.at(-1).d||0)+'|'+sv.at(-1).t+'|'+sv[0].t:'')+'|'+(cfg.mis===false?0:1);const c=EC.get(sv);if(c&&c.key==key)return c.e;const m=misFlags(sv),e=cfg.mis===false?m.a:m.a.map((v,i)=>m.fl[i]?Infinity:v);EC.set(sv,{key,e,fl:m.fl});return e}
+const misOf=sv=>{effA(sv);const c=EC.get(sv);return c?c.fl:new Uint8Array(0)};
+window.effA=effA;window.misOf=misOf;
 function aoAt(a,i,n){if(i+1<n)return null;const w=a.slice(i-n+1,i+1).sort((x,y)=>x-y),k=kOf(n);if(!isFinite(w[n-k-1]))return Infinity;let s=0;for(let j=k;j<n-k;j++)s+=w[j];return s/(n-2*k)}
-function analyse(q0){const sv=q0.sv,a=sv.map(E),n=a.length,f=a.filter(isFinite);let bi=-1;a.forEach((v,i)=>{if(isFinite(v)&&(bi<0||v<a[bi]))bi=i});
+function analyse(q0){const sv=q0.sv,a=effA(sv),fl=misOf(sv),n=a.length,f=a.filter(isFinite);let bi=-1;a.forEach((v,i)=>{if(isFinite(v)&&(bi<0||v<a[bi]))bi=i});
  const r={n,dnf:sv.filter(s=>s.p==2).length,p2:sv.filter(s=>s.p==1).length,mean:f.length?f.reduce((x,y)=>x+y,0)/f.length:null,bi,ao:{}};
- [5,12,50,100].forEach(m=>{r.ao[m]=win(a,m)});r.c5=aoAt(a,n-1,5);r.c12=aoAt(a,n-1,12);r.a=a;return r}
+ [5,12,50,100].forEach(m=>{r.ao[m]=win(a,m)});r.c5=aoAt(a,n-1,5);r.c12=aoAt(a,n-1,12);r.a=a;r.fl=fl;r.nm=fl.reduce((x,y)=>x+y,0);return r}
 const dt=d=>d?new Date(d).toLocaleString([], {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'–';
 const dd=d=>d?new Date(d).toLocaleDateString([], {day:'2-digit',month:'2-digit',year:'2-digit'}):'';
 let AN=null;
-function anaSheet(){const q0=window.pSes?pSes():D.ses[D.cur];if(!q0||!window.sheetOpen)return;const R=analyse(q0),sv=q0.sv;AN={q0,R,lim:150};
+function anaSheet(qx){const q0=qx||(window.pSes?pSes():D.ses[D.cur]);if(!q0||!window.sheetOpen)return;const R=analyse(q0),sv=q0.sv;AN={q0,R,lim:150};
 
  const box=(lab,w,m)=>`<div class="anb"${w?` data-anj="${w.i}"`:''}><span>${lab}</span><b>${fm(w?w.v:null)}</b><em>${w?`Nr. ${w.i+1}–${w.i+m}`:T('zu wenig Zeiten','not enough solves')}</em></div>`;
  const cl=window.__ntClean||{};
- const h=`<div class="nxh"><b>${esc(q0.n)}</b><span>${(PZ[q0.pz]||[q0.pz])[0]} · ${R.n.toLocaleString()} ${T('Zeiten','solves')}${sv[0]&&sv[0].d?' · '+dd(sv[0].d)+' – '+dd(sv.at(-1).d):''}</span></div>
+ const sl=D.ses.map((x,i)=>({x,i})).filter(o=>(o.x.sv||[]).length);
+ const h=`<label class="ansel"><span class="nmu">Session</span><select id="ansel">${sl.map(o=>`<option value="${o.i}"${o.x===q0?' selected':''}>${esc((PZ[o.x.pz]||[o.x.pz])[0])} · ${esc(o.x.n)} · ${o.x.sv.length.toLocaleString()}</option>`).join('')}</select></label><div class="nxh"><b>${esc(q0.n)}</b><span>${(PZ[q0.pz]||[q0.pz])[0]} · ${R.n.toLocaleString()} ${T('Zeiten','solves')}${sv[0]&&sv[0].d?' · '+dd(sv[0].d)+' – '+dd(sv.at(-1).d):''}</span></div>
  ${cl.dup||cl.mer?`<div class="anfix">${T(`${cl.dup} doppelte Zeiten gefunden und entfernt`,`${cl.dup} duplicate solves found and removed`)}${cl.mer?T(`, ${cl.mer} doppelte Importe zusammengelegt`,`, ${cl.mer} duplicate imports merged`):''}. ${T('Die kamen vom mehrfachen csTimer-Import und haben die Schnitte verfälscht.','They came from importing csTimer more than once and skewed the averages.')}</div>`:''}
+ ${R.nm||cfg.mis===false?`<div class="anmis"><div><b>${cfg.mis===false?T('Fehlstopps werden mitgezählt','Mis-stops are counted'):T(`${R.nm} Fehlstopps zählen als DNF`,`${R.nm} mis-stops count as DNF`)}</b><span>${T('Zeiten unter der Hälfte deines normalen Schnitts in dem Zeitraum, z. B. aus Versehen gestoppt.','Times below half of your usual average at that point, e.g. stopped by accident.')}</span></div><button class="chip" data-anmt>${cfg.mis===false?T('Rausrechnen','Exclude'):T('Doch mitzählen','Count them')}</button></div>`:''}
  <div class="ang">
   <div class="anb"${R.bi>=0?` data-anj="${R.bi}"`:''}><span>${T('Bestzeit','Best single')}</span><b>${fm(R.bi>=0?R.a[R.bi]:null)}</b><em>${R.bi>=0?'Nr. '+(R.bi+1)+' · '+dd(sv[R.bi].d):''}</em></div>
   ${box(T('Bestes Ao5','Best Ao5'),R.ao[5],5)}${box(T('Bestes Ao12','Best Ao12'),R.ao[12],12)}${box(T('Bestes Ao50','Best Ao50'),R.ao[50],50)}${box(T('Bestes Ao100','Best Ao100'),R.ao[100],100)}
@@ -3516,18 +3529,20 @@ function anaSheet(){const q0=window.pSes?pSes():D.ses[D.cur];if(!q0||!window.she
  sheetOpen(h,'anw');anaRows()}
 function anaRows(hi){if(!AN)return;const{q0,R}=AN,sv=q0.sv,a=R.a,n=a.length,b5=R.ao[5],b12=R.ao[12];const L=q('#anl');if(!L)return;
  let from=Math.max(0,n-AN.lim);if(hi!=null&&hi<from){AN.lim=n-hi+20;from=Math.max(0,n-AN.lim)}
- let h='';for(let i=n-1;i>=from;i--){const s=sv[i],c=[];if(i==R.bi)c.push('pb');if(b5&&i>=b5.i&&i<b5.i+5)c.push('w5');if(b12&&i>=b12.i&&i<b12.i+12)c.push('w12');
-  h+=`<div class="anr ${c.join(' ')}" data-ani="${i}"><span>${i+1}</span><b>${s.p==2?'DNF':F(E(s))+(s.p==1?'+':'')}</b><span>${fm(aoAt(a,i,5))}</span><span>${fm(aoAt(a,i,12))}</span><span>${dt(s.d)}</span><button class="anx" data-anx="${i}" aria-label="${T('Löschen','Delete')}">×</button></div>`}
+ let h='';for(let i=n-1;i>=from;i--){const s=sv[i],c=[];if(i==R.bi)c.push('pb');if(b5&&i>=b5.i&&i<b5.i+5)c.push('w5');if(b12&&i>=b12.i&&i<b12.i+12)c.push('w12');if(R.fl[i])c.push('mis');
+  h+=`<div class="anr ${c.join(' ')}" data-ani="${i}"><span>${i+1}</span><b>${s.p==2?'DNF':F(E(s))+(s.p==1?'+':'')}${R.fl[i]?`<small>${T('Fehlstopp','mis-stop')}</small>`:''}</b><span>${fm(aoAt(a,i,5))}</span><span>${fm(aoAt(a,i,12))}</span><span>${dt(s.d)}</span><button class="anx" data-anx="${i}" aria-label="${T('Löschen','Delete')}">×</button></div>`}
  if(from>0)h+=`<button class="chip anm" data-anm>${T(`Ältere zeigen (${from} weitere)`,`Show older (${from} more)`)}</button>`;
  L.innerHTML=h}
 document.addEventListener('click',e=>{const t=e.target;
  if(t.closest('[data-nana]')){anaSheet();return}
  if(!AN||!t.closest('#nx'))return;
+ if(t.closest('[data-anmt]')){cfg.mis=cfg.mis===false?true:false;S('nt.c',cfg);PSC=null;try{render()}catch(er){}try{window.profPush&&profPush()}catch(er){}anaSheet(AN.q0);return}
  if(t.closest('[data-anm]')){AN.lim+=300;anaRows();return}
  const j=t.closest('[data-anj]');if(j){const i=+j.dataset.anj;anaRows(i);const r=q(`.anr[data-ani="${i}"]`);if(r){r.scrollIntoView({behavior:'smooth',block:'center'});r.classList.add('flash');setTimeout(()=>r.classList.remove('flash'),1400)}return}
  const x=t.closest('[data-anx]');if(x){const i=+x.dataset.anx;if(x.dataset.ok!='1'){qa('[data-anx]').forEach(b=>{b.dataset.ok='';b.textContent='×';b.classList.remove('on')});x.dataset.ok='1';x.textContent=T('Löschen?','Delete?');x.classList.add('on');return}
   AN.q0.sv.splice(i,1);try{if(AN.q0===D.ses[D.cur])solves=AN.q0.sv;save();PSC=null;render()}catch(er){}try{window.profPush&&profPush()}catch(er){}const lim=AN.lim,sc=q('#nx .nxc')&&q('#nx .nxc').scrollTop;anaSheet();AN.lim=lim;anaRows();const c=q('#nx .nxc');if(c&&sc!=null)c.scrollTop=sc}
 },true);
+document.addEventListener('change',e=>{if(e.target.id=='ansel'){const q0=D.ses[+e.target.value];if(q0)anaSheet(q0)}});
 window.anaSheet=anaSheet;
 
 /* ---------- 3. Widgets wie am iPhone ---------- */
