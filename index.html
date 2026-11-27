@@ -879,6 +879,22 @@ html body.lk-lg .nse input{background:none!important;background-image:none!impor
 
 #v-set>.card.lkhide{display:none!important}
 .lkp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+#lkcard.lkrowc{padding:0}
+.lkrow{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;background:none;border:0;color:var(--fg);font:inherit;text-align:left}
+.lkri{width:56px;flex:none}.lkri .lkp{height:42px;border-radius:12px}.lkri .lkp em{font-size:13px}
+.lkrt{flex:1;display:flex;flex-direction:column;min-width:0}.lkrt b{font-size:16px}
+.lkrv{color:var(--mut);font-weight:600;white-space:nowrap}
+.nxc.lkwide{max-width:520px;max-height:84vh;overflow:auto}
+.lkh2{display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px}.lkh2 b{font-size:15px}.lkh2 .chip{min-height:34px;padding:0 12px;font-size:13px}
+.lkt{position:relative}.lkdel{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center;font-style:normal;font-size:12px}
+.lkprev{max-width:180px;margin:4px auto 8px}.lkprev .lkp{height:90px}.lkprev .lkp em{font-size:30px}
+.lksw{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px}.lksw button{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.2)}.lksw button.on{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.lkbgs{max-height:150px;overflow:auto}
+.lkp b.skm{position:absolute;left:12px;top:0;bottom:0;width:1px;background:#e0533d}.lkt[data-look="p:sketch"] em,.lkri .lkp:has(.skm) em{color:#222;font-family:Georgia,serif}
+.lkp b.pxw{position:absolute;left:30%;top:28%;width:40%;height:44%;background:#7a4a2a;box-shadow:inset 0 0 0 3px #3a2414}.lkt[data-look="p:pixel"] em{color:#ffc94d;font-family:ui-monospace,Menlo,monospace;text-shadow:2px 2px 0 #3a2414}
+.lkt[data-look="p:terminal"] em{color:#43ff7d;font-family:ui-monospace,Menlo,monospace;text-shadow:0 0 10px #43ff7d}
+.lkt[data-look="p:blueprint"] em{color:transparent;-webkit-text-stroke:1.2px #fff;font-family:ui-monospace,Menlo,monospace}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -3239,7 +3255,7 @@ try{goalChip();stRender();trRender()}catch(e){}
 const q=s=>document.querySelector(s);
 const LOOKS=[['std',T('Klassik','Classic')],['lg','Liquid Glass'],['na','Neon Arcade'],['ab','Aurora Bento'],['hc','Holo'],['rh','Race HUD'],['sm','Swiss Mono']];
 const PRES=[['sketch','Sketchbook'],['pixel','Pixel'],['terminal','Terminal'],['blueprint','Blueprint']];
-const SHOW=[...LOOKS.filter(x=>x[0]!='std').map(x=>({k:x[0],n:x[1]})),...PRES.map(x=>({k:'p:'+x[0],n:x[1],p:x[0]}))];
+const SHOW=[{k:'std',n:'Standard'},...LOOKS.filter(x=>x[0]!='std').map(x=>({k:x[0],n:x[1]})),...PRES.map(x=>({k:'p:'+x[0],n:x[1],p:x[0]}))];
 if(cfg.look==null){cfg.look='lg';S('nt.c',cfg)}
 /* Hintergrund-Ebene für die Looks */
 {let b=q('#lkbg');if(!b){b=document.createElement('div');b.id='lkbg';b.innerHTML='<i class="k1"></i><i class="k2"></i><i class="k3"></i><i class="k4"></i><u></u><s></s>';const a=q('#app');a?a.before(b):document.body.prepend(b)}}
@@ -3247,18 +3263,44 @@ function lkApply(){const L=cfg.look||'std';const c=document.body.classList;LOOKS
 {const o=apply;apply=function(){const r=o.apply(this,arguments);try{lkApply()}catch(e){}return r}}
 lkApply();
 /* Auswahl in Settings > Look */
-const PV={std:'<i style="background:linear-gradient(135deg,#0b1026,#1a2550)"></i>',lg:'<i style="background:radial-gradient(circle at 25% 30%,#ff3d9a,transparent 45%),radial-gradient(circle at 75% 60%,#3d7bff,transparent 50%),radial-gradient(circle at 30% 85%,#ffb13d,transparent 45%),#101218"></i><b class="gl"></b>',na:'<i style="background:linear-gradient(#12002b,#2b0040 60%,#0b0014)"></i><b class="ng"></b>',ab:'<i style="background:radial-gradient(70% 50% at 30% 20%,#2bffb2,transparent 70%),radial-gradient(60% 50% at 80% 15%,#7a5cff,transparent 70%),#07080d"></i>',hc:'<i style="background:#0b0b12"></i><b class="hl"></b>',rh:'<i style="background:#06070a"></i><b class="rl"></b>',sm:'<i style="background:#f2f0eb"></i><b class="sl"></b>'};
+const PV={std:'<i style="background:radial-gradient(120% 80% at 50% 0,#1c2f6b,#0a1230 60%,#060a1a)"></i>','p:sketch':'<i style="background:repeating-linear-gradient(#f6f1e4 0 9px,#d9d2bf 9px 10px)"></i><b class="skm"></b>','p:pixel':'<i style="background:linear-gradient(#1d3b2a 0 55%,#4a2e1b 55% 100%)"></i><b class="pxw"></b>','p:terminal':'<i style="background:#020a04"></i>','p:blueprint':'<i style="background:linear-gradient(rgba(255,255,255,.13) 1px,transparent 1px) 0 0/10px 10px,linear-gradient(90deg,rgba(255,255,255,.13) 1px,transparent 1px) 0 0/10px 10px,#1b4b9a"></i>',lg:'<i style="background:radial-gradient(circle at 25% 30%,#ff3d9a,transparent 45%),radial-gradient(circle at 75% 60%,#3d7bff,transparent 50%),radial-gradient(circle at 30% 85%,#ffb13d,transparent 45%),#101218"></i><b class="gl"></b>',na:'<i style="background:linear-gradient(#12002b,#2b0040 60%,#0b0014)"></i><b class="ng"></b>',ab:'<i style="background:radial-gradient(70% 50% at 30% 20%,#2bffb2,transparent 70%),radial-gradient(60% 50% at 80% 15%,#7a5cff,transparent 70%),#07080d"></i>',hc:'<i style="background:#0b0b12"></i><b class="hl"></b>',rh:'<i style="background:#06070a"></i><b class="rl"></b>',sm:'<i style="background:#f2f0eb"></i><b class="sl"></b>'};
 {const set=q('#v-set');if(set&&!q('#lkcard')){const c=document.createElement('div');c.className='card';c.id='lkcard';c.dataset.g='a';const f=set.querySelector(':scope>.card');set.insertBefore(c,f);c.hidden=!(q('#stabs .chip.on')&&q('#stabs .chip.on').dataset.t=='a')}}
-function lkCur(){return cfg.look&&cfg.look!='std'?cfg.look:(cfg.lkp?'p:'+cfg.lkp:'')}
-function lkPaint(){const c=q('#lkcard');if(!c)return;const cur=lkCur();c.innerHTML=`<div class="lkh"><b>Themes</b><span class="nmu">${T('Das ganze App-Design','The whole app design')}</span></div><div class="lkg">${SHOW.map(o=>`<button class="lkt${cur==o.k?' on':''}" data-look="${o.k}"><span class="lkp">${o.p?`<img alt="" src="${(typeof PREIMG!='undefined'&&PREIMG[o.p])||''}">`:PV[o.k]+'<em>9.04</em>'}</span><b>${o.n}</b></button>`).join('')}</div>`}
-document.addEventListener('click',e=>{const b=e.target.closest('[data-look]');if(!b)return;const k=b.dataset.look;
- if(k.startsWith('p:')){const p=k.slice(2),Q=(typeof PRE!='undefined'&&PRE[p])||null;if(!Q)return;cfg.look='std';cfg.lkp=p;['theme','bg','bo','ac','ac2','tg','tc'].forEach(x=>{if(Q[x]!==undefined)cfg[x]=Q[x]});cfg.sty=Q.sty||'classic'}
+function lkCur(){if(cfg.ctk)return 'c:'+cfg.ctk;return cfg.look&&cfg.look!='std'?cfg.look:(cfg.lkp?'p:'+cfg.lkp:'std')}
+function lkName(){const c=lkCur();if(c.startsWith('c:')){const t=(cfg.cth||[]).find(x=>x.id==c.slice(2));return t?t.n:'Standard'}const o=SHOW.find(x=>x.k==c);return o?o.n:'Standard'}
+const tileArt=(k,ac)=>`<span class="lkp">${PV[k]||PV.std}<em${ac?` style="color:${ac};text-shadow:0 0 14px ${ac}88"`:''}>9.04</em></span>`;
+function lkGrid(){const cur=lkCur(),ct=cfg.cth||[];return`<div class="lkg">${SHOW.map(o=>`<button class="lkt${cur==o.k?' on':''}" data-look="${o.k}">${tileArt(o.k)}<b>${o.n}</b></button>`).join('')}</div>
+ <div class="lkh2"><b>${T('Eigene Themes','Your themes')}</b><button class="chip on" data-lknew>${T('+ Neues Theme','+ New theme')}</button></div>
+ ${ct.length?`<div class="lkg">${ct.map(t=>`<div class="lkt${cur=='c:'+t.id?' on':''}" data-look="c:${t.id}" role="button">${tileArt(t.look=='std'?'std':t.look,t.ac)}<b>${esc(t.n)}</b><i class="lkdel" data-lkdel="${t.id}">✕</i></div>`).join('')}</div>`:`<div class="nmu" style="padding:4px 2px 2px">${T('Noch keine. Bau dir eins aus Look, Farbe und Hintergrund.','None yet. Build one from a look, a colour and a background.')}</div>`}`}
+function lkSheet(){if(!window.sheetOpen)return;const d=sheetOpen(`<div class="nxh"><b>Themes</b><span>${T('Das ganze App-Design','The whole app design')}</span></div><div id="lksh">${lkGrid()}</div><div class="chips" style="margin-top:12px"><button class="chip" data-nbx>${T('Fertig','Done')}</button></div>`,'lkwide')}
+function lkRefresh(){const s=q('#lksh');if(s)s.innerHTML=lkGrid();lkPaint()}
+function lkPaint(){const c=q('#lkcard');if(!c)return;c.innerHTML=`<button class="lkrow" data-lkopen><span class="lkri">${tileArt(lkCur().startsWith('c:')?((cfg.cth||[]).find(x=>'c:'+x.id==lkCur())||{look:'std'}).look:lkCur())}</span><span class="lkrt"><b>Themes</b><span class="nmu">${T('Das ganze App-Design','The whole app design')}</span></span><span class="lkrv">${esc(lkName())} ›</span></button>`}
+function setStd(){cfg.look='std';delete cfg.lkp;cfg.sty='classic';cfg.theme='nacht';['ac','ac2','bgc','pv'].forEach(x=>delete cfg[x]);cfg.bg='pulse'}
+function useCustom(t){cfg.ctk=t.id;if(t.look=='std'){setStd();cfg.bg=t.bg||'pulse'}else{cfg.look=t.look;delete cfg.lkp;if(['paper','pixel','term','blue'].includes(cfg.sty))cfg.sty='classic'}if(t.ac){cfg.ac=t.ac;cfg.ac2=t.ac2||t.ac}}
+document.addEventListener('click',e=>{
+ if(e.target.closest('[data-lkopen]')){lkSheet();return}
+ const del=e.target.closest('[data-lkdel]');if(del){e.stopPropagation();cfg.cth=(cfg.cth||[]).filter(x=>x.id!=del.dataset.lkdel);if(cfg.ctk==del.dataset.lkdel)delete cfg.ctk;S('nt.c',cfg);lkRefresh();return}
+ if(e.target.closest('[data-lknew]')){lkEditor();return}
+ const sv=e.target.closest('[data-lksave]');if(sv){const n=(q('#lken').value||'').trim()||T('Mein Theme','My theme'),t={id:Date.now().toString(36),n:n.slice(0,18),look:ED.look,ac:ED.ac,ac2:ED.ac,bg:ED.bg};cfg.cth=[...(cfg.cth||[]),t].slice(-12);useCustom(t);S('nt.c',cfg);lkApply();try{apply();render()}catch(er){}lkSheet();return}
+ const el=e.target.closest('[data-ed]');if(el){ED[el.dataset.ed]=el.dataset.v;lkEdPaint();return}
+ const b=e.target.closest('[data-look]');if(!b)return;const k=b.dataset.look;delete cfg.ctk;
+ if(k.startsWith('c:')){const t=(cfg.cth||[]).find(x=>x.id==k.slice(2));if(t)useCustom(t)}
+ else if(k=='std')setStd();
+ else if(k.startsWith('p:')){const p=k.slice(2),Q=(typeof PRE!='undefined'&&PRE[p])||null;if(!Q)return;cfg.look='std';cfg.lkp=p;['theme','bg','bo','ac','ac2','tg','tc'].forEach(x=>{if(Q[x]!==undefined)cfg[x]=Q[x]});cfg.sty=Q.sty||'classic'}
  else{cfg.look=k;delete cfg.lkp;if(['paper','pixel','term','blue'].includes(cfg.sty))cfg.sty='classic'}
- S('nt.c',cfg);lkApply();lkPaint();try{apply();render()}catch(er){}});
+ S('nt.c',cfg);lkApply();try{apply();render()}catch(er){}lkRefresh()});
+/* Editor für eigene Themes */
+const ED={look:'lg',ac:'#4d8dff',bg:'pulse'};
+const ACS=['#4d8dff','#37e8ff','#47e891','#ffd23f','#ff8a1f','#ff4d6d','#ff3df2','#b47cff','#ffffff'];
+function lkEditor(){if(!window.sheetOpen)return;sheetOpen(`<div class="nxh"><b>${T('Eigenes Theme','Custom theme')}</b><span>${T('Look, Farbe und Hintergrund wählen','Pick a look, colour and background')}</span></div><div id="lked"></div><input id="lken" class="cmi" maxlength="18" placeholder="${T('Name, z. B. Mein Blau','Name, e.g. My blue')}" style="margin-top:10px"><div class="chips" style="margin-top:12px"><button class="chip on" data-lksave>${T('Speichern und nutzen','Save and use')}</button><button class="chip" data-lkopen>${T('Zurück','Back')}</button></div>`,'lkwide');lkEdPaint()}
+function lkEdPaint(){const d=q('#lked');if(!d)return;const bgs=typeof BN!='undefined'?Object.keys(BN).filter(k=>k!='img'&&!k.startsWith('st_')):['pulse','off'];
+ d.innerHTML=`<div class="lkprev">${tileArt(ED.look,ED.ac)}</div>
+ <div class="k">Look</div><div class="chips">${SHOW.filter(o=>!o.p).map(o=>`<button class="chip${ED.look==o.k?' on':''}" data-ed="look" data-v="${o.k}">${o.n}</button>`).join('')}</div>
+ <div class="k">${T('Farbe','Colour')}</div><div class="lksw">${ACS.map(c=>`<button class="${ED.ac==c?'on':''}" data-ed="ac" data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')}</div>
+ ${ED.look=='std'?`<div class="k">${T('Hintergrund','Background')}</div><div class="chips lkbgs">${bgs.map(k=>`<button class="chip${ED.bg==k?' on':''}" data-ed="bg" data-v="${k}">${esc(BN[k]||k)}</button>`).join('')}</div>`:`<div class="nmu">${T('Der Hintergrund gehört bei diesem Look dazu.','The background is part of this look.')}</div>`}`}
 /* alte Themes-Auswahl ausblenden */
 function hideOld(){try{document.querySelectorAll('#v-set>.card').forEach(c=>{if(c.dataset.hn=='Themes'||c.dataset.hn=='Style')c.classList.add('lkhide')})}catch(e){}}
 hideOld();setTimeout(hideOld,500);setTimeout(hideOld,2000);
-lkPaint();
+lkPaint();try{const c=q('#lkcard');c&&c.classList.add('lkrowc')}catch(e){}
 })();
 
 </script>
