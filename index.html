@@ -772,6 +772,7 @@ body.lkon #bg,body.lkon #gl,body.lkon #fs,body.lkon #bgi,body.lkon #bgfx,body.lk
 .lkt{display:flex;flex-direction:column;gap:6px;padding:6px 6px 9px;border-radius:18px;border:1.5px solid var(--line);background:rgba(255,255,255,.03);color:var(--fg);font:inherit;text-align:center}
 .lkt b{font-size:12.5px}.lkt.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
 .lkp{position:relative;display:block;height:64px;border-radius:13px;overflow:hidden}
+.lkp.lkm{height:auto;aspect-ratio:3/4}
 .lkp i{position:absolute;inset:0}.lkp em{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:20px;color:#fff}
 .lkp b.gl{position:absolute;left:14%;right:14%;bottom:10px;height:14px;border-radius:8px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5)}
 .lkp b.ng{position:absolute;left:-10%;right:-10%;bottom:0;height:40%;background:repeating-linear-gradient(90deg,rgba(255,61,242,.7) 0 1px,transparent 1px 10px),repeating-linear-gradient(rgba(255,61,242,.7) 0 1px,transparent 1px 7px);transform:perspective(40px) rotateX(45deg);transform-origin:bottom}
@@ -895,6 +896,28 @@ html body.lk-lg .nse input{background:none!important;background-image:none!impor
 .lkp b.pxw{position:absolute;left:30%;top:28%;width:40%;height:44%;background:#7a4a2a;box-shadow:inset 0 0 0 3px #3a2414}.lkt[data-look="p:pixel"] em{color:#ffc94d;font-family:ui-monospace,Menlo,monospace;text-shadow:2px 2px 0 #3a2414}
 .lkt[data-look="p:terminal"] em{color:#43ff7d;font-family:ui-monospace,Menlo,monospace;text-shadow:0 0 10px #43ff7d}
 .lkt[data-look="p:blueprint"] em{color:transparent;-webkit-text-stroke:1.2px #fff;font-family:ui-monospace,Menlo,monospace}
+
+/* Mini-App in der Vorschau */
+.lkm .m-s{position:absolute;left:12%;right:12%;top:9%;height:9%;border-radius:6px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.18)}
+.lkm em{font-size:clamp(18px,6vw,26px)!important;top:-6%!important}
+.lkm .m-r{position:absolute;left:10%;right:10%;bottom:20%;height:11%;display:flex;gap:6%}.lkm .m-r i{flex:1;border-radius:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14)}
+.lkm .m-n{position:absolute;left:10%;right:10%;bottom:5%;height:9%;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15)}.lkm .m-n i{position:absolute;left:4%;top:12%;bottom:12%;width:22%;border-radius:999px;background:var(--ta,#4d8dff)}
+.lkm[data-k=lg] .m-s,.lkm[data-k=lg] .m-r i,.lkm[data-k=lg] .m-n{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}.lkm[data-k=lg] .m-n i{background:#fff}
+.lkm[data-k=na] .m-s,.lkm[data-k=na] .m-r i{background:rgba(20,0,40,.7);border-color:#ff3df2;box-shadow:0 0 6px #ff3df2}.lkm[data-k=na] .m-n{border-color:#37e8ff;box-shadow:0 0 6px #37e8ff;background:rgba(20,0,40,.8)}.lkm[data-k=na] .m-n i{background:#37e8ff}
+.lkm[data-k=ab] .m-r i:nth-child(1){background:#3a1f7a}.lkm[data-k=ab] .m-r i:nth-child(2){background:#0e3a5c}.lkm[data-k=ab] .m-r i:nth-child(3){background:#0f3d33}.lkm[data-k=ab] .m-r i{border:0}.lkm[data-k=ab] .m-n i{background:linear-gradient(90deg,#2bffb2,#37c8ff)}
+.lkm[data-k=hc] .m-s,.lkm[data-k=hc] .m-r i{border:1px solid transparent;background:linear-gradient(#15151f,#15151f) padding-box,linear-gradient(135deg,#ff9ad5,#9ad5ff,#b4ffb0) border-box}.lkm[data-k=hc] .m-n i{background:linear-gradient(90deg,#ff9ad5,#9ad5ff)}
+.lkm[data-k=rh] .m-s,.lkm[data-k=rh] .m-r i{background:#111318;border:0;border-left:2px solid #ff2b6d;border-radius:2px}.lkm[data-k=rh] .m-n{border-radius:4px}.lkm[data-k=rh] .m-n i{background:#ff2b6d;border-radius:2px}
+.lkm[data-k=sm] .m-s{background:none;border:1.5px solid #0b0b0b;border-radius:0}.lkm[data-k=sm] .m-r i{background:none;border:0;border-top:1.5px solid #0b0b0b;border-radius:0}.lkm[data-k=sm] .m-n{background:#0b0b0b;border:0}.lkm[data-k=sm] .m-n i{background:#ff5a1f}
+.lkm[data-k="p:sketch"] .m-s,.lkm[data-k="p:sketch"] .m-r i{background:#fffdf6;border:1.5px solid #2a2a33;border-radius:8px 3px 7px 3px}.lkm[data-k="p:sketch"] .m-n{background:#fffdf6;border:1.5px solid #2a2a33}.lkm[data-k="p:sketch"] .m-n i{background:#ffe46b}
+.lkm[data-k="p:pixel"] .m-s,.lkm[data-k="p:pixel"] .m-r i,.lkm[data-k="p:pixel"] .m-n{background:#241a33;border:2px solid #6b4f3a;border-radius:3px}.lkm[data-k="p:pixel"] .m-n i{background:#ffc94d;border-radius:2px}
+.lkm[data-k="p:terminal"] .m-s,.lkm[data-k="p:terminal"] .m-r i,.lkm[data-k="p:terminal"] .m-n{background:#02140a;border:1px solid #1e6b3a;border-radius:2px}.lkm[data-k="p:terminal"] .m-n i{background:#43ff7d}
+.lkm[data-k="p:blueprint"] .m-s,.lkm[data-k="p:blueprint"] .m-r i,.lkm[data-k="p:blueprint"] .m-n{background:transparent;border:1px dashed rgba(255,255,255,.7);border-radius:3px}.lkm[data-k="p:blueprint"] .m-n i{background:#fff}
+.lkm[data-k=std] .m-n i{background:#4d8dff}
+.lkt.on{box-shadow:0 0 0 2px var(--ac),0 10px 30px color-mix(in srgb,var(--ac) 35%,transparent);transform:translateY(-2px)}
+.lkt{transition:transform .2s,box-shadow .2s}
+.lkob{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 4px 12px;margin:6px -4px 0;scrollbar-width:none}.lkob::-webkit-scrollbar{display:none}
+.lkob .lkt{flex:none;width:128px;scroll-snap-align:start}.lkob .lkt b{font-size:13.5px}
+.lkm b.gl,.lkm b.hl,.lkm b.sl,.lkm b.rl,.lkm b.pxw{display:none!important}.lkm b.ng{height:26%!important;opacity:.7}
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script></head><body>
 <div id="bgi"></div><canvas id="fs"></canvas><canvas id="gl"></canvas><canvas id="bg"></canvas>
 <div id="app">
@@ -2795,7 +2818,7 @@ const OB=[['333','3x3'],['222','2x2'],['444','4x4'],['pyr','Pyraminx'],['skb','S
 function obStep(i){const dots=`<div class="obd">${[0,1,2].map(k=>`<i class="${k==i?'on':''}"></i>`).join('')}</div>`;
  if(i==0)return dots+`<div class="nxh"><b>${T('Willkommen bei NOBTIME','Welcome to NOBTIME')}</b><span>${T('Was cubest du am meisten?','What do you cube the most?')}</span></div><div class="obg">${OB.map(([k,l])=>`<button class="chip" data-nx="ob-pz" data-v="${k}">${l}</button>`).join('')}</div>`;
  if(i==1)return dots+`<div class="nxh"><b>${T('Inspektion','Inspection')}</b><span>${T('15 Sekunden zum Anschauen vor dem Solve, wie im Wettkampf.','15 seconds to look at the cube before the solve, like in competition.')}</span></div><div class="obg two"><button class="chip" data-nx="ob-in" data-v="1">${T('Mit Inspektion','With inspection')}</button><button class="chip" data-nx="ob-in" data-v="0">${T('Ohne','Without')}</button></div>`;
- return dots+`<div class="nxh"><b>${T('Dein Hintergrund','Your background')}</b><span>${T('Kannst du jederzeit oben ändern.','You can change it anytime at the top.')}</span></div><div class="obg bgs">${[['galaxy','Galaxy'],['saturn','Saturn'],['hole','Black Hole']].map(([k,l])=>`<button class="bgt" data-nx="ob-bg" data-v="${k}">${k=='off'?'<span class="obp"></span>':`<img alt="" src="${BGV[k]}">`}<span class="bgn">${l}</span></button>`).join('')}</div>`}
+ return dots+`<div class="nxh"><b>${T('Dein Theme','Your theme')}</b><span>${T('Wisch durch und tipp eins an. Kannst du jederzeit in Settings ändern.','Swipe through and tap one. You can change it anytime in Settings.')}</span></div>${window.lkObHtml?lkObHtml():''}`}
 function obNeeded(){try{if(localStorage.getItem('nt.onb'))return false;const any=(D.ses||[]).some(z=>(z.sv||[]).length);if(any){localStorage.setItem('nt.onb','1');return false}return true}catch(e){return false}}
 function obOpen(){sheetOpen(obStep(0),'ob')}
 
@@ -2811,6 +2834,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-nx]');if(!
  if(a=='pbx'){const t=q('#pbt');if(t)t.remove();return}
  if(a=='ob-pz'){if(PZ[v]){const z=D.ses[D.cur];if(z&&!(z.sv||[]).length){z.pz=v;cur=scr();save();render()}}q('#nx .nxc').innerHTML=obStep(1);return}
  if(a=='ob-in'){cfg.insp=v=='1';S('nt.c',cfg);apply();render();q('#nx .nxc').innerHTML=obStep(2);return}
+ if(a=='ob-th'){try{window.lkUse&&lkUse(v)}catch(er){}localStorage.setItem('nt.onb','1');sheetClose();if(instNeeded())setTimeout(instOpen,500);return}
  if(a=='ob-bg'){cfg.bg=v;S('nt.c',cfg);apply();localStorage.setItem('nt.onb','1');sheetClose();if(instNeeded())setTimeout(instOpen,500);return}
 });
 document.addEventListener('click',e=>{const b=e.target.closest('[data-pf2]');if(!b)return;const k=b.dataset.pf2,v=b.dataset.v;if(k=='ra'){PF.ra=v=='1';pfSave()}else if(k=='pg'){cfg.pglass=+v;S('nt.c',cfg);pgApply()}cmRender()});
@@ -3256,7 +3280,7 @@ const q=s=>document.querySelector(s);
 const LOOKS=[['std',T('Klassik','Classic')],['lg','Liquid Glass'],['na','Neon Arcade'],['ab','Aurora Bento'],['hc','Holo'],['rh','Race HUD'],['sm','Swiss Mono']];
 const PRES=[['sketch','Sketchbook'],['pixel','Pixel'],['terminal','Terminal'],['blueprint','Blueprint']];
 const SHOW=[{k:'std',n:'Standard'},...LOOKS.filter(x=>x[0]!='std').map(x=>({k:x[0],n:x[1]})),...PRES.map(x=>({k:'p:'+x[0],n:x[1],p:x[0]}))];
-if(cfg.look==null){cfg.look='lg';S('nt.c',cfg)}
+if(cfg.look==null){cfg.look='std';S('nt.c',cfg)}
 /* Hintergrund-Ebene für die Looks */
 {let b=q('#lkbg');if(!b){b=document.createElement('div');b.id='lkbg';b.innerHTML='<i class="k1"></i><i class="k2"></i><i class="k3"></i><i class="k4"></i><u></u><s></s>';const a=q('#app');a?a.before(b):document.body.prepend(b)}}
 function lkApply(){const L=cfg.look||'std';const c=document.body.classList;LOOKS.forEach(([k])=>c.remove('lk-'+k));c.add('lk-'+L);c.toggle('lkon',L!='std');if(L!='std'){c.remove('hbg');if(L=='lg')c.add('lg');else c.remove('lg')}}
@@ -3267,13 +3291,15 @@ const PV={std:'<i style="background:radial-gradient(120% 80% at 50% 0,#1c2f6b,#0
 {const set=q('#v-set');if(set&&!q('#lkcard')){const c=document.createElement('div');c.className='card';c.id='lkcard';c.dataset.g='a';const f=set.querySelector(':scope>.card');set.insertBefore(c,f);c.hidden=!(q('#stabs .chip.on')&&q('#stabs .chip.on').dataset.t=='a')}}
 function lkCur(){if(cfg.ctk)return 'c:'+cfg.ctk;return cfg.look&&cfg.look!='std'?cfg.look:(cfg.lkp?'p:'+cfg.lkp:'std')}
 function lkName(){const c=lkCur();if(c.startsWith('c:')){const t=(cfg.cth||[]).find(x=>x.id==c.slice(2));return t?t.n:'Standard'}const o=SHOW.find(x=>x.k==c);return o?o.n:'Standard'}
-const tileArt=(k,ac)=>`<span class="lkp">${PV[k]||PV.std}<em${ac?` style="color:${ac};text-shadow:0 0 14px ${ac}88"`:''}>9.04</em></span>`;
+const tileArt=(k,ac)=>`<span class="lkp lkm" data-k="${k}"${ac?` style="--ta:${ac}"`:''}>${PV[k]||PV.std}<span class="m-s"></span><em${ac?` style="color:${ac};text-shadow:0 0 14px ${ac}88"`:''}>9.04</em><span class="m-r"><i></i><i></i><i></i></span><span class="m-n"><i></i></span></span>`;
 function lkGrid(){const cur=lkCur(),ct=cfg.cth||[];return`<div class="lkg">${SHOW.map(o=>`<button class="lkt${cur==o.k?' on':''}" data-look="${o.k}">${tileArt(o.k)}<b>${o.n}</b></button>`).join('')}</div>
  <div class="lkh2"><b>${T('Eigene Themes','Your themes')}</b><button class="chip on" data-lknew>${T('+ Neues Theme','+ New theme')}</button></div>
  ${ct.length?`<div class="lkg">${ct.map(t=>`<div class="lkt${cur=='c:'+t.id?' on':''}" data-look="c:${t.id}" role="button">${tileArt(t.look=='std'?'std':t.look,t.ac)}<b>${esc(t.n)}</b><i class="lkdel" data-lkdel="${t.id}">✕</i></div>`).join('')}</div>`:`<div class="nmu" style="padding:4px 2px 2px">${T('Noch keine. Bau dir eins aus Look, Farbe und Hintergrund.','None yet. Build one from a look, a colour and a background.')}</div>`}`}
 function lkSheet(){if(!window.sheetOpen)return;const d=sheetOpen(`<div class="nxh"><b>Themes</b><span>${T('Das ganze App-Design','The whole app design')}</span></div><div id="lksh">${lkGrid()}</div><div class="chips" style="margin-top:12px"><button class="chip" data-nbx>${T('Fertig','Done')}</button></div>`,'lkwide')}
 function lkRefresh(){const s=q('#lksh');if(s)s.innerHTML=lkGrid();lkPaint()}
 function lkPaint(){const c=q('#lkcard');if(!c)return;c.innerHTML=`<button class="lkrow" data-lkopen><span class="lkri">${tileArt(lkCur().startsWith('c:')?((cfg.cth||[]).find(x=>'c:'+x.id==lkCur())||{look:'std'}).look:lkCur())}</span><span class="lkrt"><b>Themes</b><span class="nmu">${T('Das ganze App-Design','The whole app design')}</span></span><span class="lkrv">${esc(lkName())} ›</span></button>`}
+window.lkUse=function(k){const b=document.createElement('button');b.dataset.look=k;b.hidden=true;document.body.appendChild(b);b.click();b.remove()};
+window.lkObHtml=()=>`<div class="lkob">${SHOW.map(o=>`<button class="lkt" data-nx="ob-th" data-v="${o.k}">${tileArt(o.k)}<b>${o.n}</b></button>`).join('')}</div>`;
 function setStd(){cfg.look='std';delete cfg.lkp;cfg.sty='classic';cfg.theme='nacht';['ac','ac2','bgc','pv'].forEach(x=>delete cfg[x]);cfg.bg='pulse'}
 function useCustom(t){cfg.ctk=t.id;if(t.look=='std'){setStd();cfg.bg=t.bg||'pulse'}else{cfg.look=t.look;delete cfg.lkp;if(['paper','pixel','term','blue'].includes(cfg.sty))cfg.sty='classic'}if(t.ac){cfg.ac=t.ac;cfg.ac2=t.ac2||t.ac}}
 document.addEventListener('click',e=>{
